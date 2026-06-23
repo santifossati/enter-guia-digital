@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>guIA — Enter Guía Digital de Carlos Casares</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal:        #1e7d96;
+      --teal-dark:   #145f73;
+      --teal-darker: #0e4a5a;
+      --teal-light:  #4db3cc;
+      --teal-pale:   #e6f4f7;
+      --gray-bg:     #f0eeeb;
+      --gray-border: #d9d4cd;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #4a4a4a;
+      --text-light:  #7a7a7a;
+      --white:       #ffffff;
+      --transition:  .3s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Header ── */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--teal-darker);
+      height: 64px;
+      display: flex; align-items: center;
+      padding: 0 32px; gap: 24px;
+      box-shadow: 0 2px 20px rgba(0,0,0,.2);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .logo img { height: 40px; width: auto; filter: brightness(0) invert(1); }
+    .logo-text .name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); }
+    .logo-text .sub { font-size: 9px; color: rgba(255,255,255,.7); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+    .nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .nav a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.8); padding: 6px 12px; border-radius: 6px; transition: background var(--transition); font-family: 'Montserrat', sans-serif; }
+    .nav a:hover, .nav a.active { background: rgba(255,255,255,.12); color: var(--white); }
+    .btn-registrar { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; transition: background var(--transition); white-space: nowrap; }
+    .btn-registrar:hover { background: var(--teal-pale); }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 64px);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 80px 24px 100px;
+      overflow: hidden;
+      background: var(--teal-darker);
+    }
+    .hero-bg { position: absolute; inset: 0; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .55; animation: blobMove 12s ease-in-out infinite alternate; }
+    .blob-1 { width: 600px; height: 600px; background: #1a9cb8; top: -150px; left: -100px; animation-delay: 0s; }
+    .blob-2 { width: 500px; height: 500px; background: #0e5f7a; top: 100px; right: -100px; animation-delay: -4s; }
+    .blob-3 { width: 400px; height: 400px; background: #2ec4e0; bottom: -50px; left: 30%; animation-delay: -8s; }
+    .blob-4 { width: 300px; height: 300px; background: #083d4f; top: 40%; left: 20%; animation-delay: -2s; }
+    @keyframes blobMove {
+      0%   { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(30px,-20px) scale(1.05); }
+      66%  { transform: translate(-20px,30px) scale(.97); }
+      100% { transform: translate(15px,10px) scale(1.02); }
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 2; text-align: center; max-width: 720px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 12px; font-weight: 600; color: rgba(255,255,255,.9);
+      font-family: 'Montserrat', sans-serif; letter-spacing: .5px;
+      margin-bottom: 28px; backdrop-filter: blur(8px);
+      animation: fadeDown .7s ease both;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #4dd9f0; animation: pulse 2s ease infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .6; transform: scale(1.3); } }
+    .hero-title { font-family: 'Montserrat', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; color: var(--white); line-height: 1.15; margin-bottom: 16px; animation: fadeDown .7s .1s ease both; }
+    .hero-title span { color: #4dd9f0; }
+    .hero-sub { font-size: clamp(.9rem, 2vw, 1.05rem); color: rgba(255,255,255,.7); line-height: 1.6; margin-bottom: 48px; animation: fadeDown .7s .2s ease both; }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+    /* Chat box */
+    .chat-box {
+      background: rgba(255,255,255,.96); border-radius: 18px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.3), 0 0 0 1px rgba(255,255,255,.2);
+      padding: 20px 20px 16px; width: 100%; max-width: 640px;
+      animation: fadeUp .7s .3s ease both;
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .chat-box:focus-within { box-shadow: 0 28px 72px rgba(0,0,0,.35), 0 0 0 2px var(--teal-light); transform: translateY(-2px); }
+    .chat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); font-family: 'Montserrat', sans-serif; margin-bottom: 8px; padding: 0 4px; }
+    .chat-input-row { display: flex; align-items: center; gap: 10px; }
+    .chat-input { flex: 1; border: none; outline: none; font-size: 16px; font-family: 'Inter', sans-serif; color: var(--text-dark); background: transparent; padding: 6px 4px; caret-color: var(--teal); }
+    .chat-input::placeholder { color: var(--text-light); }
+    .chat-send { width: 42px; height: 42px; border-radius: 50%; background: var(--teal); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background var(--transition), transform var(--transition), box-shadow var(--transition); }
+    .chat-send:hover { background: var(--teal-dark); transform: scale(1.08); box-shadow: 0 4px 16px rgba(30,125,150,.5); }
+    .chat-send svg { width: 18px; height: 18px; fill: white; }
+    .chat-suggestions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--gray-border); }
+    .chip { font-size: 12px; font-family: 'Inter', sans-serif; color: var(--teal-dark); background: var(--teal-pale); border: 1px solid rgba(30,125,150,.15); border-radius: 20px; padding: 5px 12px; cursor: pointer; transition: background var(--transition), transform var(--transition); white-space: nowrap; }
+    .chip:hover { background: #c8e9f0; transform: translateY(-1px); }
+
+    /* Respuesta IA */
+    .chat-response {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--gray-border);
+      text-align: left;
+      font-size: .9rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+      display: none;
+    }
+    .chat-response.visible { display: block; }
+    .chat-response .resp-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); font-family: 'Montserrat', sans-serif; margin-bottom: 6px; }
+    .chat-response .typing::after { content: '▍'; animation: blink .8s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Scroll hint */
+    .scroll-hint { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 6px; color: rgba(255,255,255,.5); font-size: 11px; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; text-transform: uppercase; animation: fadeDown .7s .8s ease both; }
+    .scroll-hint .arrow { width: 20px; height: 20px; border-right: 2px solid rgba(255,255,255,.4); border-bottom: 2px solid rgba(255,255,255,.4); transform: rotate(45deg); animation: bounce 2s ease infinite; }
+    @keyframes bounce { 0%, 100% { transform: rotate(45deg) translateY(0); } 50% { transform: rotate(45deg) translateY(5px); } }
+
+    /* ── Sección info ── */
+    .info-section { max-width: 1000px; margin: 0 auto; padding: 64px 24px 80px; }
+    .info-section h2 { font-family: 'Montserrat', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+    .info-section .lead { font-size: .95rem; color: var(--text-light); margin-bottom: 40px; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .feature-card { background: var(--white); border-radius: 12px; border: 1px solid var(--gray-border); padding: 24px 22px; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+    .feature-icon { font-size: 1.8rem; margin-bottom: 12px; }
+    .feature-card h3 { font-family: 'Montserrat', sans-serif; font-size: .9rem; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; }
+    .feature-card p { font-size: .84rem; color: var(--text-light); line-height: 1.6; }
+
+    /* Footer */
+    .footer { background: var(--teal-darker); text-align: center; padding: 28px 24px; color: rgba(255,255,255,.5); font-size: .83rem; }
+    .footer a { color: rgba(255,255,255,.7); }
+
+    @media (max-width: 860px) { .nav { display: none; } }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="./index.html" class="logo">
+      <img src="./logo.png" alt="Enter Guía Digital" />
+      <div class="logo-text">
+        <div class="name">enter</div>
+        <div class="sub">guía digital</div>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="./guia.html" class="active">guIA</a>
+      <a href="./negocios.html">Negocios</a>
+      <a href="./index.html#reclamos">Reclamos</a>
+      <a href="./index.html#eventos">Eventos</a>
+      <a href="./empleos.html">Empleos</a>
+    </nav>
+    <div style="margin-left:auto;">
+      <button class="btn-registrar">Registrá tu negocio <span style="opacity:.75;">(¡Es gratis!)</span></button>
+    </div>
+  </header>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+      <div class="blob blob-4"></div>
+    </div>
+    <div class="hero-grid"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Carlos Casares, Provincia de Buenos Aires
+      </div>
+
+      <h1 class="hero-title">
+        Tu ciudad,<br>
+        en tus <span>manos</span>
+      </h1>
+
+      <p class="hero-sub">
+        Preguntale a nuestra IA todo lo que necesitás saber<br>
+        sobre Carlos Casares. Horarios, servicios, eventos y más.
+      </p>
+
+      <div class="chat-box">
+        <div class="chat-label">guIA — Preguntale algo a la IA</div>
+        <div class="chat-input-row">
+          <input class="chat-input" type="text" id="chatInput" placeholder="¿Qué querés saber de Carlos Casares?" />
+          <button class="chat-send" onclick="sendChat()">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
+        </div>
+        <div class="chat-suggestions">
+          <span class="chip" onclick="setChat(this)">¿Cuándo saco la basura?</span>
+          <span class="chip" onclick="setChat(this)">¿Dónde hay farmacias de turno?</span>
+          <span class="chip" onclick="setChat(this)">¿Qué eventos hay este fin de semana?</span>
+          <span class="chip" onclick="setChat(this)">¿Dónde queda el hospital?</span>
+        </div>
+        <div class="chat-response" id="chatResponse">
+          <div class="resp-label">guIA responde</div>
+          <div id="respText"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Explorá</span>
+      <div class="arrow"></div>
+    </div>
+  </section>
+
+  <!-- ── Qué puede hacer guIA ── -->
+  <div class="info-section">
+    <h2>¿Qué puede hacer guIA?</h2>
+    <p class="lead">Una inteligencia artificial entrenada para conocer Carlos Casares mejor que nadie.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏥</div>
+        <h3>Servicios municipales</h3>
+        <p>Horarios del hospital, turnos médicos, recolección de residuos, cortes de agua y más.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💊</div>
+        <h3>Farmacias de turno</h3>
+        <p>Consultá qué farmacia está de guardia hoy y su dirección actualizada.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Eventos y agenda</h3>
+        <p>Conocé qué pasa en la ciudad: recitales, ferias, deportes y actividades culturales.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏪</div>
+        <h3>Negocios y comercios</h3>
+        <p>Encontrá cualquier negocio local con horarios, dirección y teléfono de contacto.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📍</div>
+        <h3>Cómo llegar</h3>
+        <p>Preguntá dónde queda cualquier lugar de la ciudad y cómo llegar.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Emergencias y contactos</h3>
+        <p>Números de policía, bomberos, defensa civil y servicios de urgencia.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2024 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
+  </footer>
+
+  <script>
+    function setChat(el) {
+      document.getElementById('chatInput').value = el.textContent;
+      document.getElementById('chatInput').focus();
+    }
+
+    function sendChat() {
+      const input = document.getElementById('chatInput');
+      const q = input.value.trim();
+      if (!q) return;
+      const resp = document.getElementById('chatResponse');
+      const text = document.getElementById('respText');
+      resp.classList.add('visible');
+      text.textContent = '';
+      text.classList.add('typing');
+      setTimeout(() => {
+        text.classList.remove('typing');
+        text.textContent = 'Esta función estará disponible próximamente. Por ahora, podés explorar la Guía de Negocios o la sección de Eventos para encontrar lo que buscás.';
+      }, 1200);
+    }
+
+    document.getElementById('chatInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendChat();
+    });
+  </script>
+</body>
+</html>

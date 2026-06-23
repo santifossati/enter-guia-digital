@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acerca del proyecto — Reclamos — Enter Guía Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal:        #1e7d96;
+      --teal-dark:   #145f73;
+      --teal-darker: #0e4a5a;
+      --teal-pale:   #e6f4f7;
+      --gray-bg:     #f0eeeb;
+      --gray-border: #d9d4cd;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #4a4a4a;
+      --text-light:  #7a7a7a;
+      --white:       #ffffff;
+      --shadow-sm:   0 2px 8px rgba(0,0,0,.08);
+      --shadow-md:   0 6px 24px rgba(0,0,0,.12);
+      --radius:      14px;
+      --transition:  .3s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .header { background: var(--teal-darker); height: 64px; display: flex; align-items: center; padding: 0 32px; gap: 24px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 20px rgba(0,0,0,.2); }
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
+    .logo-text .name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); }
+    .logo-text .sub { font-size: 9px; color: rgba(255,255,255,.7); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+    .nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .nav a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.8); padding: 6px 12px; border-radius: 6px; transition: background var(--transition); font-family: 'Montserrat', sans-serif; }
+    .nav a:hover, .nav a.active { background: rgba(255,255,255,.12); color: var(--white); }
+    .btn-nav { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; transition: background var(--transition); white-space: nowrap; }
+
+    .subnav { background: var(--white); border-bottom: 2px solid var(--gray-border); padding: 0 24px; display: flex; }
+    .subnav a { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; color: var(--text-light); padding: 14px 20px; border-bottom: 3px solid transparent; margin-bottom: -2px; display: flex; align-items: center; gap: 7px; transition: color var(--transition), border-color var(--transition); white-space: nowrap; }
+    .subnav a:hover { color: var(--teal); }
+    .subnav a.active { color: var(--teal-darker); border-bottom-color: var(--teal); }
+
+    .page-hero { background: var(--teal-darker); padding: 28px 32px 24px; color: var(--white); }
+    .hero-inner { max-width: 900px; margin: 0 auto; }
+    .page-hero h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(1.4rem, 2.5vw, 1.9rem); font-weight: 800; margin-bottom: 4px; }
+    .page-hero p { font-size: .85rem; color: rgba(255,255,255,.6); }
+
+    .layout { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* Sections */
+    .content-section { margin-bottom: 48px; }
+    .section-icon { font-size: 2rem; margin-bottom: 12px; }
+    .section-label { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+    .section-title { font-family: 'Montserrat', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin-bottom: 12px; }
+    .section-body { font-size: .93rem; color: var(--text-mid); line-height: 1.8; }
+    .section-body p { margin-bottom: 12px; }
+    .section-body p:last-child { margin-bottom: 0; }
+    .section-body strong { color: var(--text-dark); }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid var(--gray-border); margin: 48px 0; }
+
+    /* Steps — cómo funciona */
+    .steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 24px; }
+    .step { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-border); padding: 24px 22px; box-shadow: var(--shadow-sm); position: relative; }
+    .step-num { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--teal-pale); line-height: 1; margin-bottom: 12px; }
+    .step-icon { font-size: 1.4rem; margin-bottom: 10px; }
+    .step h3 { font-family: 'Montserrat', sans-serif; font-size: .9rem; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; }
+    .step p { font-size: .83rem; color: var(--text-light); line-height: 1.6; }
+
+    /* Destino de datos */
+    .data-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+    .data-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-border); padding: 22px; box-shadow: var(--shadow-sm); }
+    .data-card-icon { font-size: 1.6rem; margin-bottom: 10px; }
+    .data-card h3 { font-family: 'Montserrat', sans-serif; font-size: .88rem; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; }
+    .data-card p { font-size: .82rem; color: var(--text-light); line-height: 1.6; }
+
+    /* Valores */
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 24px; }
+    .value-card { background: var(--teal-pale); border-radius: 10px; padding: 18px 20px; }
+    .value-icon { font-size: 1.3rem; margin-bottom: 8px; }
+    .value-card h3 { font-family: 'Montserrat', sans-serif; font-size: .85rem; font-weight: 800; color: var(--teal-darker); margin-bottom: 4px; }
+    .value-card p { font-size: .8rem; color: var(--teal-dark); line-height: 1.5; }
+
+    /* CTA final */
+    .cta-block { background: var(--teal-darker); border-radius: var(--radius); padding: 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 48px; }
+    .cta-block h3 { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+    .cta-block p { font-size: .85rem; color: rgba(255,255,255,.6); }
+    .cta-btn { font-family: 'Montserrat', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 12px 24px; border-radius: 7px; cursor: pointer; white-space: nowrap; transition: background var(--transition); }
+    .cta-btn:hover { background: var(--teal-pale); }
+
+    .footer { background: var(--teal-darker); text-align: center; padding: 28px 24px; color: rgba(255,255,255,.5); font-size: .83rem; }
+    .footer a { color: rgba(255,255,255,.7); }
+
+    @media (max-width: 860px) { .nav { display: none; } .data-cards { grid-template-columns: 1fr; } .cta-block { flex-direction: column; } }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="./index.html" class="logo">
+      <img src="./logo.png" alt="Enter Guía Digital" />
+      <div class="logo-text">
+        <div class="name">enter</div>
+        <div class="sub">guía digital</div>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="./guia.html">guIA</a>
+      <a href="./negocios.html">Negocios</a>
+      <a href="./reclamos.html" class="active">Reclamos</a>
+      <a href="./index.html#eventos">Eventos</a>
+      <a href="./empleos.html">Empleos</a>
+    </nav>
+    <div style="margin-left:auto;">
+      <a href="./reclamos.html"><button class="btn-nav">+ Reportar un problema</button></a>
+    </div>
+  </header>
+
+  <nav class="subnav">
+    <a href="./reclamos.html">🗺️ Mapa</a>
+    <a href="./reclamos-estadisticas.html">📊 Estadísticas</a>
+    <a href="./reclamos-blog.html">📰 Blog y Presentaciones</a>
+    <a href="./reclamos-acerca.html" class="active">ℹ️ Acerca</a>
+    <a href="./reclamos-faq.html">❓ FAQ</a>
+  </nav>
+
+  <div class="page-hero">
+    <div class="hero-inner">
+      <h1>Acerca del proyecto</h1>
+      <p>Conocé qué es el Mapa de Reclamos, para qué existe y qué hacemos con los datos.</p>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- Acerca -->
+    <div class="content-section">
+      <div class="section-label">El proyecto</div>
+      <h2 class="section-title">¿Qué es el Mapa de Reclamos?</h2>
+      <div class="section-body">
+        <p>El <strong>Mapa de Reclamos de Carlos Casares</strong> es una herramienta de participación ciudadana desarrollada por <strong>Enter Guía Digital</strong> que permite a los vecinos reportar problemas urbanos directamente en el mapa de la ciudad.</p>
+        <p>Baches, luminarias apagadas, basura acumulada, pérdidas de agua, árboles caídos: cualquier problema que afecte la calidad de vida en el espacio público puede ser reportado de forma gratuita, rápida y anónima desde el celular o la computadora.</p>
+        <p>Todos los reportes quedan visibles en el mapa para que cualquier vecino pueda verlos, y son monitoreados para identificar los problemas más urgentes y frecuentes de cada zona.</p>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Propósito -->
+    <div class="content-section">
+      <div class="section-label">Propósito</div>
+      <h2 class="section-title">¿Por qué existe esta herramienta?</h2>
+      <div class="section-body">
+        <p>Carlos Casares, como toda ciudad, enfrenta problemas urbanos cotidianos que muchas veces no llegan a las autoridades o tardan en resolverse por falta de información organizada.</p>
+        <p>El Mapa de Reclamos nace con un objetivo claro: <strong>darle voz a los vecinos</strong> y generar datos útiles para entender dónde están los problemas, con qué frecuencia ocurren y cuánto tiempo tardan en resolverse.</p>
+        <p>No reemplaza los canales oficiales de reclamo municipal, sino que los complementa: es un registro ciudadano independiente que documenta la realidad del espacio público.</p>
+      </div>
+
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">🙌</div>
+          <h3>Participación ciudadana</h3>
+          <p>Cualquier vecino puede reportar, sin necesidad de registrarse.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">👁️</div>
+          <h3>Transparencia</h3>
+          <p>Los reportes son públicos y visibles para toda la comunidad.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">📍</div>
+          <h3>Precisión geográfica</h3>
+          <p>Cada reporte queda ubicado en el mapa exacto de la ciudad.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">📊</div>
+          <h3>Datos abiertos</h3>
+          <p>Las estadísticas son públicas para que todos puedan analizarlas.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Cómo funciona -->
+    <div class="content-section">
+      <div class="section-label">Funcionamiento</div>
+      <h2 class="section-title">¿Cómo funciona?</h2>
+      <div class="section-body">
+        <p>El proceso es simple y tarda menos de un minuto.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-icon">📝</div>
+          <h3>Reportá el problema</h3>
+          <p>Hacé clic en "+ Reportar", elegí la categoría y describí el problema. Podés agregar la dirección y una foto.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-icon">🗺️</div>
+          <h3>Aparece en el mapa</h3>
+          <p>Tu reporte queda registrado en el mapa con un pin del color de la categoría elegida, visible para todos.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-icon">📊</div>
+          <h3>Se suma a las estadísticas</h3>
+          <p>El reporte alimenta los datos de la plataforma y ayuda a identificar los problemas más frecuentes.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-icon">✅</div>
+          <h3>Se actualiza el estado</h3>
+          <p>Cuando el problema se resuelve, el estado del reporte cambia a "Resuelto" en el mapa.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Destino de los datos -->
+    <div class="content-section">
+      <div class="section-label">Destino de los datos</div>
+      <h2 class="section-title">¿Qué hacemos con la información?</h2>
+      <div class="section-body">
+        <p>Los datos recopilados son de uso <strong>público y comunitario</strong>. No se venden ni se comparten con terceros con fines comerciales.</p>
+      </div>
+      <div class="data-cards">
+        <div class="data-card">
+          <div class="data-card-icon">🏛️</div>
+          <h3>Municipio de Carlos Casares</h3>
+          <p>Los reportes agrupados por zona y categoría pueden ser compartidos con el municipio para contribuir a la planificación urbana y la gestión de servicios públicos.</p>
+        </div>
+        <div class="data-card">
+          <div class="data-card-icon">📰</div>
+          <h3>Medios y periodismo ciudadano</h3>
+          <p>Las estadísticas públicas pueden ser utilizadas por periodistas, medios locales y organizaciones que quieran informar sobre el estado de la ciudad.</p>
+        </div>
+        <div class="data-card">
+          <div class="data-card-icon">🎓</div>
+          <h3>Investigación y análisis</h3>
+          <p>Los datos anonimizados pueden usarse para estudios urbanos, tesis universitarias y trabajos de investigación sobre la ciudad.</p>
+        </div>
+        <div class="data-card">
+          <div class="data-card-icon">👥</div>
+          <h3>La comunidad</h3>
+          <p>Cualquier vecino puede ver todos los reportes y las estadísticas. La información es pública y accesible sin necesidad de registrarse.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Privacidad -->
+    <div class="content-section">
+      <div class="section-label">Privacidad</div>
+      <h2 class="section-title">Tus datos están seguros</h2>
+      <div class="section-body">
+        <p>Los reportes son <strong>completamente anónimos</strong>. No pedimos nombre, apellido ni ningún dato personal para realizar un reporte.</p>
+        <p>Si el usuario decide incluir información de contacto (opcional), esa información no es pública y nunca es compartida con terceros. Consultá nuestra <a href="./privacidad.html" style="color:var(--teal);font-weight:600;">Política de privacidad</a> para más detalle.</p>
+        <p>Cumplimos con la <strong>Ley 25.326 de Protección de Datos Personales</strong> de la República Argentina.</p>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-block">
+      <div>
+        <h3>¿Encontraste un problema en la ciudad?</h3>
+        <p>Reportalo en el mapa en menos de un minuto. Es gratis y anónimo.</p>
+      </div>
+      <a href="./reclamos.html"><button class="cta-btn">Ir al mapa de reclamos</button></a>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p>© 2024 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
+  </footer>
+
+</body>
+</html>

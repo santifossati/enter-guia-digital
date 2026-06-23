@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Términos de Uso — Enter Guía Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal:        #1e7d96;
+      --teal-dark:   #145f73;
+      --teal-darker: #0e4a5a;
+      --teal-light:  #4db3cc;
+      --teal-pale:   #e6f4f7;
+      --gray-bg:     #f0eeeb;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #4a4a4a;
+      --text-light:  #7a7a7a;
+      --white:       #ffffff;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
+    a { text-decoration: none; color: inherit; }
+
+    /* Header */
+    .header {
+      background: var(--teal-darker);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
+    .logo-text .name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--white);
+    }
+    .logo-text .sub {
+      font-size: 9px;
+      color: rgba(255,255,255,.7);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+
+    /* Page */
+    .page-hero {
+      background: var(--teal-darker);
+      padding: 56px 32px 48px;
+      text-align: center;
+      color: var(--white);
+    }
+    .page-hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .page-hero p {
+      font-size: .95rem;
+      color: rgba(255,255,255,.65);
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    .section {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
+    .section h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--teal-darker);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--teal-pale);
+    }
+    .section p {
+      font-size: .93rem;
+      line-height: 1.75;
+      color: var(--text-mid);
+      margin-bottom: 12px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .section ul {
+      list-style: none;
+      margin: 0 0 12px;
+      padding: 0;
+    }
+    .section ul li {
+      font-size: .93rem;
+      line-height: 1.75;
+      color: var(--text-mid);
+      padding-left: 20px;
+      position: relative;
+      margin-bottom: 6px;
+    }
+    .section ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    .meta-bar {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: var(--teal-pale);
+      border-radius: 10px;
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      font-size: .85rem;
+      color: var(--teal-dark);
+      font-weight: 500;
+    }
+    .meta-bar span { display: flex; align-items: center; gap: 6px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--teal);
+      font-size: .9rem;
+      font-weight: 600;
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: 28px;
+      transition: gap .2s;
+    }
+    .back-link:hover { gap: 10px; }
+
+    /* Footer */
+    .footer {
+      background: var(--teal-darker);
+      text-align: center;
+      padding: 28px 24px;
+      color: rgba(255,255,255,.5);
+      font-size: .83rem;
+    }
+    .footer a { color: rgba(255,255,255,.7); }
+
+    @media (max-width: 600px) {
+      .section { padding: 24px 20px; }
+      .meta-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="./index.html" class="logo">
+      <img src="./logo.png" alt="Enter Guía Digital" />
+      <div class="logo-text">
+        <div class="name">enter</div>
+        <div class="sub">guía digital</div>
+      </div>
+    </a>
+  </header>
+
+  <div class="page-hero">
+    <h1>Términos de Uso</h1>
+    <p>Última actualización: junio de 2024</p>
+  </div>
+
+  <div class="container">
+
+    <a href="./index.html" class="back-link">← Volver al inicio</a>
+
+    <div class="meta-bar">
+      <span>📄 Versión 1.0</span>
+      <span>📅 Vigente desde junio 2024</span>
+      <span>📍 Carlos Casares, Buenos Aires</span>
+    </div>
+
+    <div class="section">
+      <h2>1. Aceptación de los términos</h2>
+      <p>Al acceder y utilizar la plataforma <strong>Enter Guía Digital</strong> (en adelante "la Plataforma"), disponible en <strong>enterguiacasares.com</strong>, aceptás plena y voluntariamente los presentes Términos de Uso. Si no estás de acuerdo con alguna de estas condiciones, te pedimos que no utilices la Plataforma.</p>
+      <p>Estos términos aplican a todos los usuarios, incluyendo visitantes, usuarios registrados y negocios que publiquen su información en la guía.</p>
+    </div>
+
+    <div class="section">
+      <h2>2. Descripción del servicio</h2>
+      <p>Enter Guía Digital es una plataforma digital local que ofrece los siguientes servicios a los vecinos de Carlos Casares y la región:</p>
+      <ul>
+        <li><strong>guIA:</strong> Asistente de inteligencia artificial que responde preguntas sobre la ciudad, horarios, servicios municipales, farmacias de turno, eventos y más.</li>
+        <li><strong>Guía de Negocios:</strong> Directorio de comercios, empresas y servicios locales con información de contacto, ubicación y horarios.</li>
+        <li><strong>Agenda de Eventos:</strong> Listado de eventos culturales, deportivos y comunitarios que ocurren en la ciudad.</li>
+        <li><strong>Mapa de Reclamos:</strong> Herramienta para reportar problemas urbanos (baches, iluminación, etc.) georreferenciados en el mapa de la ciudad.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>3. Uso aceptable</h2>
+      <p>El usuario se compromete a utilizar la Plataforma de manera responsable y legal. Queda expresamente prohibido:</p>
+      <ul>
+        <li>Publicar información falsa, engañosa o que induzca a error sobre un negocio o servicio.</li>
+        <li>Utilizar la Plataforma para actividades ilegales, fraudulentas o que atenten contra la integridad de terceros.</li>
+        <li>Intentar acceder sin autorización a sistemas, bases de datos o cuentas de otros usuarios.</li>
+        <li>Reproducir, redistribuir o comercializar contenido de la Plataforma sin autorización expresa.</li>
+        <li>Enviar consultas abusivas, spam o contenido ofensivo al asistente guIA.</li>
+        <li>Reportar reclamos falsos o malintencionados en el mapa de la ciudad.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>4. Registro de negocios</h2>
+      <p>Los comercios y servicios que deseen aparecer en la Guía de Negocios deben completar el formulario de registro y aceptar que la información publicada sea veraz y actualizada. Enter Guía Digital se reserva el derecho de:</p>
+      <ul>
+        <li>Verificar la información proporcionada antes de publicarla.</li>
+        <li>Rechazar o dar de baja listados que no cumplan con las normas de la Plataforma.</li>
+        <li>Editar información manifiestamente incorrecta o desactualizada.</li>
+      </ul>
+      <p>El titular del negocio es el único responsable por la exactitud de los datos proporcionados.</p>
+    </div>
+
+    <div class="section">
+      <h2>5. Asistente guIA — Limitaciones</h2>
+      <p>El asistente de inteligencia artificial <strong>guIA</strong> genera respuestas automáticas basadas en la información disponible en la Plataforma y fuentes públicas. Tené en cuenta que:</p>
+      <ul>
+        <li>Las respuestas de guIA son orientativas y pueden contener errores o información desactualizada.</li>
+        <li>No deben tomarse como asesoramiento médico, legal, financiero ni como información oficial del municipio.</li>
+        <li>Siempre verificá información crítica (horarios de guardia, turnos médicos, servicios de emergencia) en las fuentes oficiales correspondientes.</li>
+        <li>Las consultas realizadas a guIA pueden ser almacenadas de forma anónima para mejorar el servicio.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>6. Mapa de Reclamos</h2>
+      <p>El Mapa de Reclamos es una herramienta de participación ciudadana. Al reportar un problema urbano, el usuario:</p>
+      <ul>
+        <li>Declara que el problema reportado es real y verificable.</li>
+        <li>Acepta que su reporte (sin datos personales identificatorios) puede ser compartido con autoridades municipales.</li>
+        <li>Entiende que la resolución de los reclamos depende exclusivamente de los organismos municipales correspondientes y que Enter Guía Digital no es responsable de su gestión.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>7. Propiedad intelectual</h2>
+      <p>Todo el contenido de la Plataforma — diseño, textos, logos, código, estructura de datos y contenido generado por guIA — es propiedad de Enter Guía Digital o de sus respectivos titulares, y está protegido por las leyes de propiedad intelectual de la República Argentina.</p>
+      <p>La información de negocios publicada en el directorio pertenece a sus respectivos titulares, quienes otorgan licencia a la Plataforma para su exhibición.</p>
+    </div>
+
+    <div class="section">
+      <h2>8. Limitación de responsabilidad</h2>
+      <p>Enter Guía Digital no garantiza la disponibilidad continua de la Plataforma ni la exactitud total de la información publicada. En ningún caso será responsable por daños directos o indirectos derivados del uso o imposibilidad de uso de la Plataforma, incluyendo decisiones tomadas en base a información obtenida a través de guIA.</p>
+    </div>
+
+    <div class="section">
+      <h2>9. Modificaciones</h2>
+      <p>Enter Guía Digital podrá modificar estos Términos de Uso en cualquier momento. Los cambios serán publicados en esta página con la fecha de actualización correspondiente. El uso continuado de la Plataforma implica la aceptación de los términos modificados.</p>
+    </div>
+
+    <div class="section">
+      <h2>10. Contacto</h2>
+      <p>Para consultas, reclamos o sugerencias relacionadas con estos Términos de Uso, podés contactarnos a través de la sección <a href="#" style="color:var(--teal);font-weight:600;">Contacto</a> de la Plataforma o escribirnos a <strong>enterguiadigital@gmail.com</strong>.</p>
+      <p>Jurisdicción: República Argentina — Provincia de Buenos Aires.</p>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p>© 2024 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
+  </footer>
+
+</body>
+</html>

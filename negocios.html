@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guía de Negocios — Enter Guía Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal:        #1e7d96;
+      --teal-dark:   #145f73;
+      --teal-darker: #0e4a5a;
+      --teal-pale:   #e6f4f7;
+      --gray-bg:     #f0eeeb;
+      --gray-border: #d9d4cd;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #4a4a4a;
+      --text-light:  #7a7a7a;
+      --white:       #ffffff;
+      --shadow-sm:   0 2px 8px rgba(0,0,0,.08);
+      --shadow-md:   0 6px 24px rgba(0,0,0,.12);
+      --radius:      14px;
+      --transition:  .3s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Header ── */
+    .header {
+      background: var(--teal-darker);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,.2);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
+    .logo-text .name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); }
+    .logo-text .sub { font-size: 9px; color: rgba(255,255,255,.7); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+    .nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .nav a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.8); padding: 6px 12px; border-radius: 6px; transition: background var(--transition); font-family: 'Montserrat', sans-serif; }
+    .nav a:hover, .nav a.active { background: rgba(255,255,255,.12); color: var(--white); }
+    .btn-registrar { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; transition: background var(--transition); white-space: nowrap; }
+    .btn-registrar:hover { background: var(--teal-pale); }
+
+    /* ── Hero ── */
+    .page-hero {
+      background: var(--teal-darker);
+      padding: 44px 32px 36px;
+      color: var(--white);
+    }
+    .hero-inner { max-width: 1200px; margin: 0 auto; }
+    .page-hero h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; margin-bottom: 8px; }
+    .page-hero p { font-size: .9rem; color: rgba(255,255,255,.6); margin-bottom: 20px; }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,.97);
+      border-radius: 10px;
+      padding: 0 16px;
+      max-width: 560px;
+    }
+    .search-bar svg { width: 17px; height: 17px; flex-shrink: 0; color: var(--text-light); }
+    .search-bar input { flex: 1; border: none; outline: none; font-family: 'Inter', sans-serif; font-size: .93rem; color: var(--text-dark); padding: 13px 0; background: transparent; }
+    .search-bar input::placeholder { color: var(--text-light); }
+
+    /* ── Layout ── */
+    .layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      position: sticky;
+      top: 80px;
+    }
+    .sidebar-header {
+      padding: 16px 20px;
+      background: var(--teal-darker);
+      font-family: 'Montserrat', sans-serif;
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.8);
+    }
+
+    /* Grupo de categorías */
+    .cat-group { border-bottom: 1px solid var(--gray-border); }
+    .cat-group:last-child { border-bottom: none; }
+
+    .cat-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 20px;
+      background: var(--teal-pale);
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--transition);
+    }
+    .cat-group-header:hover { background: #d4ecf1; }
+    .cat-group-header span {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--teal-darker);
+    }
+    .cat-group-header .arrow {
+      font-size: .7rem;
+      color: var(--teal);
+      transition: transform var(--transition);
+    }
+    .cat-group.open .arrow { transform: rotate(180deg); }
+
+    .cat-list {
+      display: none;
+      flex-direction: column;
+    }
+    .cat-group.open .cat-list { display: flex; }
+
+    .cat-item {
+      padding: 8px 20px 8px 28px;
+      font-size: .84rem;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      border-bottom: 1px solid rgba(0,0,0,.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cat-item:last-child { border-bottom: none; }
+    .cat-item:hover { background: var(--teal-pale); color: var(--teal-darker); }
+    .cat-item.active { background: var(--teal-pale); color: var(--teal); font-weight: 600; }
+    .cat-item .count {
+      font-size: .72rem;
+      background: var(--gray-bg);
+      color: var(--text-light);
+      padding: 1px 7px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .cat-item.active .count { background: var(--teal-pale); color: var(--teal); }
+
+    .ver-todos-btn {
+      display: block;
+      width: 100%;
+      padding: 13px 20px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: none;
+      border: none;
+      border-top: 1px solid var(--gray-border);
+      cursor: pointer;
+      text-align: left;
+      transition: background var(--transition);
+    }
+    .ver-todos-btn:hover { background: var(--teal-pale); }
+
+    /* ── Contenido principal ── */
+    .main-content {}
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .results-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+    .results-count {
+      font-size: .83rem;
+      color: var(--text-light);
+    }
+
+    /* ── Tarjeta negocio ── */
+    .biz-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .biz-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-border);
+      padding: 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+    .biz-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .biz-logo {
+      width: 68px; height: 68px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #eee;
+      background: #fff;
+    }
+    .biz-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .biz-logo.initials {
+      background: var(--teal-pale);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--teal);
+      border: none;
+    }
+    .biz-info { flex: 1; min-width: 0; }
+    .biz-name-row { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-bottom: 2px; }
+    .biz-name { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800; color: var(--text-dark); text-transform: uppercase; letter-spacing: .3px; }
+    .biz-cat { font-size: 11.5px; color: var(--text-light); margin-bottom: 8px; }
+    .biz-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+    .biz-tag { font-size: 10px; font-weight: 600; font-family: 'Montserrat', sans-serif; padding: 2px 9px; border-radius: 20px; background: var(--teal-pale); color: var(--teal-dark); }
+    .biz-details { display: flex; flex-direction: column; gap: 3px; }
+    .biz-detail { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--text-mid); }
+    .biz-detail svg { width: 12px; height: 12px; flex-shrink: 0; color: var(--teal); }
+    .biz-badge { font-family: 'Montserrat', sans-serif; font-size: 8px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; padding: 2px 7px; border-radius: 20px; white-space: nowrap; background: #fff3cd; color: #7c5a00; flex-shrink: 0; }
+
+    /* Estado vacío */
+    .empty-state {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--text-light);
+    }
+    .empty-state svg { width: 48px; height: 48px; margin: 0 auto 16px; opacity: .3; }
+    .empty-state h3 { font-family: 'Montserrat', sans-serif; font-size: .95rem; font-weight: 700; color: var(--text-mid); margin-bottom: 6px; }
+    .empty-state p { font-size: .85rem; }
+
+    /* CTA */
+    .cta-registrar {
+      background: var(--teal-darker);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 32px;
+    }
+    .cta-registrar h3 { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+    .cta-registrar p { font-size: .85rem; color: rgba(255,255,255,.6); }
+    .cta-btn { font-family: 'Montserrat', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 11px 22px; border-radius: 7px; cursor: pointer; white-space: nowrap; transition: background var(--transition); }
+    .cta-btn:hover { background: var(--teal-pale); }
+
+    /* Footer */
+    .footer { background: var(--teal-darker); text-align: center; padding: 28px 24px; color: rgba(255,255,255,.5); font-size: .83rem; }
+    .footer a { color: rgba(255,255,255,.7); }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .nav { display: none; }
+      .cta-registrar { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="./index.html" class="logo">
+      <img src="./logo.png" alt="Enter Guía Digital" />
+      <div class="logo-text">
+        <div class="name">enter</div>
+        <div class="sub">guía digital</div>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="./guia.html">guIA</a>
+      <a href="./negocios.html" class="active">Negocios</a>
+      <a href="/reclamos">Reclamos</a>
+      <a href="/eventos">Eventos</a>
+      <a href="./empleos.html">Empleos</a>
+    </nav>
+    <div style="margin-left:auto;">
+      <button class="btn-registrar">Registrá tu negocio <span style="opacity:.75;">(¡Es gratis!)</span></button>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <div class="hero-inner">
+      <h1>Guía de Negocios</h1>
+      <p>Comercios, servicios, profesionales e instituciones de Carlos Casares.</p>
+      <div class="search-bar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscá un negocio, rubro o servicio..." />
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+      <div class="sidebar-header">Categorías</div>
+
+      <!-- INSTITUCIONES -->
+      <div class="cat-group open" data-group="instituciones">
+        <div class="cat-group-header">
+          <span>🏛 Instituciones</span>
+          <span class="arrow">▾</span>
+        </div>
+        <div class="cat-list">
+          <div class="cat-item" data-cat="colegios">Colegios <span class="count">0</span></div>
+          <div class="cat-item" data-cat="consulados">Consulados <span class="count">0</span></div>
+          <div class="cat-item" data-cat="hospitales">Hospitales <span class="count">0</span></div>
+          <div class="cat-item" data-cat="jardines">Jardines de Infantes <span class="count">0</span></div>
+          <div class="cat-item" data-cat="juzgados">Juzgados <span class="count">0</span></div>
+          <div class="cat-item" data-cat="museos">Museos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="parroquias">Parroquias <span class="count">0</span></div>
+        </div>
+      </div>
+
+      <!-- NEGOCIOS -->
+      <div class="cat-group open" data-group="negocios">
+        <div class="cat-group-header">
+          <span>🏪 Negocios</span>
+          <span class="arrow">▾</span>
+        </div>
+        <div class="cat-list">
+          <div class="cat-item" data-cat="agencias-viajes">Agencias de Viajes <span class="count">0</span></div>
+          <div class="cat-item" data-cat="alquiler-herramientas">Alquiler de Herramientas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="bares">Bares <span class="count">0</span></div>
+          <div class="cat-item" data-cat="boliches">Boliches <span class="count">0</span></div>
+          <div class="cat-item" data-cat="cafeterias">Cafeterías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="canchas">Canchas de Fútbol <span class="count">0</span></div>
+          <div class="cat-item active" data-cat="carnicerias">Carnicerías <span class="count">1</span></div>
+          <div class="cat-item" data-cat="casas-deportes">Casas de Deportes <span class="count">0</span></div>
+          <div class="cat-item" data-cat="cervecerias">Cervecerías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="cocheras">Cocheras <span class="count">0</span></div>
+          <div class="cat-item" data-cat="corralones">Corralones <span class="count">0</span></div>
+          <div class="cat-item" data-cat="dieteticas">Dietéticas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="electricidad-auto">Electricidad del Automóvil <span class="count">0</span></div>
+          <div class="cat-item" data-cat="estaciones-servicio">Estaciones de Servicio <span class="count">0</span></div>
+          <div class="cat-item" data-cat="esteticas">Estéticas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="estudios-holisticos">Estudios Holísticos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="farmacias">Farmacias <span class="count">0</span></div>
+          <div class="cat-item" data-cat="ferreterias">Ferreterías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="fotocopias">Fotocopias <span class="count">0</span></div>
+          <div class="cat-item" data-cat="gimnasios">Gimnasios <span class="count">0</span></div>
+          <div class="cat-item" data-cat="gomerias">Gomerías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="graficas">Gráficas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="guardamuebles">Guardamuebles <span class="count">0</span></div>
+          <div class="cat-item" data-cat="hamburgueserias">Hamburgueserías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="heladerias">Heladerías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="hoteles">Hoteles <span class="count">0</span></div>
+          <div class="cat-item" data-cat="informatica">Informática <span class="count">0</span></div>
+          <div class="cat-item" data-cat="inmobiliarias">Inmobiliarias <span class="count">0</span></div>
+          <div class="cat-item" data-cat="insumos-tatuajes">Insumos para Tatuajes <span class="count">0</span></div>
+          <div class="cat-item" data-cat="jugeterias">Jugueterías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="kioskos">Kioskos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="laboratorios">Laboratorios <span class="count">0</span></div>
+          <div class="cat-item" data-cat="lavaderos-autos">Lavaderos de Autos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="lavaderos-ropa">Lavaderos de Ropa <span class="count">0</span></div>
+          <div class="cat-item" data-cat="manicuras">Manicuras <span class="count">0</span></div>
+          <div class="cat-item" data-cat="mueblerias">Mueblerías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="parrillas">Parrillas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="peluquerias">Peluquerías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="pensiones">Pensiones <span class="count">0</span></div>
+          <div class="cat-item" data-cat="pescaderias">Pescaderías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="piercing">Piercing <span class="count">0</span></div>
+          <div class="cat-item" data-cat="pizzerias">Pizzerías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="pollajerias">Pollajerías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="rep-celulares">Reparación de Celulares <span class="count">0</span></div>
+          <div class="cat-item" data-cat="rep-computadoras">Reparación de Computadoras <span class="count">0</span></div>
+          <div class="cat-item" data-cat="restaurantes">Restaurantes <span class="count">0</span></div>
+          <div class="cat-item" data-cat="sanitarios">Sanitarios <span class="count">0</span></div>
+          <div class="cat-item" data-cat="sepelios">Sepelios <span class="count">0</span></div>
+          <div class="cat-item" data-cat="supermercados">Supermercados <span class="count">0</span></div>
+          <div class="cat-item" data-cat="sushi">Sushi <span class="count">0</span></div>
+          <div class="cat-item" data-cat="tatuajes">Tatuajes <span class="count">0</span></div>
+          <div class="cat-item" data-cat="bebidas">Tiendas de Bebidas Alcohólicas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="electricidad">Tiendas de Electricidad <span class="count">0</span></div>
+          <div class="cat-item" data-cat="mascotas">Tiendas de Mascotas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="ropa">Tiendas de Ropa <span class="count">0</span></div>
+          <div class="cat-item" data-cat="videojuegos">Tiendas de Videojuegos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="verdulerias">Verdulerías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="veterinarias">Veterinarias <span class="count">0</span></div>
+          <div class="cat-item" data-cat="viveros">Viveros <span class="count">0</span></div>
+          <div class="cat-item" data-cat="yoga">Yoga <span class="count">0</span></div>
+        </div>
+      </div>
+
+      <!-- OFICIOS -->
+      <div class="cat-group" data-group="oficios">
+        <div class="cat-group-header">
+          <span>🔧 Oficios</span>
+          <span class="arrow">▾</span>
+        </div>
+        <div class="cat-list">
+          <div class="cat-item" data-cat="cerrajeros">Cerrajeros <span class="count">0</span></div>
+          <div class="cat-item" data-cat="chapistas">Chapistas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="electricistas">Electricistas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="gasistas">Gasistas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="herrerias">Herrerías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="masajes">Masajes <span class="count">0</span></div>
+          <div class="cat-item" data-cat="mecanicos">Mecánicos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="plomeros">Plomeros <span class="count">0</span></div>
+          <div class="cat-item" data-cat="service-calderas">Service de Calderas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="service-refrigeracion">Service Refrigeración <span class="count">0</span></div>
+          <div class="cat-item" data-cat="zapateros">Zapateros <span class="count">0</span></div>
+        </div>
+      </div>
+
+      <!-- PROFESIONALES -->
+      <div class="cat-group" data-group="profesionales">
+        <div class="cat-group-header">
+          <span>👔 Profesionales</span>
+          <span class="arrow">▾</span>
+        </div>
+        <div class="cat-list">
+          <div class="cat-item" data-cat="abogados">Abogados <span class="count">0</span></div>
+          <div class="cat-item" data-cat="agrimensores">Agrimensores <span class="count">0</span></div>
+          <div class="cat-item" data-cat="cardiologos">Cardiólogos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="contadores">Contadores <span class="count">0</span></div>
+          <div class="cat-item" data-cat="enfermerias">Enfermerías <span class="count">0</span></div>
+          <div class="cat-item" data-cat="escribanos">Escribanos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="ginecologos">Ginecólogos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="kinesiologos">Kinesiólogos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="neurologos">Neurólogos <span class="count">0</span></div>
+          <div class="cat-item" data-cat="nutricionistas">Nutricionistas <span class="count">0</span></div>
+          <div class="cat-item" data-cat="odontologos">Odontólogos <span class="count">0</span></div>
+          <div class="cat-item active" data-cat="publicidad">Publicidad y Marketing <span class="count">1</span></div>
+        </div>
+      </div>
+
+      <button class="ver-todos-btn" id="verTodosBtn">Ver todos los negocios</button>
+    </aside>
+
+    <!-- ── CONTENIDO ── -->
+    <div class="main-content">
+      <div class="results-header">
+        <span class="results-title" id="resultsTitle">Todos los negocios</span>
+        <span class="results-count" id="resultsCount">2 resultados</span>
+      </div>
+
+      <div class="biz-grid" id="bizGrid">
+
+        <!-- Carnicería El Modelito -->
+        <div class="biz-card" data-cats="carnicerias" onclick="window.location.href='./negocios/el-modelito.html'" style="cursor:pointer;">
+          <div class="biz-logo">
+            <img src="./logo-modelito.png" alt="Carnicería El Modelito" />
+          </div>
+          <div class="biz-info">
+            <div class="biz-name-row">
+              <span class="biz-name">Carnicería El Modelito</span>
+              <span class="biz-badge">⭐ Destacado</span>
+            </div>
+            <div class="biz-cat">Carnicería y Despensa</div>
+            <div class="biz-tags">
+              <span class="biz-tag">Carnicería</span>
+              <span class="biz-tag">Despensa</span>
+              <span class="biz-tag">Fiambres</span>
+            </div>
+            <div class="biz-details">
+              <div class="biz-detail">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                9 de Julio 119, Carlos Casares
+              </div>
+              <div class="biz-detail">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                Lun–Sáb · 7:00 – 13:00
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thrive Publicidad -->
+        <div class="biz-card" data-cats="publicidad" onclick="window.location.href='./negocios/thrive.html'" style="cursor:pointer;">
+          <div class="biz-logo">
+            <img src="./logo-thrive.png" alt="Thrive Publicidad" />
+          </div>
+          <div class="biz-info">
+            <div class="biz-name-row">
+              <span class="biz-name">Thrive</span>
+              <span class="biz-badge">⭐ Destacado</span>
+            </div>
+            <div class="biz-cat">Agencia de Publicidad, Diseño Web y Apps</div>
+            <div class="biz-tags">
+              <span class="biz-tag">Publicidad</span>
+              <span class="biz-tag">Páginas web</span>
+              <span class="biz-tag">Apps</span>
+              <span class="biz-tag">Redes sociales</span>
+            </div>
+            <div class="biz-details">
+              <div class="biz-detail">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Carlos Casares, Buenos Aires
+              </div>
+              <div class="biz-detail">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                Lun–Vie · 9:00 – 18:00
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="cta-registrar">
+        <div>
+          <h3>¿Tenés un negocio en Carlos Casares?</h3>
+          <p>Sumalo a la guía gratis y llegá a miles de vecinos.</p>
+        </div>
+        <button class="cta-btn">Registrá tu negocio — ¡Es gratis!</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2024 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
+  </footer>
+
+  <script>
+    const cards = document.querySelectorAll('.biz-card');
+    const catItems = document.querySelectorAll('.cat-item');
+    const resultsTitle = document.getElementById('resultsTitle');
+    const resultsCount = document.getElementById('resultsCount');
+
+    // Toggle grupos
+    document.querySelectorAll('.cat-group-header').forEach(header => {
+      header.addEventListener('click', () => {
+        header.closest('.cat-group').classList.toggle('open');
+      });
+    });
+
+    function filterByCat(cat, label) {
+      catItems.forEach(i => i.classList.remove('active'));
+      if (cat) {
+        const item = document.querySelector(`.cat-item[data-cat="${cat}"]`);
+        if (item) item.classList.add('active');
+      }
+      let visible = 0;
+      cards.forEach(card => {
+        const cats = card.dataset.cats || '';
+        const show = !cat || cats.split(' ').includes(cat);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      resultsTitle.textContent = label || 'Todos los negocios';
+      resultsCount.textContent = visible + ' resultado' + (visible !== 1 ? 's' : '');
+    }
+
+    catItems.forEach(item => {
+      item.addEventListener('click', () => {
+        filterByCat(item.dataset.cat, item.textContent.replace(/\d+/g, '').trim());
+      });
+    });
+
+    document.getElementById('verTodosBtn').addEventListener('click', () => {
+      filterByCat(null, 'Todos los negocios');
+    });
+
+    // Búsqueda
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const q = this.value.toLowerCase().trim();
+      catItems.forEach(i => i.classList.remove('active'));
+      let visible = 0;
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const show = !q || text.includes(q);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      resultsTitle.textContent = q ? `Resultados para "${this.value}"` : 'Todos los negocios';
+      resultsCount.textContent = visible + ' resultado' + (visible !== 1 ? 's' : '');
+    });
+  </script>
+</body>
+</html>

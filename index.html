@@ -364,6 +364,37 @@
     }
     .chip:hover { background: #c8e9f0; transform: translateY(-1px); }
 
+    /* ── Chat thread / clima widget ── */
+    .chat-thread { margin-bottom: 14px; }
+    .chat-msg-user {
+      font-size: 13px; font-weight: 600; color: var(--teal-dark);
+      background: #e8f5f9; border-radius: 16px 16px 4px 16px;
+      padding: 8px 14px; display: inline-block; margin-bottom: 10px;
+    }
+    .chat-msg-ai { display: flex; flex-direction: column; gap: 0; }
+    .wx-inline {
+      background: #f7fcfe; border: 1px solid #d4edf5;
+      border-radius: 4px 16px 16px 16px; padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .wx-row { display: flex; align-items: center; gap: 14px; }
+    .wx-icon-big { font-size: 36px; line-height: 1; }
+    .wx-info { display: flex; flex-direction: column; gap: 2px; }
+    .wx-temp-big { font-size: 26px; font-weight: 700; color: var(--teal-darker); line-height: 1; }
+    .wx-cond-txt { font-size: 13px; color: var(--text-mid); }
+    .wx-meta-row { display: flex; gap: 10px; margin-top: 4px; }
+    .wx-meta-row span { font-size: 11px; color: var(--text-light); }
+    .wx-tomorrow-row {
+      display: flex; align-items: center; gap: 10px;
+      padding-top: 10px; border-top: 1px solid #d4edf5;
+      font-size: 12px;
+    }
+    .wx-tmr-label { font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--text-light); width: 46px; flex-shrink: 0; }
+    .wx-tmr-emoji { font-size: 18px; }
+    .wx-tmr-desc { color: var(--text-mid); flex: 1; }
+    .wx-tmr-temps { color: var(--text-dark); white-space: nowrap; }
+    .wx-tmr-temps b { color: var(--teal-dark); font-weight: 700; }
+
     /* Scroll hint */
     .scroll-hint {
       position: absolute;
@@ -496,6 +527,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      margin-top: auto;
       font-size: 12px;
       font-weight: 700;
       font-family: 'Montserrat', sans-serif;
@@ -616,7 +648,7 @@
       box-shadow: var(--shadow-md);
     }
     .dest-logo {
-      width: 56px; height: 56px;
+      width: 72px; height: 72px;
       border-radius: 12px;
       background: var(--teal-pale);
       display: flex;
@@ -770,14 +802,15 @@
     </a>
 
     <nav class="nav">
-      <a href="/guia">guIA</a>
-      <a href="/negocios">Negocios</a>
-      <a href="/eventos">Eventos</a>
+      <a href="./guia.html">guIA</a>
+      <a href="./negocios.html">Negocios</a>
       <a href="/reclamos">Reclamos</a>
+      <a href="/eventos">Eventos</a>
+      <a href="./empleos.html">Empleos</a>
     </nav>
 
     <div class="header-actions">
-      <button class="btn-registrar">Registrá tu negocio</button>
+      <button class="btn-registrar">Registrá tu negocio <span style="opacity:.75;font-weight:600;">(¡Es gratis!)</span></button>
     </div>
   </header>
 
@@ -810,7 +843,40 @@
       <!-- Chat box -->
       <div class="chat-box">
         <div class="chat-label">guIA — Preguntale algo a la IA</div>
-        <div class="chat-input-row">
+
+        <!-- Conversación pre-cargada: clima -->
+        <div class="chat-thread">
+          <!-- Pregunta del usuario -->
+          <div class="chat-msg-user">¿Cómo está el clima en Casares?</div>
+          <!-- Respuesta de guIA con widget de clima -->
+          <div class="chat-msg-ai">
+            <div class="wx-inline">
+              <!-- HOY -->
+              <div class="wx-row">
+                <div class="wx-icon-big" id="wxEmoji">⛅</div>
+                <div class="wx-info">
+                  <div class="wx-temp-big" id="wxTemp">—°</div>
+                  <div class="wx-cond-txt" id="wxCond">Cargando clima...</div>
+                  <div class="wx-meta-row">
+                    <span id="wxHum">— hum.</span>
+                    <span id="wxWind">— viento</span>
+                    <span id="wxClock">—:—</span>
+                  </div>
+                </div>
+              </div>
+              <!-- MAÑANA -->
+              <div class="wx-tomorrow-row">
+                <span class="wx-tmr-label">Mañana</span>
+                <span class="wx-tmr-emoji" id="tmrEmoji">—</span>
+                <span class="wx-tmr-desc" id="tmrCond">—</span>
+                <span class="wx-tmr-temps"><b id="tmrMax">—°</b> / <span id="tmrMin">—°</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input para siguiente pregunta -->
+        <div class="chat-input-row" style="margin-top:14px;">
           <input
             class="chat-input"
             type="text"
@@ -951,7 +1017,7 @@
     <div class="dest-grid">
 
       <div class="dest-card reveal reveal-delay-1">
-        <div class="dest-logo">CM</div>
+        <div class="dest-logo" style="background:#fff;padding:4px;"><img src="./logo-modelito.png" alt="El Modelito" style="width:100%;height:100%;object-fit:contain;border-radius:8px;"></div>
         <div class="dest-info">
           <div class="dest-name">Carnicería El Modelito</div>
           <div class="dest-cat">Carnicería y Despensa</div>
@@ -963,10 +1029,10 @@
       </div>
 
       <div class="dest-card reveal reveal-delay-2">
-        <div class="dest-logo" style="background:#e8f5e9;color:#2e7d32;">TH</div>
+        <div class="dest-logo" style="background:#fff;padding:4px;"><img src="./logo-thrive.png" alt="Thrive" style="width:100%;height:100%;object-fit:contain;border-radius:8px;"></div>
         <div class="dest-info">
-          <div class="dest-name">Thrive Publicidad</div>
-          <div class="dest-cat">Agencia de Publicidad</div>
+          <div class="dest-name">Thrive</div>
+          <div class="dest-cat">Publicidad, Web y Apps</div>
           <div class="dest-addr">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
             Carlos Casares
@@ -1018,6 +1084,7 @@
         <ul>
           <li><a href="/guia">guIA — Chat inteligente</a></li>
           <li><a href="/negocios">Guía de Negocios</a></li>
+          <li><a href="./empleos.html">Portal de Empleos</a></li>
           <li><a href="/eventos">Eventos</a></li>
           <li><a href="/reclamos">Mapa de Reclamos</a></li>
         </ul>
@@ -1026,8 +1093,8 @@
       <div class="footer-col">
         <h3>Legal</h3>
         <ul>
-          <li><a href="#">Términos de uso</a></li>
-          <li><a href="#">Política de privacidad</a></li>
+          <li><a href="./terminos.html">Términos de uso</a></li>
+          <li><a href="./privacidad.html">Política de privacidad</a></li>
           <li><a href="#">Registrá tu negocio</a></li>
           <li><a href="#">Contacto</a></li>
         </ul>
@@ -1074,6 +1141,54 @@
     document.getElementById('chatInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') sendChat();
     });
+
+    /* ── Widget clima ── */
+    (function() {
+      const WX = {
+        0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',
+        51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',
+        71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'🌧️',
+        95:'⛈️',96:'⛈️',99:'⛈️'
+      };
+      const ES = {
+        0:'Despejado',1:'Mayormente despejado',2:'Parcialmente nublado',3:'Nublado',
+        45:'Niebla',48:'Niebla',51:'Llovizna leve',53:'Llovizna',55:'Llovizna intensa',
+        61:'Lluvia leve',63:'Lluvia moderada',65:'Lluvia intensa',
+        71:'Nieve leve',73:'Nieve',75:'Nieve intensa',
+        80:'Chaparrones',81:'Chaparrones',82:'Chaparrones fuertes',
+        95:'Tormenta',96:'Tormenta',99:'Tormenta fuerte'
+      };
+      const DIAS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+      const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+
+      function tick() {
+        const n = new Date();
+        const el = document.getElementById('wxClock');
+        if (el) el.textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+      }
+      tick(); setInterval(tick, 30000);
+
+      fetch('https://api.open-meteo.com/v1/forecast?latitude=-35.6194&longitude=-61.3655&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FArgentina%2FBuenos_Aires&forecast_days=2')
+        .then(r => r.json())
+        .then(d => {
+          const c = d.current, code = c.weather_code;
+          document.getElementById('wxEmoji').textContent  = WX[code] || '🌡️';
+          document.getElementById('wxTemp').textContent   = Math.round(c.temperature_2m) + '°';
+          document.getElementById('wxCond').textContent   = ES[code] || 'Variable';
+          document.getElementById('wxHum').textContent    = c.relative_humidity_2m + '% hum.';
+          document.getElementById('wxWind').textContent   = Math.round(c.wind_speed_10m) + ' km/h viento';
+          const tc = d.daily.weather_code[1];
+          const tmr = new Date(); tmr.setDate(tmr.getDate()+1);
+          document.getElementById('tmrEmoji').textContent = WX[tc] || '🌡️';
+          document.getElementById('tmrCond').textContent  = DIAS[tmr.getDay()] + ' · ' + (ES[tc] || 'Variable');
+          document.getElementById('tmrMax').textContent   = Math.round(d.daily.temperature_2m_max[1]) + '°';
+          document.getElementById('tmrMin').textContent   = Math.round(d.daily.temperature_2m_min[1]) + '°';
+        })
+        .catch(() => {
+          const el = document.getElementById('wxCond');
+          if (el) el.textContent = 'Sin conexión';
+        });
+    })();
   </script>
 
 </body>

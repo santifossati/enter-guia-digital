@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thrive — Publicidad, Diseño Web y Apps · Enter Guía Digital</title>
+  <meta name="description" content="Thrive es una agencia de publicidad, diseño web y desarrollo de apps en Carlos Casares, Buenos Aires." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal:        #1e7d96;
+      --teal-dark:   #145f73;
+      --teal-darker: #0e4a5a;
+      --teal-pale:   #e6f4f7;
+      --gray-bg:     #f0eeeb;
+      --gray-border: #d9d4cd;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #4a4a4a;
+      --text-light:  #7a7a7a;
+      --white:       #ffffff;
+      --gold:        #f5a623;
+      --shadow-sm:   0 2px 8px rgba(0,0,0,.07);
+      --shadow-md:   0 8px 32px rgba(0,0,0,.12);
+      --radius:      14px;
+      --transition:  .28s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── HEADER SITE ── */
+    .site-header { background: var(--teal-darker); height: 64px; display: flex; align-items: center; padding: 0 32px; gap: 24px; position: sticky; top: 0; z-index: 300; box-shadow: 0 2px 20px rgba(0,0,0,.2); }
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .logo-text .name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); }
+    .logo-text .sub  { font-size: 9px; color: rgba(255,255,255,.6); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+    .site-nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .site-nav a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.75); padding: 6px 12px; border-radius: 6px; transition: background var(--transition); font-family: 'Montserrat', sans-serif; }
+    .site-nav a:hover { background: rgba(255,255,255,.12); color: var(--white); }
+    .btn-registra { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 9px 18px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb { background: var(--white); border-bottom: 1px solid var(--gray-border); padding: 10px 32px; display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-light); }
+    .breadcrumb a { color: var(--teal); font-weight: 500; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb svg { width: 12px; height: 12px; }
+
+    /* ── HERO NEGOCIO ── */
+    .biz-hero { background: var(--teal-darker); position: relative; overflow: hidden; padding: 48px 32px 0; }
+    .biz-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 0%, rgba(77,217,240,.12) 0%, transparent 60%), radial-gradient(ellipse at 10% 100%, rgba(30,125,150,.2) 0%, transparent 50%); pointer-events: none; }
+    .biz-hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+    .biz-hero-top { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; padding-bottom: 28px; }
+    .biz-logo-wrap { width: 110px; height: 110px; border-radius: 20px; background: var(--white); display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,.25); flex-shrink: 0; }
+    .biz-logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .biz-logo-placeholder { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 800; color: var(--teal-darker); letter-spacing: -1px; }
+    .biz-hero-info { flex: 1; }
+    .biz-badge-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .badge-dest { display: inline-flex; align-items: center; gap: 5px; background: var(--gold); color: #7a4a00; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+    .badge-cat  { font-size: 12px; color: rgba(255,255,255,.6); background: rgba(255,255,255,.1); padding: 4px 12px; border-radius: 20px; }
+    .biz-name { font-family: 'Montserrat', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; color: var(--white); margin-bottom: 6px; line-height: 1.1; }
+    .biz-tagline { font-size: 15px; color: rgba(255,255,255,.65); margin-bottom: 16px; }
+    .biz-quick { display: flex; flex-wrap: wrap; gap: 16px; }
+    .biz-quick-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255,255,255,.7); }
+    .biz-quick-item svg { width: 15px; height: 15px; flex-shrink: 0; opacity: .8; }
+    .biz-hero-actions { display: flex; gap: 10px; flex-wrap: wrap; padding: 28px 0 32px; border-top: 1px solid rgba(255,255,255,.1); margin-top: 24px; }
+    .btn-primary { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; background: var(--white); color: var(--teal-darker); border: none; padding: 11px 22px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: opacity var(--transition); }
+    .btn-primary:hover { opacity: .88; }
+    .btn-outline { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600; background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,.35); padding: 11px 22px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: border-color var(--transition), background var(--transition); }
+    .btn-outline:hover { border-color: rgba(255,255,255,.7); background: rgba(255,255,255,.08); }
+    .btn-primary svg, .btn-outline svg { width: 16px; height: 16px; }
+
+    /* ── TAGS ── */
+    .tags-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+    .tag { font-size: 12px; background: rgba(255,255,255,.13); color: rgba(255,255,255,.8); padding: 4px 12px; border-radius: 20px; }
+
+    /* ── LAYOUT BODY ── */
+    .page-body { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; display: grid; grid-template-columns: 1fr 300px; gap: 28px; align-items: start; }
+    @media (max-width: 860px) { .page-body { grid-template-columns: 1fr; } }
+
+    /* ── SECCIONES IZQUIERDA ── */
+    .section-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-border); padding: 28px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+    .section-title { font-family: 'Montserrat', sans-serif; font-size: .75rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--teal); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--gray-border); }
+    .about-text { font-size: .9rem; color: var(--text-mid); line-height: 1.8; }
+
+    /* ── SERVICIOS ── */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+    .service-card { border: 1px solid var(--gray-border); border-radius: 10px; padding: 18px 16px; background: var(--gray-bg); transition: border-color var(--transition), box-shadow var(--transition); }
+    .service-card:hover { border-color: var(--teal); box-shadow: 0 4px 16px rgba(30,125,150,.1); }
+    .service-icon { font-size: 26px; margin-bottom: 10px; }
+    .service-name { font-family: 'Montserrat', sans-serif; font-size: .82rem; font-weight: 700; color: var(--text-dark); margin-bottom: 5px; }
+    .service-desc { font-size: .78rem; color: var(--text-light); line-height: 1.6; }
+
+    /* ── GALERÍA ── */
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .gallery-grid img { border-radius: 8px; aspect-ratio: 4/3; object-fit: cover; cursor: pointer; transition: opacity var(--transition), transform var(--transition); }
+    .gallery-grid img:hover { opacity: .88; transform: scale(1.02); }
+    .gallery-placeholder { border-radius: 8px; aspect-ratio: 4/3; background: var(--gray-bg); border: 2px dashed var(--gray-border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--text-light); font-size: 12px; text-align: center; padding: 12px; cursor: default; }
+    .gallery-placeholder svg { width: 28px; height: 28px; opacity: .4; }
+
+    /* ── SIDEBAR ── */
+    .sidebar-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-border); padding: 22px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
+    .sidebar-title { font-family: 'Montserrat', sans-serif; font-size: .7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--teal); margin-bottom: 14px; }
+    .info-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; font-size: .85rem; color: var(--text-mid); }
+    .info-row:last-child { margin-bottom: 0; }
+    .info-row svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--teal); margin-top: 2px; }
+    .info-row strong { color: var(--text-dark); }
+
+    /* Horario */
+    .hours-row { display: flex; justify-content: space-between; font-size: .82rem; color: var(--text-mid); padding: 5px 0; border-bottom: 1px solid var(--gray-border); }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-row .day { font-weight: 600; color: var(--text-dark); }
+    .closed { color: #c0392b; }
+    .open-badge { display: inline-block; font-size: 11px; font-weight: 700; color: #1a7a3c; background: #d4edda; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; }
+
+    /* Redes */
+    .social-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .social-btn { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: var(--text-mid); background: var(--gray-bg); border: 1px solid var(--gray-border); border-radius: 8px; padding: 8px 14px; transition: background var(--transition), color var(--transition); cursor: pointer; }
+    .social-btn:hover { background: var(--teal-pale); color: var(--teal-dark); border-color: var(--teal); }
+    .social-btn svg { width: 16px; height: 16px; }
+
+    /* Mini mapa */
+    #mini-map { height: 160px; border-radius: 10px; overflow: hidden; border: 1px solid var(--gray-border); margin-top: 14px; }
+
+    /* CTA sidebar */
+    .cta-sidebar { background: var(--teal-darker); border-radius: var(--radius); padding: 20px; text-align: center; margin-bottom: 16px; }
+    .cta-sidebar p { font-size: .8rem; color: rgba(255,255,255,.6); margin-bottom: 12px; line-height: 1.5; }
+    .cta-sidebar strong { color: var(--white); display: block; font-family: 'Montserrat', sans-serif; font-size: .88rem; margin-bottom: 4px; }
+    .btn-cta-sm { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 9px 18px; border-radius: 7px; cursor: pointer; width: 100%; }
+
+    /* Lightbox */
+    #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 999; display: none; align-items: center; justify-content: center; cursor: zoom-out; }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 8px; box-shadow: 0 24px 80px rgba(0,0,0,.5); object-fit: contain; }
+    #lightbox-close { position: fixed; top: 20px; right: 24px; color: #fff; font-size: 28px; cursor: pointer; line-height: 1; }
+
+    /* Enter branding en footer */
+    .biz-footer { background: var(--teal-darker); text-align: center; padding: 20px 24px; color: rgba(255,255,255,.45); font-size: .8rem; }
+    .biz-footer a { color: rgba(255,255,255,.65); font-weight: 500; }
+
+    @media (max-width: 600px) {
+      .biz-hero { padding: 32px 20px 0; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .site-nav { display: none; }
+    }
+  </style>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+  <!-- HEADER SITE -->
+  <header class="site-header">
+    <a href="../index.html" class="logo">
+      <div class="logo-text">
+        <div class="name">enter</div>
+        <div class="sub">guía digital</div>
+      </div>
+    </a>
+    <nav class="site-nav">
+      <a href="../guia.html">guIA</a>
+      <a href="../negocios.html">Negocios</a>
+      <a href="../reclamos.html">Reclamos</a>
+      <a href="../index.html#eventos">Eventos</a>
+      <a href="../empleos.html">Empleos</a>
+    </nav>
+    <button class="btn-registra">Registrá tu negocio (¡Es gratis!)</button>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="../index.html">Inicio</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    <a href="../negocios.html">Negocios</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    <span>Thrive</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="biz-hero">
+    <div class="biz-hero-inner">
+      <div class="biz-hero-top">
+        <div class="biz-logo-wrap">
+          <img src="../logo-thrive.png" alt="Thrive" />
+        </div>
+        <div class="biz-hero-info">
+          <div class="biz-badge-row">
+            <span class="badge-dest">⭐ Destacado</span>
+            <span class="badge-cat">Publicidad · Diseño Web · Apps</span>
+          </div>
+          <h1 class="biz-name">Thrive</h1>
+          <p class="biz-tagline">Agencia de publicidad, diseño web y desarrollo de aplicaciones.</p>
+          <div class="biz-quick">
+            <span class="biz-quick-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              Carlos Casares, Buenos Aires
+            </span>
+            <span class="biz-quick-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Lun–Vie · 9:00 – 18:00
+            </span>
+          </div>
+          <div class="tags-row" style="margin-top:14px;">
+            <span class="tag">Publicidad</span>
+            <span class="tag">Páginas web</span>
+            <span class="tag">Apps</span>
+            <span class="tag">Redes sociales</span>
+            <span class="tag">Branding</span>
+            <span class="tag">Diseño gráfico</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="biz-hero-actions">
+        <a href="tel:+542396000000">
+          <button class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63 19.79 19.79 0 01.22 4.18 2 2 0 012.18 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 9.91a16 16 0 006.29 6.29l1.28-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            Llamar
+          </button>
+        </a>
+        <a href="https://wa.me/542396000000" target="_blank" rel="noopener">
+          <button class="btn-outline">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            WhatsApp
+          </button>
+        </a>
+        <a href="mailto:hola@thrive.com.ar">
+          <button class="btn-outline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+            Email
+          </button>
+        </a>
+        <a href="https://www.instagram.com/thrivecasares" target="_blank" rel="noopener">
+          <button class="btn-outline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            Instagram
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="page-body">
+
+    <!-- COLUMNA PRINCIPAL -->
+    <div>
+
+      <!-- SOBRE NOSOTROS -->
+      <div class="section-card">
+        <div class="section-title">Sobre nosotros</div>
+        <p class="about-text">
+          Thrive es una agencia creativa con base en Carlos Casares, especializada en publicidad, identidad de marca, diseño web y desarrollo de aplicaciones móviles. Trabajamos con negocios locales y regionales que quieren crecer en el mundo digital sin perder su esencia.<br><br>
+          Nuestro equipo combina estrategia, diseño y tecnología para crear experiencias digitales que conectan con las personas. Desde el logo hasta la app, acompañamos a nuestros clientes en cada paso.
+        </p>
+      </div>
+
+      <!-- SERVICIOS -->
+      <div class="section-card">
+        <div class="section-title">Servicios</div>
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon">🎨</div>
+            <div class="service-name">Diseño Gráfico y Branding</div>
+            <div class="service-desc">Logos, identidad visual, paleta de colores y manual de marca.</div>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">🌐</div>
+            <div class="service-name">Páginas Web</div>
+            <div class="service-desc">Sitios modernos, rápidos y adaptados a todos los dispositivos.</div>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">📱</div>
+            <div class="service-name">Apps Móviles</div>
+            <div class="service-desc">Aplicaciones para Android e iOS, diseñadas para el usuario final.</div>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">📣</div>
+            <div class="service-name">Publicidad Digital</div>
+            <div class="service-desc">Campañas en Meta Ads y Google Ads orientadas a resultados.</div>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">📸</div>
+            <div class="service-name">Redes Sociales</div>
+            <div class="service-desc">Gestión de contenido y estrategia para Instagram, Facebook y más.</div>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">📊</div>
+            <div class="service-name">Estrategia Digital</div>
+            <div class="service-desc">Análisis, posicionamiento SEO y planificación de contenidos.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GALERÍA / PORTFOLIO -->
+      <div class="section-card">
+        <div class="section-title">Portfolio y galería</div>
+        <div class="gallery-grid">
+          <!-- Reemplazar con imágenes reales: <img src="foto1.jpg" alt="..." data-lightbox /> -->
+          <div class="gallery-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Trabajo 1
+          </div>
+          <div class="gallery-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Trabajo 2
+          </div>
+          <div class="gallery-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Trabajo 3
+          </div>
+          <div class="gallery-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Trabajo 4
+          </div>
+          <div class="gallery-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Trabajo 5
+          </div>
+          <div class="gallery-placeholder" style="border-style:solid; background: var(--teal-pale); border-color: var(--teal); color: var(--teal); cursor: pointer;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            Agregar foto
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside>
+
+      <!-- INFO DE CONTACTO -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">Información de contacto</div>
+        <div class="open-badge">● Abierto ahora</div>
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63 19.79 19.79 0 01.22 4.18 2 2 0 012.18 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 9.91a16 16 0 006.29 6.29l1.28-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <div><strong>Teléfono</strong><br>+54 2396 00-0000</div>
+        </div>
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+          <div><strong>Email</strong><br>hola@thrive.com.ar</div>
+        </div>
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          <div><strong>Dirección</strong><br>Carlos Casares, Buenos Aires</div>
+        </div>
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div><strong>Horario</strong></div>
+        </div>
+        <div class="hours-row"><span class="day">Lunes</span><span>9:00 – 18:00</span></div>
+        <div class="hours-row"><span class="day">Martes</span><span>9:00 – 18:00</span></div>
+        <div class="hours-row"><span class="day">Miércoles</span><span>9:00 – 18:00</span></div>
+        <div class="hours-row"><span class="day">Jueves</span><span>9:00 – 18:00</span></div>
+        <div class="hours-row"><span class="day">Viernes</span><span>9:00 – 18:00</span></div>
+        <div class="hours-row"><span class="day">Sábado</span><span class="closed">Cerrado</span></div>
+        <div class="hours-row"><span class="day">Domingo</span><span class="closed">Cerrado</span></div>
+
+        <div id="mini-map"></div>
+      </div>
+
+      <!-- REDES SOCIALES -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">Redes sociales</div>
+        <div class="social-row">
+          <a href="https://www.instagram.com/thrivecasares" target="_blank" rel="noopener" class="social-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            Instagram
+          </a>
+          <a href="https://facebook.com/thrivecasares" target="_blank" rel="noopener" class="social-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            Facebook
+          </a>
+        </div>
+      </div>
+
+      <!-- CTA ENTER -->
+      <div class="cta-sidebar">
+        <strong>¿Sos el dueño de este negocio?</strong>
+        <p>Actualizá la información, sumá fotos y llegá a más clientes en Carlos Casares.</p>
+        <button class="btn-cta-sm">Administrar mi página</button>
+      </div>
+
+      <!-- VOLVER -->
+      <div style="text-align:center; padding-top:4px;">
+        <a href="../negocios.html" style="font-size:12.5px; color:var(--teal); font-weight:600;">← Ver todos los negocios</a>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" onclick="closeLightbox()">
+    <span id="lightbox-close">✕</span>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="biz-footer">
+    <p>Esta página es parte de <a href="../index.html">Enter Guía Digital</a> — Carlos Casares, Buenos Aires · <a href="mailto:enterguiadigital@gmail.com">enterguiadigital@gmail.com</a></p>
+  </footer>
+
+  <script>
+    /* Mini mapa */
+    const map = L.map('mini-map', { zoomControl: false, dragging: false, scrollWheelZoom: false, doubleClickZoom: false })
+      .setView([-35.6194, -61.3655], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' }).addTo(map);
+    L.circleMarker([-35.6194, -61.3655], { radius: 10, color: '#0e4a5a', fillColor: '#1e7d96', fillOpacity: 1, weight: 3 })
+      .addTo(map).bindPopup('Thrive').openPopup();
+
+    /* Estado abierto/cerrado según hora */
+    (function() {
+      const now = new Date();
+      const day = now.getDay(); // 0=dom, 6=sáb
+      const hour = now.getHours() + now.getMinutes() / 60;
+      const isOpen = day >= 1 && day <= 5 && hour >= 9 && hour < 18;
+      const badge = document.querySelector('.open-badge');
+      if (!isOpen) {
+        badge.textContent = '● Cerrado ahora';
+        badge.style.background = '#fde8e8';
+        badge.style.color = '#c0392b';
+      }
+    })();
+
+    /* Lightbox */
+    document.querySelectorAll('.gallery-grid img').forEach(img => {
+      img.addEventListener('click', () => {
+        document.getElementById('lightbox-img').src = img.src;
+        document.getElementById('lightbox').classList.add('open');
+      });
+    });
+    function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
+
+</body>
+</html>

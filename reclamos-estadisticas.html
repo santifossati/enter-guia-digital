@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estadísticas de Reclamos — Enter Guía Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --teal:        #1e7d96;
+      --teal-dark:   #145f73;
+      --teal-darker: #0e4a5a;
+      --teal-pale:   #e6f4f7;
+      --gray-bg:     #f0eeeb;
+      --gray-border: #d9d4cd;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #4a4a4a;
+      --text-light:  #7a7a7a;
+      --white:       #ffffff;
+      --shadow-sm:   0 2px 8px rgba(0,0,0,.08);
+      --shadow-md:   0 6px 24px rgba(0,0,0,.12);
+      --radius:      14px;
+      --transition:  .3s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* Header */
+    .header { background: var(--teal-darker); height: 64px; display: flex; align-items: center; padding: 0 32px; gap: 24px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 20px rgba(0,0,0,.2); }
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
+    .logo-text .name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); }
+    .logo-text .sub { font-size: 9px; color: rgba(255,255,255,.7); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+    .nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .nav a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.8); padding: 6px 12px; border-radius: 6px; transition: background var(--transition); font-family: 'Montserrat', sans-serif; }
+    .nav a:hover, .nav a.active { background: rgba(255,255,255,.12); color: var(--white); }
+    .btn-reportar-nav { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; transition: background var(--transition); white-space: nowrap; }
+
+    /* Sub-nav */
+    .subnav { background: var(--white); border-bottom: 2px solid var(--gray-border); padding: 0 24px; display: flex; gap: 0; }
+    .subnav a { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; color: var(--text-light); padding: 14px 20px; border-bottom: 3px solid transparent; margin-bottom: -2px; display: flex; align-items: center; gap: 7px; transition: color var(--transition), border-color var(--transition); white-space: nowrap; }
+    .subnav a:hover { color: var(--teal); }
+    .subnav a.active { color: var(--teal-darker); border-bottom-color: var(--teal); }
+
+    /* Hero strip */
+    .page-hero { background: var(--teal-darker); padding: 28px 32px 24px; color: var(--white); }
+    .hero-inner { max-width: 1100px; margin: 0 auto; }
+    .page-hero h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(1.4rem, 2.5vw, 1.9rem); font-weight: 800; margin-bottom: 4px; }
+    .page-hero p { font-size: .85rem; color: rgba(255,255,255,.6); }
+
+    /* Layout */
+    .layout { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+
+    /* Big numbers */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .kpi-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-border); padding: 22px 24px; box-shadow: var(--shadow-sm); border-top: 4px solid var(--teal); }
+    .kpi-card.pend { border-top-color: #e67e22; }
+    .kpi-card.proc { border-top-color: #2980b9; }
+    .kpi-card.resuelto { border-top-color: #27ae60; }
+    .kpi-num { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--text-dark); margin-bottom: 4px; }
+    .kpi-lbl { font-size: .8rem; color: var(--text-light); text-transform: uppercase; letter-spacing: .7px; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+
+    /* Section heading */
+    .section-title { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 800; color: var(--text-dark); margin-bottom: 4px; }
+    .section-sub { font-size: .83rem; color: var(--text-light); margin-bottom: 20px; }
+
+    /* Charts grid */
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+    .chart-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-border); padding: 24px; box-shadow: var(--shadow-sm); }
+    .chart-card.full { grid-column: 1 / -1; }
+    .chart-title { font-family: 'Montserrat', sans-serif; font-size: .9rem; font-weight: 800; color: var(--text-dark); margin-bottom: 16px; }
+    .chart-wrap { position: relative; height: 260px; }
+    .chart-wrap.tall { height: 320px; }
+
+    /* Bar progress (categorías) */
+    .bar-list { display: flex; flex-direction: column; gap: 12px; }
+    .bar-item {}
+    .bar-header { display: flex; justify-content: space-between; font-size: .83rem; margin-bottom: 5px; }
+    .bar-label { display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--text-mid); }
+    .bar-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .bar-count { color: var(--text-light); font-size: .8rem; }
+    .bar-track { background: var(--gray-bg); border-radius: 20px; height: 8px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 20px; transition: width 1s cubic-bezier(.4,0,.2,1); }
+
+    /* Tabla zona */
+    .zone-table { width: 100%; border-collapse: collapse; }
+    .zone-table th { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; color: var(--text-light); padding: 8px 12px; text-align: left; border-bottom: 2px solid var(--gray-border); }
+    .zone-table td { padding: 10px 12px; font-size: .85rem; border-bottom: 1px solid var(--gray-border); }
+    .zone-table tr:last-child td { border-bottom: none; }
+    .zone-table tr:hover td { background: var(--teal-pale); }
+    .zone-badge { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 20px; color: var(--white); }
+
+    /* Footer */
+    .footer { background: var(--teal-darker); text-align: center; padding: 28px 24px; color: rgba(255,255,255,.5); font-size: .83rem; }
+    .footer a { color: rgba(255,255,255,.7); }
+
+    @media (max-width: 860px) { .nav { display: none; } .charts-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="./index.html" class="logo">
+      <img src="./logo.png" alt="Enter Guía Digital" />
+      <div class="logo-text">
+        <div class="name">enter</div>
+        <div class="sub">guía digital</div>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="./guia.html">guIA</a>
+      <a href="./negocios.html">Negocios</a>
+      <a href="./reclamos.html" class="active">Reclamos</a>
+      <a href="./index.html#eventos">Eventos</a>
+      <a href="./empleos.html">Empleos</a>
+    </nav>
+    <div style="margin-left:auto;">
+      <a href="./reclamos.html"><button class="btn-reportar-nav">+ Reportar un problema</button></a>
+    </div>
+  </header>
+
+  <nav class="subnav">
+    <a href="./reclamos.html">🗺️ Mapa</a>
+    <a href="./reclamos-estadisticas.html" class="active">📊 Estadísticas</a>
+    <a href="./reclamos-blog.html">📰 Blog y Presentaciones</a>
+    <a href="./reclamos-acerca.html">ℹ️ Acerca</a>
+    <a href="./reclamos-faq.html">❓ FAQ</a>
+  </nav>
+
+  <div class="page-hero">
+    <div class="hero-inner">
+      <h1>Estadísticas</h1>
+      <p>Resumen del estado de los reportes ciudadanos de Carlos Casares.</p>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-num">14</div>
+        <div class="kpi-lbl">Total de reportes</div>
+      </div>
+      <div class="kpi-card pend">
+        <div class="kpi-num">8</div>
+        <div class="kpi-lbl">Pendientes</div>
+      </div>
+      <div class="kpi-card proc">
+        <div class="kpi-num">2</div>
+        <div class="kpi-lbl">En proceso</div>
+      </div>
+      <div class="kpi-card resuelto">
+        <div class="kpi-num">3</div>
+        <div class="kpi-lbl">Resueltos</div>
+      </div>
+    </div>
+
+    <!-- Distribución por tipo (barras) + Estado (donut) -->
+    <p class="section-title">Distribución por tipo de problema</p>
+    <p class="section-sub">¿Qué problemas reportan más los vecinos de Carlos Casares?</p>
+
+    <div class="charts-grid">
+
+      <div class="chart-card">
+        <div class="chart-title">Reportes por categoría</div>
+        <div class="bar-list" id="barList"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">Estado de resolución</div>
+        <div class="chart-wrap">
+          <canvas id="donutChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card full">
+        <div class="chart-title">Evolución mensual de reportes (2024)</div>
+        <div class="chart-wrap tall">
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tabla por zona -->
+    <p class="section-title" style="margin-top:8px;">Reportes por zona</p>
+    <p class="section-sub">Cantidad de problemas reportados según barrio o sector de la ciudad.</p>
+    <div class="chart-card" style="margin-bottom:0;">
+      <table class="zone-table">
+        <thead>
+          <tr>
+            <th>Zona / Barrio</th>
+            <th>Reportes</th>
+            <th>Categoría más frecuente</th>
+            <th>Estado predominante</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Centro</strong></td>
+            <td>7</td>
+            <td>Baches y calles</td>
+            <td><span class="zone-badge" style="background:#e67e22;">Pendiente</span></td>
+          </tr>
+          <tr>
+            <td><strong>Barrio Norte</strong></td>
+            <td>2</td>
+            <td>Iluminación</td>
+            <td><span class="zone-badge" style="background:#27ae60;">Resuelto</span></td>
+          </tr>
+          <tr>
+            <td><strong>Villa del Parque</strong></td>
+            <td>1</td>
+            <td>Agua y red</td>
+            <td><span class="zone-badge" style="background:#e67e22;">Pendiente</span></td>
+          </tr>
+          <tr>
+            <td><strong>Barrio Sarmiento</strong></td>
+            <td>1</td>
+            <td>Arbolado</td>
+            <td><span class="zone-badge" style="background:#27ae60;">Resuelto</span></td>
+          </tr>
+          <tr>
+            <td><strong>Zona Sur</strong></td>
+            <td>1</td>
+            <td>Cloacas</td>
+            <td><span class="zone-badge" style="background:#e67e22;">Pendiente</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p>© 2024 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
+  </footer>
+
+  <script>
+    const CATS = [
+      { label:'Baches y calles', color:'#e67e22', count:3 },
+      { label:'Iluminación',     color:'#f1c40f', count:2 },
+      { label:'Basura',          color:'#8e44ad', count:1 },
+      { label:'Agua y red',      color:'#2980b9', count:1 },
+      { label:'Cloacas',         color:'#6d4c41', count:1 },
+      { label:'Semáforos',       color:'#27ae60', count:1 },
+      { label:'Arbolado',        color:'#16a085', count:1 },
+      { label:'Obra pública',    color:'#c0392b', count:1 },
+      { label:'Inseguridad',     color:'#e74c3c', count:1 },
+      { label:'Caminos rurales', color:'#a0522d', count:2 },
+      { label:'Otros',           color:'#7f8c8d', count:0 },
+    ];
+    const TOTAL = CATS.reduce((s,c) => s + c.count, 0);
+
+    // Barras horizontales
+    const barList = document.getElementById('barList');
+    CATS.forEach(c => {
+      const pct = TOTAL ? Math.round(c.count / TOTAL * 100) : 0;
+      barList.innerHTML += `
+        <div class="bar-item">
+          <div class="bar-header">
+            <span class="bar-label"><span class="bar-dot" style="background:${c.color}"></span>${c.label}</span>
+            <span class="bar-count">${c.count} (${pct}%)</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${c.color}"></div></div>
+        </div>`;
+    });
+
+    // Donut
+    new Chart(document.getElementById('donutChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Pendiente', 'En proceso', 'Resuelto'],
+        datasets: [{ data: [7, 2, 3], backgroundColor: ['#e67e22','#2980b9','#27ae60'], borderWidth: 0, hoverOffset: 8 }]
+      },
+      options: {
+        cutout: '68%',
+        plugins: { legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 12 }, padding: 16 } } },
+        responsive: true, maintainAspectRatio: false
+      }
+    });
+
+    // Línea mensual
+    new Chart(document.getElementById('lineChart'), {
+      type: 'line',
+      data: {
+        labels: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        datasets: [{
+          label: 'Reportes', data: [0,0,0,0,0,0,0,0,0,0,3,9],
+          borderColor: '#1e7d96', backgroundColor: 'rgba(30,125,150,.1)',
+          borderWidth: 2.5, pointBackgroundColor: '#1e7d96', pointRadius: 5,
+          fill: true, tension: 0.35
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } },
+          y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Inter', size: 11 } }, grid: { color: '#eee' } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

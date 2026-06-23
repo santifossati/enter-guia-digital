@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de Privacidad — Enter Guía Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal:        #1e7d96;
+      --teal-dark:   #145f73;
+      --teal-darker: #0e4a5a;
+      --teal-light:  #4db3cc;
+      --teal-pale:   #e6f4f7;
+      --gray-bg:     #f0eeeb;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #4a4a4a;
+      --text-light:  #7a7a7a;
+      --white:       #ffffff;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
+    a { text-decoration: none; color: inherit; }
+
+    .header {
+      background: var(--teal-darker);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
+    .logo-text .name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--white);
+    }
+    .logo-text .sub {
+      font-size: 9px;
+      color: rgba(255,255,255,.7);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+
+    .page-hero {
+      background: var(--teal-darker);
+      padding: 56px 32px 48px;
+      text-align: center;
+      color: var(--white);
+    }
+    .page-hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .page-hero p { font-size: .95rem; color: rgba(255,255,255,.65); }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    .section {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
+    .section h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--teal-darker);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--teal-pale);
+    }
+    .section p {
+      font-size: .93rem;
+      line-height: 1.75;
+      color: var(--text-mid);
+      margin-bottom: 12px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .section ul {
+      list-style: none;
+      margin: 0 0 12px;
+      padding: 0;
+    }
+    .section ul li {
+      font-size: .93rem;
+      line-height: 1.75;
+      color: var(--text-mid);
+      padding-left: 20px;
+      position: relative;
+      margin-bottom: 6px;
+    }
+    .section ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    .highlight-box {
+      background: var(--teal-pale);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      font-size: .9rem;
+      color: var(--teal-dark);
+      line-height: 1.6;
+    }
+
+    .meta-bar {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: var(--teal-pale);
+      border-radius: 10px;
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      font-size: .85rem;
+      color: var(--teal-dark);
+      font-weight: 500;
+    }
+    .meta-bar span { display: flex; align-items: center; gap: 6px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--teal);
+      font-size: .9rem;
+      font-weight: 600;
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: 28px;
+      transition: gap .2s;
+    }
+    .back-link:hover { gap: 10px; }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      font-size: .88rem;
+    }
+    .data-table th {
+      background: var(--teal-pale);
+      color: var(--teal-darker);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      font-size: .82rem;
+      letter-spacing: .3px;
+    }
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #eee;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+
+    .footer {
+      background: var(--teal-darker);
+      text-align: center;
+      padding: 28px 24px;
+      color: rgba(255,255,255,.5);
+      font-size: .83rem;
+    }
+    .footer a { color: rgba(255,255,255,.7); }
+
+    @media (max-width: 600px) {
+      .section { padding: 24px 20px; }
+      .meta-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .data-table { font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="./index.html" class="logo">
+      <img src="./logo.png" alt="Enter Guía Digital" />
+      <div class="logo-text">
+        <div class="name">enter</div>
+        <div class="sub">guía digital</div>
+      </div>
+    </a>
+  </header>
+
+  <div class="page-hero">
+    <h1>Política de Privacidad</h1>
+    <p>Última actualización: junio de 2024</p>
+  </div>
+
+  <div class="container">
+
+    <a href="./index.html" class="back-link">← Volver al inicio</a>
+
+    <div class="meta-bar">
+      <span>🔒 Versión 1.0</span>
+      <span>📅 Vigente desde junio 2024</span>
+      <span>📍 Carlos Casares, Buenos Aires</span>
+    </div>
+
+    <div class="section">
+      <h2>1. Quiénes somos</h2>
+      <div class="highlight-box">
+        <strong>Responsable del tratamiento de datos:</strong> Enter Guía Digital<br>
+        <strong>Sitio web:</strong> enterguiacasares.com<br>
+        <strong>Correo de contacto:</strong> enterguiadigital@gmail.com<br>
+        <strong>Ubicación:</strong> Carlos Casares, Provincia de Buenos Aires, Argentina
+      </div>
+      <p>Enter Guía Digital es una plataforma digital local que conecta a los vecinos de Carlos Casares con negocios, servicios, eventos e información de su ciudad. Esta Política de Privacidad describe cómo recopilamos, usamos y protegemos tu información personal, en cumplimiento de la <strong>Ley N° 25.326 de Protección de Datos Personales</strong> de la República Argentina.</p>
+    </div>
+
+    <div class="section">
+      <h2>2. Qué datos recopilamos</h2>
+      <p>Dependiendo de cómo uses la Plataforma, podemos recopilar los siguientes datos:</p>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Dato</th>
+            <th>Fuente</th>
+            <th>Finalidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Consultas realizadas a guIA</td>
+            <td>Ingreso voluntario del usuario</td>
+            <td>Procesar la respuesta y mejorar el asistente</td>
+          </tr>
+          <tr>
+            <td>Ubicación aproximada</td>
+            <td>Navegador (con permiso del usuario)</td>
+            <td>Mostrar negocios y eventos cercanos</td>
+          </tr>
+          <tr>
+            <td>Datos del reclamo urbano</td>
+            <td>Formulario de reclamos</td>
+            <td>Georreferenciar el problema en el mapa</td>
+          </tr>
+          <tr>
+            <td>Nombre y datos del negocio</td>
+            <td>Formulario de registro de negocio</td>
+            <td>Publicar el negocio en la guía</td>
+          </tr>
+          <tr>
+            <td>Correo electrónico (opcional)</td>
+            <td>Formulario de contacto o registro</td>
+            <td>Responder consultas y enviar novedades</td>
+          </tr>
+          <tr>
+            <td>Datos de navegación (cookies)</td>
+            <td>Automático al visitar la web</td>
+            <td>Analítica de uso y mejora de la Plataforma</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>No recopilamos datos sensibles como información médica, religiosa, política ni datos de menores de 13 años de forma intencional.</p>
+    </div>
+
+    <div class="section">
+      <h2>3. Cómo usamos tu información</h2>
+      <p>Utilizamos la información recopilada exclusivamente para:</p>
+      <ul>
+        <li>Brindar y mejorar los servicios de la Plataforma (guIA, directorio, eventos, reclamos).</li>
+        <li>Personalizar resultados según tu ubicación geográfica (solo si otorgás permiso).</li>
+        <li>Responder consultas enviadas a través del formulario de contacto.</li>
+        <li>Enviar comunicaciones opcionales sobre novedades de la Plataforma (solo si suscribiste).</li>
+        <li>Analizar el uso general de la Plataforma para detectar errores y mejorar la experiencia.</li>
+        <li>Compartir datos de reclamos urbanos (sin identificación personal) con el Municipio de Carlos Casares cuando corresponda.</li>
+      </ul>
+      <p><strong>No vendemos, alquilamos ni cedemos tus datos personales a terceros con fines comerciales.</strong></p>
+    </div>
+
+    <div class="section">
+      <h2>4. Consultas al asistente guIA</h2>
+      <p>Cuando realizás una consulta al asistente de inteligencia artificial <strong>guIA</strong>:</p>
+      <ul>
+        <li>El texto de tu consulta es procesado para generar una respuesta automática.</li>
+        <li>Las consultas pueden ser almacenadas de forma anonimizada para entrenamiento y mejora del sistema.</li>
+        <li>No asociamos las consultas a tu identidad personal a menos que hayas iniciado sesión con una cuenta registrada.</li>
+        <li>Evitá incluir datos personales sensibles (DNI, datos bancarios, contraseñas) en tus consultas.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>5. Cookies y tecnologías de seguimiento</h2>
+      <p>La Plataforma utiliza cookies y tecnologías similares para:</p>
+      <ul>
+        <li><strong>Cookies esenciales:</strong> Necesarias para el funcionamiento básico de la web (sesión, preferencias).</li>
+        <li><strong>Cookies analíticas:</strong> Herramientas como Google Analytics para entender cómo se usa la Plataforma (datos agregados y anónimos).</li>
+      </ul>
+      <p>Podés configurar tu navegador para rechazar cookies, aunque esto puede afectar el funcionamiento de algunas funciones de la Plataforma.</p>
+    </div>
+
+    <div class="section">
+      <h2>6. Compartir información con terceros</h2>
+      <p>Solo compartimos datos en los siguientes casos limitados:</p>
+      <ul>
+        <li><strong>Municipio de Carlos Casares:</strong> Datos anonimizados de reclamos urbanos para su gestión.</li>
+        <li><strong>Proveedores de servicios tecnológicos:</strong> Hosting, analítica y servicios de IA, sujetos a acuerdos de confidencialidad.</li>
+        <li><strong>Autoridades competentes:</strong> Cuando lo exija la ley o una orden judicial.</li>
+      </ul>
+      <p>En ningún caso compartiremos tu información con terceros para fines publicitarios sin tu consentimiento explícito.</p>
+    </div>
+
+    <div class="section">
+      <h2>7. Tus derechos sobre tus datos</h2>
+      <p>De acuerdo con la Ley N° 25.326, tenés derecho a:</p>
+      <ul>
+        <li><strong>Acceso:</strong> Solicitar qué datos personales tuyos tenemos almacenados.</li>
+        <li><strong>Rectificación:</strong> Corregir datos incorrectos o desactualizados.</li>
+        <li><strong>Supresión:</strong> Solicitar la eliminación de tus datos de nuestra base.</li>
+        <li><strong>Oposición:</strong> Oponerte al tratamiento de tus datos para determinados fines.</li>
+      </ul>
+      <p>Para ejercer cualquiera de estos derechos, escribinos a <strong>enterguiadigital@gmail.com</strong>. Responderemos dentro de los 30 días hábiles.</p>
+    </div>
+
+    <div class="section">
+      <h2>8. Seguridad de la información</h2>
+      <p>Implementamos medidas técnicas y organizativas razonables para proteger tus datos contra acceso no autorizado, pérdida o alteración, incluyendo:</p>
+      <ul>
+        <li>Conexión cifrada mediante HTTPS en toda la Plataforma.</li>
+        <li>Acceso restringido a la base de datos por personal autorizado.</li>
+        <li>Almacenamiento en servidores con protocolos de seguridad actualizados.</li>
+      </ul>
+      <p>Sin embargo, ningún sistema es 100% infalible. En caso de una brecha de seguridad que afecte tus datos, te notificaremos a la brevedad posible.</p>
+    </div>
+
+    <div class="section">
+      <h2>9. Menores de edad</h2>
+      <p>La Plataforma no está destinada a menores de 13 años. No recopilamos intencionalmente datos de menores. Si sos padre, madre o tutor y creés que un menor proporcionó datos personales a través de nuestra Plataforma, contactanos para proceder a su eliminación.</p>
+    </div>
+
+    <div class="section">
+      <h2>10. Cambios en esta política</h2>
+      <p>Podemos actualizar esta Política de Privacidad periódicamente. Cuando lo hagamos, actualizaremos la fecha al inicio de esta página. Te recomendamos revisarla con regularidad. El uso continuado de la Plataforma tras los cambios implica la aceptación de la nueva versión.</p>
+    </div>
+
+    <div class="section">
+      <h2>11. Contacto</h2>
+      <p>Para cualquier consulta sobre el tratamiento de tus datos personales o para ejercer tus derechos, podés contactarnos:</p>
+      <ul>
+        <li>📧 <strong>enterguiadigital@gmail.com</strong></li>
+        <li>🌐 A través del formulario de <a href="#" style="color:var(--teal);font-weight:600;">Contacto</a> en la Plataforma</li>
+        <li>📍 Carlos Casares, Provincia de Buenos Aires, Argentina</li>
+      </ul>
+      <p>También podés comunicarte con la <strong>Dirección Nacional de Protección de Datos Personales</strong> (Argentina) en caso de considerar que tus derechos no fueron debidamente atendidos.</p>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p>© 2024 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
+  </footer>
+
+</body>
+</html>

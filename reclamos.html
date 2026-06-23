@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reclamos — Enter Guía Digital de Carlos Casares</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    :root {
+      --teal:        #1e7d96;
+      --teal-dark:   #145f73;
+      --teal-darker: #0e4a5a;
+      --teal-pale:   #e6f4f7;
+      --gray-bg:     #f0eeeb;
+      --gray-border: #d9d4cd;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #4a4a4a;
+      --text-light:  #7a7a7a;
+      --white:       #ffffff;
+      --shadow-sm:   0 2px 8px rgba(0,0,0,.08);
+      --shadow-md:   0 6px 24px rgba(0,0,0,.14);
+      --radius:      12px;
+      --transition:  .25s cubic-bezier(.4,0,.2,1);
+
+      /* Colores por categoría */
+      --c-baches:       #e67e22;
+      --c-iluminacion:  #f1c40f;
+      --c-basura:       #8e44ad;
+      --c-agua:         #2980b9;
+      --c-cloacas:      #6d4c41;
+      --c-semaforos:    #27ae60;
+      --c-arbolado:     #16a085;
+      --c-obra:         #c0392b;
+      --c-inseguridad:  #e74c3c;
+      --c-rurales:      #a0522d;
+      --c-otros:        #7f8c8d;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Header ── */
+    .header {
+      background: var(--teal-darker); height: 64px;
+      display: flex; align-items: center;
+      padding: 0 32px; gap: 24px;
+      position: sticky; top: 0; z-index: 200;
+      box-shadow: 0 2px 20px rgba(0,0,0,.2);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
+    .logo-text .name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); }
+    .logo-text .sub { font-size: 9px; color: rgba(255,255,255,.7); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+    .nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .nav a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.8); padding: 6px 12px; border-radius: 6px; transition: background var(--transition); font-family: 'Montserrat', sans-serif; }
+    .nav a:hover, .nav a.active { background: rgba(255,255,255,.12); color: var(--white); }
+    .btn-reportar-nav { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; transition: background var(--transition); white-space: nowrap; }
+    .btn-reportar-nav:hover { background: var(--teal-pale); }
+
+    /* ── Hero strip ── */
+    .page-hero { background: var(--teal-darker); padding: 28px 32px 24px; color: var(--white); }
+    .hero-inner { max-width: 1300px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .page-hero h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(1.4rem, 2.5vw, 1.9rem); font-weight: 800; margin-bottom: 4px; }
+    .page-hero p { font-size: .85rem; color: rgba(255,255,255,.6); }
+    .hero-stats { display: flex; gap: 24px; }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 800; color: #4dd9f0; }
+    .stat-lbl { font-size: 10px; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .8px; font-family: 'Montserrat', sans-serif; }
+
+    /* ── Sub-nav ── */
+    .subnav {
+      background: var(--white);
+      border-bottom: 2px solid var(--gray-border);
+      padding: 0 24px;
+      display: flex; gap: 0;
+    }
+    .subnav a {
+      font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+      color: var(--text-light); padding: 14px 20px;
+      border-bottom: 3px solid transparent; margin-bottom: -2px;
+      display: flex; align-items: center; gap: 7px;
+      transition: color var(--transition), border-color var(--transition);
+      white-space: nowrap;
+    }
+    .subnav a:hover { color: var(--teal); }
+    .subnav a.active { color: var(--teal-darker); border-bottom-color: var(--teal); }
+
+    /* ── Controles ── */
+    .controls {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-border);
+      padding: 14px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      position: sticky; top: 64px; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .search-wrap {
+      flex: 1; min-width: 200px; max-width: 340px;
+      display: flex; align-items: center; gap: 8px;
+      border: 1.5px solid var(--gray-border); border-radius: 8px;
+      padding: 7px 12px; background: var(--gray-bg);
+      transition: border-color var(--transition);
+    }
+    .search-wrap:focus-within { border-color: var(--teal); background: var(--white); }
+    .search-wrap svg { width: 15px; height: 15px; color: var(--text-light); flex-shrink: 0; }
+    .search-wrap input { border: none; outline: none; background: transparent; font-family: 'Inter', sans-serif; font-size: .85rem; color: var(--text-dark); width: 100%; }
+    .search-wrap input::placeholder { color: var(--text-light); }
+
+    .cat-select {
+      border: 1.5px solid var(--gray-border); border-radius: 8px;
+      padding: 7px 12px; background: var(--gray-bg);
+      font-family: 'Inter', sans-serif; font-size: .85rem;
+      color: var(--text-dark); outline: none; cursor: pointer;
+      transition: border-color var(--transition);
+    }
+    .cat-select:focus { border-color: var(--teal); }
+
+    .time-chips { display: flex; gap: 6px; }
+    .time-chip {
+      font-family: 'Montserrat', sans-serif; font-size: 11.5px; font-weight: 600;
+      padding: 6px 13px; border-radius: 20px;
+      border: 1.5px solid var(--gray-border);
+      background: transparent; color: var(--text-mid);
+      cursor: pointer; transition: all var(--transition);
+    }
+    .time-chip.active, .time-chip:hover { background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+    /* ── Leyenda ── */
+    .legend-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-border);
+      padding: 8px 24px;
+      display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+    }
+    .legend-lbl { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--text-light); margin-right: 4px; }
+    .leg-item { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--text-mid); cursor: pointer; }
+    .leg-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+    .leg-item.dimmed { opacity: .35; }
+
+    /* ── Mapa ── */
+    #map { width: 100%; height: 460px; z-index: 1; }
+
+    /* ── Lista reportes ── */
+    .list-section { max-width: 1300px; margin: 0 auto; padding: 24px 24px 80px; }
+    .list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .list-header h2 { font-family: 'Montserrat', sans-serif; font-size: .95rem; font-weight: 800; }
+    .list-count { font-size: .83rem; color: var(--text-light); }
+
+    .report-list { display: flex; flex-direction: column; gap: 10px; }
+    .report-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-border);
+      border-left-width: 4px;
+      padding: 14px 18px;
+      display: flex; gap: 14px; align-items: flex-start;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), transform var(--transition);
+      cursor: pointer;
+    }
+    .report-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .report-card.hidden { display: none; }
+    .report-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+    .report-body { flex: 1; min-width: 0; }
+    .report-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+    .badge {
+      font-family: 'Montserrat', sans-serif; font-size: 9.5px; font-weight: 800;
+      letter-spacing: .5px; text-transform: uppercase;
+      padding: 2px 9px; border-radius: 20px; color: var(--white);
+    }
+    .badge-estado { background: #888; }
+    .badge-estado.pendiente { background: #e67e22; }
+    .badge-estado.en-proceso { background: #2980b9; }
+    .badge-estado.resuelto { background: #27ae60; }
+    .report-desc { font-size: .88rem; color: var(--text-dark); margin-bottom: 6px; line-height: 1.5; }
+    .report-meta { display: flex; gap: 14px; flex-wrap: wrap; }
+    .report-meta span { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--text-light); }
+    .report-meta svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+    /* ── FAB Reportar ── */
+    .fab {
+      position: fixed; bottom: 28px; right: 28px; z-index: 300;
+      display: flex; align-items: center; gap: 10px;
+      background: var(--teal-darker); color: var(--white);
+      font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800;
+      letter-spacing: .5px; text-transform: uppercase;
+      padding: 14px 22px; border-radius: 50px; border: none;
+      cursor: pointer; box-shadow: 0 8px 24px rgba(14,74,90,.45);
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .fab:hover { background: var(--teal-dark); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(14,74,90,.55); }
+    .fab svg { width: 18px; height: 18px; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.5); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--transition);
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--white); border-radius: 18px;
+      padding: 32px; width: 100%; max-width: 520px;
+      box-shadow: 0 32px 80px rgba(0,0,0,.25);
+      transform: translateY(20px);
+      transition: transform var(--transition);
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal-overlay.open .modal { transform: none; }
+    .modal-title { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; }
+    .modal-sub { font-size: .84rem; color: var(--text-light); margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; font-family: 'Montserrat', sans-serif; color: var(--text-mid); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+    .form-group select, .form-group input, .form-group textarea {
+      width: 100%; border: 1.5px solid var(--gray-border); border-radius: 8px;
+      padding: 10px 12px; font-family: 'Inter', sans-serif; font-size: .9rem;
+      color: var(--text-dark); background: var(--gray-bg); outline: none;
+      transition: border-color var(--transition);
+    }
+    .form-group select:focus, .form-group input:focus, .form-group textarea:focus { border-color: var(--teal); background: var(--white); }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-note { font-size: .8rem; color: var(--text-light); margin-top: 4px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+    .btn-cancel { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; background: none; border: 1.5px solid var(--gray-border); color: var(--text-mid); padding: 10px 20px; border-radius: 7px; cursor: pointer; }
+    .btn-submit { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; background: var(--teal-darker); color: var(--white); border: none; padding: 10px 24px; border-radius: 7px; cursor: pointer; transition: background var(--transition); }
+    .btn-submit:hover { background: var(--teal-dark); }
+
+    /* Success */
+    .success-msg { text-align: center; padding: 16px 0 8px; display: none; }
+    .success-msg .success-icon { font-size: 2.5rem; margin-bottom: 10px; }
+    .success-msg h3 { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 800; margin-bottom: 6px; }
+    .success-msg p { font-size: .85rem; color: var(--text-light); }
+
+    /* Footer */
+    .footer { background: var(--teal-darker); text-align: center; padding: 28px 24px; color: rgba(255,255,255,.5); font-size: .83rem; }
+    .footer a { color: rgba(255,255,255,.7); }
+
+    @media (max-width: 860px) { .nav { display: none; } .hero-stats { display: none; } #map { height: 340px; } }
+    @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="./index.html" class="logo">
+      <img src="./logo.png" alt="Enter Guía Digital" />
+      <div class="logo-text">
+        <div class="name">enter</div>
+        <div class="sub">guía digital</div>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="./guia.html">guIA</a>
+      <a href="./negocios.html">Negocios</a>
+      <a href="./reclamos.html" class="active">Reclamos</a>
+      <a href="./index.html#eventos">Eventos</a>
+      <a href="./empleos.html">Empleos</a>
+    </nav>
+    <div style="margin-left:auto;">
+      <button class="btn-reportar-nav" onclick="openModal()">+ Reportar un problema</button>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <div class="hero-inner">
+      <div>
+        <h1>Mapa de Reclamos</h1>
+        <p>Reportá problemas urbanos de Carlos Casares directamente en el mapa.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num" id="statTotal">12</div><div class="stat-lbl">Reportes</div></div>
+        <div class="stat"><div class="stat-num" id="statPend">7</div><div class="stat-lbl">Pendientes</div></div>
+        <div class="stat"><div class="stat-num" id="statResuelto">3</div><div class="stat-lbl">Resueltos</div></div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="subnav">
+    <a href="./reclamos.html" class="active">🗺️ Mapa</a>
+    <a href="./reclamos-estadisticas.html">📊 Estadísticas</a>
+    <a href="./reclamos-blog.html">📰 Blog y Presentaciones</a>
+    <a href="./reclamos-acerca.html">ℹ️ Acerca</a>
+    <a href="./reclamos-faq.html">❓ FAQ</a>
+  </nav>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Buscar reportes..." />
+    </div>
+    <select class="cat-select" id="catSelect">
+      <option value="todas">Todas las categorías</option>
+      <option value="baches">Baches y calles</option>
+      <option value="iluminacion">Iluminación</option>
+      <option value="basura">Basura y residuos</option>
+      <option value="agua">Agua y red</option>
+      <option value="cloacas">Cloacas</option>
+      <option value="semaforos">Semáforos y señales</option>
+      <option value="arbolado">Arbolado urbano</option>
+      <option value="obra">Obra pública</option>
+      <option value="inseguridad">Inseguridad</option>
+      <option value="rurales">Caminos rurales</option>
+      <option value="otros">Otros</option>
+    </select>
+    <div class="time-chips">
+      <button class="time-chip active" data-days="0">Todo</button>
+      <button class="time-chip" data-days="1">Hoy</button>
+      <button class="time-chip" data-days="7">7 días</button>
+      <button class="time-chip" data-days="30">30 días</button>
+    </div>
+  </div>
+
+  <div class="legend-bar">
+    <span class="legend-lbl">Categorías:</span>
+    <span class="leg-item" data-cat="baches"><span class="leg-dot" style="background:var(--c-baches)"></span>Baches</span>
+    <span class="leg-item" data-cat="iluminacion"><span class="leg-dot" style="background:var(--c-iluminacion)"></span>Iluminación</span>
+    <span class="leg-item" data-cat="basura"><span class="leg-dot" style="background:var(--c-basura)"></span>Basura</span>
+    <span class="leg-item" data-cat="agua"><span class="leg-dot" style="background:var(--c-agua)"></span>Agua</span>
+    <span class="leg-item" data-cat="cloacas"><span class="leg-dot" style="background:var(--c-cloacas)"></span>Cloacas</span>
+    <span class="leg-item" data-cat="semaforos"><span class="leg-dot" style="background:var(--c-semaforos)"></span>Semáforos</span>
+    <span class="leg-item" data-cat="arbolado"><span class="leg-dot" style="background:var(--c-arbolado)"></span>Arbolado</span>
+    <span class="leg-item" data-cat="obra"><span class="leg-dot" style="background:var(--c-obra)"></span>Obra pública</span>
+    <span class="leg-item" data-cat="inseguridad"><span class="leg-dot" style="background:var(--c-inseguridad)"></span>Inseguridad</span>
+    <span class="leg-item" data-cat="rurales"><span class="leg-dot" style="background:var(--c-rurales)"></span>Caminos rurales</span>
+    <span class="leg-item" data-cat="otros"><span class="leg-dot" style="background:var(--c-otros)"></span>Otros</span>
+  </div>
+
+  <div id="map"></div>
+
+  <div class="list-section">
+    <div class="list-header">
+      <h2 id="listTitle">Reportes recientes</h2>
+      <span class="list-count" id="listCount">12 reportes encontrados</span>
+    </div>
+    <div class="report-list" id="reportList"></div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2024 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
+  </footer>
+
+  <!-- FAB -->
+  <button class="fab" onclick="openModal()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    Reportar
+  </button>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeOnBg(event)">
+    <div class="modal">
+      <div id="formContent">
+        <div class="modal-title">Reportar un problema</div>
+        <div class="modal-sub">Tu reporte ayuda a mejorar Carlos Casares. Es anónimo y gratuito.</div>
+        <div class="form-group">
+          <label>Categoría *</label>
+          <select id="fCat">
+            <option value="">Seleccioná una categoría</option>
+            <option value="baches">Baches y calles</option>
+            <option value="iluminacion">Iluminación</option>
+            <option value="basura">Basura y residuos</option>
+            <option value="agua">Agua y red</option>
+            <option value="cloacas">Cloacas</option>
+            <option value="semaforos">Semáforos y señales</option>
+            <option value="arbolado">Arbolado urbano</option>
+            <option value="obra">Obra pública</option>
+            <option value="inseguridad">Inseguridad</option>
+            <option value="rurales">Caminos rurales</option>
+            <option value="otros">Otros</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Descripción *</label>
+          <textarea id="fDesc" placeholder="Describí el problema con el mayor detalle posible..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Calle</label>
+            <input type="text" id="fCalle" placeholder="Ej: Rivadavia 500" />
+          </div>
+          <div class="form-group">
+            <label>Entre calles</label>
+            <input type="text" id="fEntre" placeholder="Ej: entre Italia y España" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Barrio / Zona</label>
+          <input type="text" id="fBarrio" placeholder="Ej: Centro, Villa del Parque..." />
+        </div>
+        <div class="form-group">
+          <label>Foto (opcional)</label>
+          <input type="file" id="fFoto" accept="image/*" />
+          <div class="form-note">Podés adjuntar una foto del problema.</div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+          <button class="btn-submit" onclick="submitReport()">Enviar reporte</button>
+        </div>
+      </div>
+      <div class="success-msg" id="successMsg">
+        <div class="success-icon">✅</div>
+        <h3>¡Reporte enviado!</h3>
+        <p>Gracias por contribuir a mejorar Carlos Casares. Tu reporte quedó registrado.</p>
+        <div class="modal-actions" style="justify-content:center;margin-top:20px;">
+          <button class="btn-submit" onclick="closeModal()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ── Datos de ejemplo ──
+    const REPORTES = [
+      { id:1, cat:'baches',      desc:'Bache grande en la esquina, peligroso para motos y bicicletas.',   calle:'Rivadavia y España',       barrio:'Centro',          estado:'pendiente',   daysAgo:0,  lat:-35.6188, lng:-61.3665 },
+      { id:2, cat:'iluminacion', desc:'La luminaria está apagada hace más de una semana.',                calle:'Mitre 340',                barrio:'Centro',          estado:'en-proceso',  daysAgo:1,  lat:-35.6202, lng:-61.3640 },
+      { id:3, cat:'basura',      desc:'Contenedor desbordado, acumula basura hace días.',                 calle:'San Martín y Belgrano',    barrio:'Centro',          estado:'pendiente',   daysAgo:2,  lat:-35.6175, lng:-61.3658 },
+      { id:4, cat:'agua',        desc:'Pérdida de agua en la vereda, corre hace 3 días.',                 calle:'Alsina 120',               barrio:'Villa del Parque',estado:'pendiente',   daysAgo:2,  lat:-35.6210, lng:-61.3680 },
+      { id:5, cat:'baches',      desc:'Bache profundo que dañó un auto, urgente.',                        calle:'Italia 450',               barrio:'Centro',          estado:'pendiente',   daysAgo:3,  lat:-35.6195, lng:-61.3650 },
+      { id:6, cat:'arbolado',    desc:'Árbol caído sobre la vereda, bloquea el paso.',                   calle:'Moreno 200',               barrio:'Sarmiento',       estado:'resuelto',    daysAgo:4,  lat:-35.6220, lng:-61.3625 },
+      { id:7, cat:'semaforos',   desc:'Semáforo intermitente en rojo todo el tiempo.',                   calle:'Brown y San Martín',       barrio:'Centro',          estado:'en-proceso',  daysAgo:5,  lat:-35.6183, lng:-61.3672 },
+      { id:8, cat:'iluminacion', desc:'Barrio sin luz desde el temporal, varias cuadras.',               calle:'Av. 9 de Julio 600',       barrio:'Barrio Norte',    estado:'resuelto',    daysAgo:6,  lat:-35.6230, lng:-61.3690 },
+      { id:9, cat:'cloacas',     desc:'Cloaca desbordada en la vereda, mal olor.',                       calle:'Dorrego 85',               barrio:'Sur',             estado:'pendiente',   daysAgo:8,  lat:-35.6245, lng:-61.3648 },
+      { id:10,cat:'obra',        desc:'Zanja abierta sin señalización hace 2 semanas.',                  calle:'Lavalle y Arenales',       barrio:'Centro',          estado:'pendiente',   daysAgo:10, lat:-35.6172, lng:-61.3660 },
+      { id:11,cat:'inseguridad', desc:'Robo de bicicleta frente a la plaza, cámara no funciona.',        calle:'Plaza 9 de Julio',         barrio:'Centro',          estado:'pendiente',   daysAgo:12, lat:-35.6192, lng:-61.3655 },
+      { id:12,cat:'otros',       desc:'Placa de la calle rota, dirección incorrecta.',                   calle:'Echeverría y Alvear',      barrio:'Barrio Nuevo',    estado:'pendiente',   daysAgo:15, lat:-35.6205, lng:-61.3635 },
+      { id:13,cat:'rurales',     desc:'Camino rural intransitable por lluvias, baches profundos a 5 km del casco urbano.', calle:'Ruta prov. s/n — km 5',  barrio:'Zona Rural',      estado:'pendiente',   daysAgo:3,  lat:-35.6420, lng:-61.3900 },
+      { id:14,cat:'rurales',     desc:'Alcantarilla destruida corta el paso a campos vecinos.',           calle:'Camino a Los Pinos',       barrio:'Zona Rural',      estado:'en-proceso',  daysAgo:18, lat:-35.5980, lng:-61.4120 },
+    ];
+
+    const CAT_COLORS = {
+      baches:'#e67e22', iluminacion:'#f1c40f', basura:'#8e44ad',
+      agua:'#2980b9', cloacas:'#6d4c41', semaforos:'#27ae60',
+      arbolado:'#16a085', obra:'#c0392b', inseguridad:'#e74c3c', rurales:'#a0522d', otros:'#7f8c8d'
+    };
+    const CAT_ICONS = {
+      baches:'🕳️', iluminacion:'💡', basura:'🗑️', agua:'💧',
+      cloacas:'🚽', semaforos:'🚦', arbolado:'🌳', obra:'🏗️',
+      inseguridad:'🚨', rurales:'🛤️', otros:'📌'
+    };
+    const CAT_LABELS = {
+      baches:'Baches y calles', iluminacion:'Iluminación', basura:'Basura y residuos',
+      agua:'Agua y red', cloacas:'Cloacas', semaforos:'Semáforos y señales',
+      arbolado:'Arbolado urbano', obra:'Obra pública', inseguridad:'Inseguridad', rurales:'Caminos rurales', otros:'Otros'
+    };
+
+    // ── Mapa ──
+    const map = L.map('map', { zoomControl: true }).setView([-35.6194, -61.3655], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19
+    }).addTo(map);
+
+    function makeIcon(cat) {
+      const color = CAT_COLORS[cat] || '#888';
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="24" height="36">
+        <path d="M12 0C5.4 0 0 5.4 0 12c0 7.2 12 24 12 24s12-16.8 12-24C24 5.4 18.6 0 12 0z" fill="${color}" stroke="rgba(0,0,0,.25)" stroke-width="1"/>
+        <circle cx="12" cy="11" r="5" fill="rgba(255,255,255,.85)"/>
+      </svg>`;
+      return L.divIcon({ html: svg, className: '', iconSize: [24,36], iconAnchor: [12,36], popupAnchor: [0,-36] });
+    }
+
+    const markers = [];
+    REPORTES.forEach(r => {
+      const m = L.marker([r.lat, r.lng], { icon: makeIcon(r.cat) })
+        .addTo(map)
+        .bindPopup(`<b>${CAT_ICONS[r.cat]} ${CAT_LABELS[r.cat]}</b><br><small>${r.calle}</small><br><span style="font-size:12px">${r.desc}</span>`);
+      markers.push({ marker: m, report: r });
+    });
+
+    // Click en mapa para nuevo reporte
+    map.on('click', e => {
+      openModal();
+    });
+
+    // ── Render lista ──
+    function renderList(filtrados) {
+      const list = document.getElementById('reportList');
+      list.innerHTML = '';
+      document.getElementById('listCount').textContent = filtrados.length + ' reportes encontrados';
+      if (!filtrados.length) {
+        list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light);font-size:.9rem;">No se encontraron reportes con ese filtro.</div>';
+        return;
+      }
+      filtrados.forEach(r => {
+        const color = CAT_COLORS[r.cat] || '#888';
+        const timeStr = r.daysAgo === 0 ? 'Hoy' : r.daysAgo === 1 ? 'Ayer' : `hace ${r.daysAgo} días`;
+        const estadoLabel = { pendiente: 'Pendiente', 'en-proceso': 'En proceso', resuelto: 'Resuelto' }[r.estado] || r.estado;
+        const card = document.createElement('div');
+        card.className = 'report-card';
+        card.style.borderLeftColor = color;
+        card.dataset.id = r.id;
+        card.innerHTML = `
+          <div class="report-icon">${CAT_ICONS[r.cat]}</div>
+          <div class="report-body">
+            <div class="report-badges">
+              <span class="badge" style="background:${color}">${CAT_LABELS[r.cat]}</span>
+              <span class="badge badge-estado ${r.estado}">${estadoLabel}</span>
+            </div>
+            <div class="report-desc">${r.desc}</div>
+            <div class="report-meta">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${r.calle}${r.barrio ? ' — ' + r.barrio : ''}</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>${timeStr}</span>
+            </div>
+          </div>`;
+        card.addEventListener('click', () => {
+          map.setView([r.lat, r.lng], 17);
+          markers.find(m => m.report.id === r.id)?.marker.openPopup();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        list.appendChild(card);
+      });
+    }
+
+    // ── Filtros ──
+    let activeCat = 'todas';
+    let activeDays = 0;
+    let searchQ = '';
+
+    function applyFilters() {
+      const filtered = REPORTES.filter(r => {
+        const catOk = activeCat === 'todas' || r.cat === activeCat;
+        const daysOk = activeDays === 0 || r.daysAgo <= activeDays;
+        const qOk = !searchQ || r.desc.toLowerCase().includes(searchQ) || r.calle.toLowerCase().includes(searchQ) || CAT_LABELS[r.cat].toLowerCase().includes(searchQ);
+        return catOk && daysOk && qOk;
+      });
+      markers.forEach(({ marker, report }) => {
+        const catOk = activeCat === 'todas' || report.cat === activeCat;
+        const daysOk = activeDays === 0 || report.daysAgo <= activeDays;
+        const qOk = !searchQ || report.desc.toLowerCase().includes(searchQ) || report.calle.toLowerCase().includes(searchQ);
+        if (catOk && daysOk && qOk) map.addLayer(marker);
+        else map.removeLayer(marker);
+      });
+      renderList(filtered);
+    }
+
+    document.getElementById('catSelect').addEventListener('change', e => { activeCat = e.target.value; applyFilters(); });
+    document.getElementById('searchInput').addEventListener('input', e => { searchQ = e.target.value.toLowerCase().trim(); applyFilters(); });
+    document.querySelectorAll('.time-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.time-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeDays = parseInt(chip.dataset.days);
+        applyFilters();
+      });
+    });
+
+    // ── Modal ──
+    function openModal() {
+      document.getElementById('modalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+      document.getElementById('formContent').style.display = '';
+      document.getElementById('successMsg').style.display = 'none';
+    }
+    function closeOnBg(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+    function submitReport() {
+      const cat = document.getElementById('fCat').value;
+      const desc = document.getElementById('fDesc').value.trim();
+      if (!cat || !desc) { alert('Por favor completá la categoría y la descripción.'); return; }
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    }
+
+    // Init
+    renderList(REPORTES);
+  </script>
+</body>
+</html>
