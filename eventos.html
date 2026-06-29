@@ -236,51 +236,52 @@
       border-radius: var(--radius);
       border: 1px solid var(--gray-border);
       box-shadow: var(--shadow-sm);
-      padding: 20px;
-      margin-bottom: 28px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      max-width: 340px;
     }
     .cal-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
     .cal-title {
       font-family: 'Montserrat', sans-serif;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 800;
       color: var(--text-dark);
       text-transform: capitalize;
     }
     .cal-nav {
       display: flex;
-      gap: 4px;
+      gap: 3px;
     }
     .cal-nav button {
       background: none;
       border: 1.5px solid var(--gray-border);
-      border-radius: 6px;
-      width: 28px; height: 28px;
+      border-radius: 5px;
+      width: 22px; height: 22px;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       color: var(--text-mid);
       transition: all var(--transition);
-      font-size: 14px;
+      font-size: 13px;
     }
     .cal-nav button:hover { background: var(--teal-pale); border-color: var(--teal); color: var(--teal); }
     .cal-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 2px;
+      gap: 1px;
     }
     .cal-dow {
       font-family: 'Montserrat', sans-serif;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       color: var(--text-light);
       text-align: center;
-      padding: 4px 0 8px;
-      letter-spacing: .5px;
+      padding: 2px 0 6px;
+      letter-spacing: .4px;
     }
     .cal-day {
       aspect-ratio: 1;
@@ -288,14 +289,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 500;
       color: var(--text-dark);
       position: relative;
       transition: background var(--transition), color var(--transition);
-      gap: 3px;
+      gap: 2px;
       user-select: none;
     }
     .cal-day:hover:not(.empty):not(.other-month) { background: var(--teal-pale); }
