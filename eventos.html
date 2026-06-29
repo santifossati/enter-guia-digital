@@ -231,48 +231,50 @@
     .event-btn:hover { background: var(--teal-dark); }
 
     /* ── Calendario ── */
+    .cal-section {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+      align-items: start;
+    }
     .calendar-wrap {
       background: var(--white);
       border-radius: var(--radius);
       border: 1px solid var(--gray-border);
       box-shadow: var(--shadow-sm);
-      padding: 14px 16px;
-      margin-bottom: 20px;
-      max-width: 340px;
+      padding: 16px;
     }
     .cal-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .cal-title {
       font-family: 'Montserrat', sans-serif;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
       color: var(--text-dark);
       text-transform: capitalize;
     }
-    .cal-nav {
-      display: flex;
-      gap: 3px;
-    }
+    .cal-nav { display: flex; gap: 3px; }
     .cal-nav button {
       background: none;
       border: 1.5px solid var(--gray-border);
       border-radius: 5px;
-      width: 22px; height: 22px;
+      width: 24px; height: 24px;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       color: var(--text-mid);
       transition: all var(--transition);
-      font-size: 13px;
+      font-size: 14px;
     }
     .cal-nav button:hover { background: var(--teal-pale); border-color: var(--teal); color: var(--teal); }
     .cal-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 1px;
+      gap: 2px;
     }
     .cal-dow {
       font-family: 'Montserrat', sans-serif;
@@ -290,8 +292,8 @@
       align-items: center;
       justify-content: center;
       border-radius: 6px;
-      cursor: pointer;
-      font-size: 11px;
+      cursor: default;
+      font-size: 12px;
       font-weight: 500;
       color: var(--text-dark);
       position: relative;
@@ -299,21 +301,13 @@
       gap: 2px;
       user-select: none;
     }
-    .cal-day:hover:not(.empty):not(.other-month) { background: var(--teal-pale); }
+    .cal-day.has-event { cursor: pointer; }
+    .cal-day.has-event:hover { background: var(--teal-pale); }
     .cal-day.today { font-weight: 800; color: var(--teal); }
-    .cal-day.today::after {
-      content: '';
-      position: absolute;
-      bottom: 4px;
-      width: 4px; height: 4px;
-      border-radius: 50%;
-      background: var(--teal);
-    }
     .cal-day.has-event .cal-dots {
       display: flex;
       gap: 2px;
       justify-content: center;
-      margin-top: 1px;
     }
     .cal-dot {
       width: 4px; height: 4px;
@@ -323,34 +317,89 @@
     }
     .cal-day.selected { background: var(--teal) !important; color: white !important; }
     .cal-day.selected .cal-dot { background: white; }
-    .cal-day.selected.today::after { background: white; }
-    .cal-day.other-month { color: var(--gray-border); cursor: default; }
-    .cal-day.empty { cursor: default; }
-    .cal-filter-active {
+    .cal-day.other-month { color: var(--gray-border); }
+    .cal-day.empty { }
+
+    /* Panel lateral de día seleccionado */
+    .cal-panel {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-border);
+      box-shadow: var(--shadow-sm);
+      padding: 20px;
+      min-height: 200px;
       display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid var(--gray-border);
-      font-size: .8rem;
-      color: var(--text-mid);
+      flex-direction: column;
     }
-    .cal-clear {
+    .cal-panel-title {
       font-family: 'Montserrat', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .4px;
-      color: var(--teal);
-      border: none;
-      background: none;
-      cursor: pointer;
-      padding: 0;
-      margin-left: auto;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gray-border);
+      text-transform: capitalize;
     }
-    .cal-filter-active { display: none; }
-    .cal-filter-active.visible { display: flex; }
+    .cal-panel-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-light);
+      text-align: center;
+      padding: 20px 0;
+    }
+    .cal-panel-empty svg { opacity: .25; }
+    .cal-panel-empty p { font-size: .82rem; }
+    .cal-panel-hint {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-light);
+      text-align: center;
+      padding: 20px 0;
+      font-size: .82rem;
+    }
+    .cal-event-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-border);
+    }
+    .cal-event-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .cal-event-emoji { font-size: 28px; flex-shrink: 0; line-height: 1; }
+    .cal-event-info {}
+    .cal-event-cat {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+    .cal-event-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .cal-event-desc { font-size: .78rem; color: var(--text-mid); line-height: 1.5; margin-bottom: 6px; }
+    .cal-event-meta { font-size: .75rem; color: var(--text-light); display: flex; flex-direction: column; gap: 2px; }
+
+    @media (max-width: 700px) {
+      .cal-section { grid-template-columns: 1fr; }
+    }
 
     /* ── CTA ── */
     .cta-publicar {
@@ -436,19 +485,25 @@
 
   <div class="layout">
     <!-- Calendario -->
-    <div class="calendar-wrap">
-      <div class="cal-header">
-        <span class="cal-title" id="calTitle"></span>
-        <div class="cal-nav">
-          <button id="calPrev">&#8249;</button>
-          <button id="calNext">&#8250;</button>
+    <div class="cal-section">
+      <div class="calendar-wrap">
+        <div class="cal-header">
+          <span class="cal-title" id="calTitle"></span>
+          <div class="cal-nav">
+            <button id="calPrev">&#8249;</button>
+            <button id="calNext">&#8250;</button>
+          </div>
         </div>
+        <div class="cal-grid" id="calGrid"></div>
       </div>
-      <div class="cal-grid" id="calGrid"></div>
-      <div class="cal-filter-active" id="calFilterBar">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Mostrando eventos del <strong id="calFilterLabel"></strong>
-        <button class="cal-clear" id="calClear">✕ Limpiar</button>
+
+      <div class="cal-panel" id="calPanel">
+        <div class="cal-panel-title" id="calPanelTitle">Agenda</div>
+        <div class="cal-panel-hint" id="calPanelHint">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Tocá un día con puntos para ver los eventos
+        </div>
+        <div id="calPanelEvents" style="display:none; flex-direction:column;"></div>
       </div>
     </div>
 
@@ -690,18 +745,23 @@
   </footer>
 
   <script>
-    // ── Datos de fechas de eventos (día del mes, mes 0-based) ──
-    // Formato: 'YYYY-M-D' (mes 0-based para Date)
-    const eventDates = {
-      '2026-6-5':  ['cine'],
-      '2026-6-11': ['teatro'],
-      '2026-6-12': ['teatro'],
-      '2026-6-13': ['ferias', 'futbol'],
-      '2026-6-18': ['recitales'],
-      '2026-6-19': ['boliche'],
-      '2026-6-20': ['fiestas'],
-      '2026-6-26': ['talleres'],
+    // ── Datos de eventos por fecha (mes 0-based) ──
+    const eventData = {
+      '2026-6-5':  [{ cat:'cine',      emoji:'🎬', nombre:'Noche de Cine: El Planeta del Tesoro', desc:'Proyección especial animada apta para toda la familia en el salón del Centro Cultural.', hora:'20:00 hs', lugar:'Centro Cultural Municipal', precio:'$2.500' }],
+      '2026-6-11': [{ cat:'teatro',    emoji:'🎭', nombre:'Obra: "El vecino del 4B"', desc:'Comedia costumbrista del grupo de teatro independiente de Carlos Casares. Elenco local.', hora:'21:00 hs', lugar:'Teatro Municipal Juan B. Justo', precio:'$3.000' }],
+      '2026-6-12': [{ cat:'teatro',    emoji:'🎭', nombre:'Obra: "El vecino del 4B"', desc:'Segunda función. Comedia costumbrista del grupo de teatro independiente de Carlos Casares.', hora:'21:00 hs', lugar:'Teatro Municipal Juan B. Justo', precio:'$3.000' }],
+      '2026-6-13': [
+        { cat:'ferias',  emoji:'🛍️', nombre:'Feria de Artesanos y Emprendedores', desc:'Más de 30 puestos de productores locales con artesanías, ropa, gastronomía y productos regionales.', hora:'10:00 – 18:00 hs', lugar:'Peatonal Rivadavia', precio:'Gratis' },
+        { cat:'futbol',  emoji:'⚽', nombre:'Casares vs. Bolívar', desc:'Torneo Regional — Clásico regional por la Liga del Oeste. Venta de entradas en cancha.', hora:'15:30 hs', lugar:'Estadio Municipal', precio:'$2.000' },
+      ],
+      '2026-6-18': [{ cat:'recitales', emoji:'🎸', nombre:'Noche de Rock Local — Bandas en vivo', desc:'Tres bandas locales en vivo en una noche de rock y blues. Sin restricción de edad.', hora:'22:00 hs', lugar:'Bar La Esquina', precio:'Gratis' }],
+      '2026-6-19': [{ cat:'boliche',   emoji:'🎧', nombre:'Noche Reggaetón', desc:'DJ en vivo toda la noche. Promoción de entradas anticipadas disponible hasta el viernes.', hora:'00:00 hs', lugar:'Boliche El Portal', precio:'$5.000 antic.' }],
+      '2026-6-20': [{ cat:'fiestas',   emoji:'🎉', nombre:'Fiesta del Aniversario de Carlos Casares', desc:'Espectáculo artístico, fuegos artificiales y baile popular. Entrada libre y gratuita.', hora:'19:00 hs', lugar:'Plaza San Martín', precio:'Gratis' }],
+      '2026-6-26': [{ cat:'talleres',  emoji:'📚', nombre:'Taller de Fotografía con Celular', desc:'Aprendé a sacar mejores fotos con tu celular: encuadre, luz, edición y redes sociales.', hora:'10:00 hs', lugar:'Biblioteca Municipal', precio:'$1.500' }],
     };
+
+    const catLabels = { cine:'Cine', teatro:'Teatro', fiestas:'Fiestas', boliche:'Boliche', ferias:'Ferias', futbol:'Fútbol', recitales:'Recitales', talleres:'Talleres' };
+    const catClasses = { cine:'cat-cine', teatro:'cat-teatro', fiestas:'cat-fiestas', boliche:'cat-boliche', ferias:'cat-ferias', futbol:'cat-futbol', recitales:'cat-recitales', talleres:'cat-talleres' };
 
     // ── Calendario ──
     let calYear, calMonth, selectedDate = null;
@@ -721,7 +781,7 @@
         grid.appendChild(el);
       });
 
-      const firstDay = new Date(year, month, 1).getDay(); // 0=Dom
+      const firstDay = new Date(year, month, 1).getDay();
       const startOffset = (firstDay === 0) ? 6 : firstDay - 1;
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       const today = new Date();
@@ -739,12 +799,12 @@
 
         const key = `${year}-${month}-${d}`;
         const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
-        const cats = eventDates[key];
+        const events = eventData[key];
 
         if (isToday) el.classList.add('today');
-        if (cats) {
+        if (events) {
           el.classList.add('has-event');
-          cats.slice(0, 3).forEach(() => {
+          events.slice(0, 3).forEach(() => {
             const dot = document.createElement('div');
             dot.className = 'cal-dot';
             el.querySelector('.cal-dots').appendChild(dot);
@@ -760,47 +820,71 @@
       selectedDate = (selectedDate === key) ? null : key;
       document.querySelectorAll('.cal-day').forEach(c => c.classList.remove('selected'));
       if (selectedDate) el.classList.add('selected');
-      applyCalFilter();
+      renderPanel();
     }
 
-    function applyCalFilter() {
-      const filterBar = document.getElementById('calFilterBar');
-      const label = document.getElementById('calFilterLabel');
-      const cats = selectedDate ? eventDates[selectedDate] : null;
+    function renderPanel() {
+      const hint = document.getElementById('calPanelHint');
+      const eventsEl = document.getElementById('calPanelEvents');
+      const title = document.getElementById('calPanelTitle');
+      const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
-      if (cats) {
-        const [y, m, d] = selectedDate.split('-');
-        const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-        label.textContent = `${d} de ${meses[parseInt(m)]}`;
-        filterBar.classList.add('visible');
-        cards.forEach(card => {
-          card.style.display = cats.includes(card.dataset.cat) ? '' : 'none';
-        });
-      } else {
-        filterBar.classList.remove('visible');
-        cards.forEach(card => card.style.display = '');
+      if (!selectedDate) {
+        title.textContent = 'Agenda';
+        hint.style.display = 'flex';
+        eventsEl.style.display = 'none';
+        eventsEl.innerHTML = '';
+        return;
       }
-      countVisible();
+
+      const [y, m, d] = selectedDate.split('-');
+      const eventos = eventData[selectedDate];
+      title.textContent = `${d} de ${meses[parseInt(m)]}`;
+
+      if (!eventos || eventos.length === 0) {
+        hint.innerHTML = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><p>No hay eventos disponibles para este día.</p>`;
+        hint.style.display = 'flex';
+        eventsEl.style.display = 'none';
+        return;
+      }
+
+      hint.style.display = 'none';
+      eventsEl.style.display = 'flex';
+      eventsEl.innerHTML = eventos.map(ev => `
+        <div class="cal-event-item">
+          <div class="cal-event-emoji">${ev.emoji}</div>
+          <div class="cal-event-info">
+            <span class="cal-event-cat ${catClasses[ev.cat]}">${catLabels[ev.cat]}</span>
+            <div class="cal-event-name">${ev.nombre}</div>
+            <div class="cal-event-desc">${ev.desc}</div>
+            <div class="cal-event-meta">
+              <span>🕐 ${ev.hora}</span>
+              <span>📍 ${ev.lugar}</span>
+              <span>🎟️ ${ev.precio}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
     document.getElementById('calPrev').addEventListener('click', () => {
       calMonth--;
       if (calMonth < 0) { calMonth = 11; calYear--; }
+      selectedDate = null;
       buildCalendar(calYear, calMonth);
+      renderPanel();
     });
     document.getElementById('calNext').addEventListener('click', () => {
       calMonth++;
       if (calMonth > 11) { calMonth = 0; calYear++; }
-      buildCalendar(calYear, calMonth);
-    });
-    document.getElementById('calClear').addEventListener('click', () => {
       selectedDate = null;
       buildCalendar(calYear, calMonth);
-      applyCalFilter();
+      renderPanel();
     });
 
     const now = new Date();
     buildCalendar(now.getFullYear(), now.getMonth());
+    renderPanel();
 
     // ── Filtros y búsqueda ──
     const cards = document.querySelectorAll('.event-card');
