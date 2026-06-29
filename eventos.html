@@ -230,6 +230,127 @@
     }
     .event-btn:hover { background: var(--teal-dark); }
 
+    /* ── Calendario ── */
+    .calendar-wrap {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-border);
+      box-shadow: var(--shadow-sm);
+      padding: 20px;
+      margin-bottom: 28px;
+    }
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .cal-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-dark);
+      text-transform: capitalize;
+    }
+    .cal-nav {
+      display: flex;
+      gap: 4px;
+    }
+    .cal-nav button {
+      background: none;
+      border: 1.5px solid var(--gray-border);
+      border-radius: 6px;
+      width: 28px; height: 28px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-mid);
+      transition: all var(--transition);
+      font-size: 14px;
+    }
+    .cal-nav button:hover { background: var(--teal-pale); border-color: var(--teal); color: var(--teal); }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .cal-dow {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-light);
+      text-align: center;
+      padding: 4px 0 8px;
+      letter-spacing: .5px;
+    }
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-dark);
+      position: relative;
+      transition: background var(--transition), color var(--transition);
+      gap: 3px;
+      user-select: none;
+    }
+    .cal-day:hover:not(.empty):not(.other-month) { background: var(--teal-pale); }
+    .cal-day.today { font-weight: 800; color: var(--teal); }
+    .cal-day.today::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+    .cal-day.has-event .cal-dots {
+      display: flex;
+      gap: 2px;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .cal-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--teal);
+      flex-shrink: 0;
+    }
+    .cal-day.selected { background: var(--teal) !important; color: white !important; }
+    .cal-day.selected .cal-dot { background: white; }
+    .cal-day.selected.today::after { background: white; }
+    .cal-day.other-month { color: var(--gray-border); cursor: default; }
+    .cal-day.empty { cursor: default; }
+    .cal-filter-active {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--gray-border);
+      font-size: .8rem;
+      color: var(--text-mid);
+    }
+    .cal-clear {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      color: var(--teal);
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+      margin-left: auto;
+    }
+    .cal-filter-active { display: none; }
+    .cal-filter-active.visible { display: flex; }
+
     /* ── CTA ── */
     .cta-publicar {
       background: var(--teal-darker);
@@ -313,6 +434,23 @@
   </div>
 
   <div class="layout">
+    <!-- Calendario -->
+    <div class="calendar-wrap">
+      <div class="cal-header">
+        <span class="cal-title" id="calTitle"></span>
+        <div class="cal-nav">
+          <button id="calPrev">&#8249;</button>
+          <button id="calNext">&#8250;</button>
+        </div>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-filter-active" id="calFilterBar">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Mostrando eventos del <strong id="calFilterLabel"></strong>
+        <button class="cal-clear" id="calClear">✕ Limpiar</button>
+      </div>
+    </div>
+
     <div class="results-header">
       <span class="results-title" id="resultsTitle">Próximos eventos</span>
       <span class="results-count" id="resultsCount">8 eventos</span>
@@ -551,6 +689,119 @@
   </footer>
 
   <script>
+    // ── Datos de fechas de eventos (día del mes, mes 0-based) ──
+    // Formato: 'YYYY-M-D' (mes 0-based para Date)
+    const eventDates = {
+      '2026-6-5':  ['cine'],
+      '2026-6-11': ['teatro'],
+      '2026-6-12': ['teatro'],
+      '2026-6-13': ['ferias', 'futbol'],
+      '2026-6-18': ['recitales'],
+      '2026-6-19': ['boliche'],
+      '2026-6-20': ['fiestas'],
+      '2026-6-26': ['talleres'],
+    };
+
+    // ── Calendario ──
+    let calYear, calMonth, selectedDate = null;
+
+    function buildCalendar(year, month) {
+      calYear = year; calMonth = month;
+      const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      document.getElementById('calTitle').textContent = meses[month] + ' ' + year;
+
+      const grid = document.getElementById('calGrid');
+      grid.innerHTML = '';
+
+      ['Lu','Ma','Mi','Ju','Vi','Sá','Do'].forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'cal-dow';
+        el.textContent = d;
+        grid.appendChild(el);
+      });
+
+      const firstDay = new Date(year, month, 1).getDay(); // 0=Dom
+      const startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+
+      for (let i = 0; i < startOffset; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day empty';
+        grid.appendChild(el);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day';
+        el.innerHTML = `<span>${d}</span><div class="cal-dots"></div>`;
+
+        const key = `${year}-${month}-${d}`;
+        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+        const cats = eventDates[key];
+
+        if (isToday) el.classList.add('today');
+        if (cats) {
+          el.classList.add('has-event');
+          cats.slice(0, 3).forEach(() => {
+            const dot = document.createElement('div');
+            dot.className = 'cal-dot';
+            el.querySelector('.cal-dots').appendChild(dot);
+          });
+          el.addEventListener('click', () => selectDay(d, key, el));
+        }
+        if (selectedDate === key) el.classList.add('selected');
+        grid.appendChild(el);
+      }
+    }
+
+    function selectDay(d, key, el) {
+      selectedDate = (selectedDate === key) ? null : key;
+      document.querySelectorAll('.cal-day').forEach(c => c.classList.remove('selected'));
+      if (selectedDate) el.classList.add('selected');
+      applyCalFilter();
+    }
+
+    function applyCalFilter() {
+      const filterBar = document.getElementById('calFilterBar');
+      const label = document.getElementById('calFilterLabel');
+      const cats = selectedDate ? eventDates[selectedDate] : null;
+
+      if (cats) {
+        const [y, m, d] = selectedDate.split('-');
+        const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+        label.textContent = `${d} de ${meses[parseInt(m)]}`;
+        filterBar.classList.add('visible');
+        cards.forEach(card => {
+          card.style.display = cats.includes(card.dataset.cat) ? '' : 'none';
+        });
+      } else {
+        filterBar.classList.remove('visible');
+        cards.forEach(card => card.style.display = '');
+      }
+      countVisible();
+    }
+
+    document.getElementById('calPrev').addEventListener('click', () => {
+      calMonth--;
+      if (calMonth < 0) { calMonth = 11; calYear--; }
+      buildCalendar(calYear, calMonth);
+    });
+    document.getElementById('calNext').addEventListener('click', () => {
+      calMonth++;
+      if (calMonth > 11) { calMonth = 0; calYear++; }
+      buildCalendar(calYear, calMonth);
+    });
+    document.getElementById('calClear').addEventListener('click', () => {
+      selectedDate = null;
+      buildCalendar(calYear, calMonth);
+      applyCalFilter();
+    });
+
+    const now = new Date();
+    buildCalendar(now.getFullYear(), now.getMonth());
+
+    // ── Filtros y búsqueda ──
     const cards = document.querySelectorAll('.event-card');
     const chips = document.querySelectorAll('.filter-chip');
     const resultsCount = document.getElementById('resultsCount');
@@ -562,6 +813,12 @@
       resultsCount.textContent = visible + ' evento' + (visible !== 1 ? 's' : '');
       emptyState.style.display = visible === 0 ? 'block' : 'none';
       grid.style.display = visible === 0 ? 'none' : 'grid';
+    }
+
+    function countVisible() {
+      let v = 0;
+      cards.forEach(c => { if (c.style.display !== 'none') v++; });
+      updateCount(v);
     }
 
     chips.forEach(chip => {
