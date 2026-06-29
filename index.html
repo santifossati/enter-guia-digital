@@ -791,6 +791,79 @@
     .footer-bottom a { color: rgba(255,255,255,.5); transition: color var(--transition); }
     .footer-bottom a:hover { color: white; }
 
+    /* ── Mobile nav ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: white;
+      border-radius: 2px;
+      transition: transform .3s ease, opacity .3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 64px;
+      left: 0; right: 0;
+      background: var(--teal-darker);
+      padding: 12px 20px 20px;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.3);
+      z-index: 99;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(255,255,255,.85);
+      padding: 12px 14px;
+      border-radius: 8px;
+      transition: background var(--transition);
+    }
+    .mobile-menu a:hover { background: rgba(255,255,255,.1); color: white; }
+    .mobile-menu .btn-registrar-mobile {
+      margin-top: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      background: var(--white);
+      color: var(--teal-darker);
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .nav { display: none; }
+      .header-actions { display: none; }
+      .hamburger { display: flex; }
+      .header { position: relative; }
+    }
+
   </style>
 </head>
 <body>
@@ -816,7 +889,20 @@
     <div class="header-actions">
       <button class="btn-registrar">Registrá tu negocio <span style="opacity:.75;font-weight:600;">(¡Es gratis!)</span></button>
     </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
   </header>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="./guia.html">guIA</a>
+    <a href="./negocios.html">Negocios</a>
+    <a href="./reclamos.html">Reclamos</a>
+    <a href="./eventos.html">Eventos</a>
+    <a href="./empleos.html">Empleos</a>
+    <button class="btn-registrar-mobile">Registrá tu negocio (¡Es gratis!)</button>
+  </div>
 
   <!-- ══ HERO ══ -->
   <section class="hero">
@@ -1121,6 +1207,20 @@
 
   <script>
     // ── Header scroll effect ──
+    // ── Mobile menu toggle ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+
     const header = document.getElementById('header');
     window.addEventListener('scroll', () => {
       header.classList.toggle('scrolled', window.scrollY > 10);
