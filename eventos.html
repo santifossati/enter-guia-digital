@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventos — Enter Guía Digital de Carlos Casares</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal:        #1e7d96;
+      --teal-dark:   #145f73;
+      --teal-darker: #0e4a5a;
+      --teal-pale:   #e6f4f7;
+      --gray-bg:     #f0eeeb;
+      --gray-border: #d9d4cd;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #4a4a4a;
+      --text-light:  #7a7a7a;
+      --white:       #ffffff;
+      --shadow-sm:   0 2px 8px rgba(0,0,0,.08);
+      --shadow-md:   0 6px 24px rgba(0,0,0,.12);
+      --radius:      14px;
+      --transition:  .3s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Header ── */
+    .header {
+      background: var(--teal-darker);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,.2);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
+    .logo-text .name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); }
+    .logo-text .sub { font-size: 9px; color: rgba(255,255,255,.7); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; font-weight: 600; }
+    .nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .nav a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.8); padding: 6px 12px; border-radius: 6px; transition: background var(--transition); font-family: 'Montserrat', sans-serif; }
+    .nav a:hover, .nav a.active { background: rgba(255,255,255,.12); color: var(--white); }
+    .btn-publicar { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; transition: background var(--transition); white-space: nowrap; }
+    .btn-publicar:hover { background: var(--teal-pale); }
+
+    /* ── Hero ── */
+    .page-hero {
+      background: var(--teal-darker);
+      padding: 44px 32px 36px;
+      color: var(--white);
+    }
+    .hero-inner { max-width: 1200px; margin: 0 auto; }
+    .page-hero h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; margin-bottom: 8px; }
+    .page-hero p { font-size: .9rem; color: rgba(255,255,255,.6); margin-bottom: 20px; }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,.97);
+      border-radius: 10px;
+      padding: 0 16px;
+      max-width: 560px;
+    }
+    .search-bar svg { width: 17px; height: 17px; flex-shrink: 0; color: var(--text-light); }
+    .search-bar input { flex: 1; border: none; outline: none; font-family: 'Inter', sans-serif; font-size: .93rem; color: var(--text-dark); padding: 13px 0; background: transparent; }
+    .search-bar input::placeholder { color: var(--text-light); }
+
+    /* ── Filtros ── */
+    .filters-bar {
+      max-width: 1200px;
+      margin: 24px auto 0;
+      padding: 0 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .filter-chip {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-border);
+      background: var(--white);
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .filter-chip:hover, .filter-chip.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+    /* ── Layout ── */
+    .layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .results-title { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 800; color: var(--text-dark); }
+    .results-count { font-size: .83rem; color: var(--text-light); }
+
+    /* ── Grid de eventos ── */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    /* ── Tarjeta evento ── */
+    .event-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-border);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    .event-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--teal); }
+
+    .event-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: var(--teal-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      flex-shrink: 0;
+    }
+
+    .event-body { padding: 18px 18px 20px; display: flex; flex-direction: column; flex: 1; }
+
+    .event-cat-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .event-cat {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .cat-cine     { background: #e3f2fd; color: #1565c0; }
+    .cat-teatro   { background: #f3e5f5; color: #6a1b9a; }
+    .cat-fiestas  { background: #fce4ec; color: #ad1457; }
+    .cat-boliche  { background: #1a1a2e; color: #e040fb; }
+    .cat-ferias   { background: #fff8e1; color: #f57f17; }
+    .cat-futbol   { background: #e8f5e9; color: #2e7d32; }
+    .cat-recitales{ background: #fff3e0; color: #e65100; }
+    .cat-talleres { background: #e8eaf6; color: #283593; }
+
+    .event-destacado {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: #f57f17;
+    }
+
+    .event-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .event-desc {
+      font-size: .83rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin-bottom: 14px;
+      flex: 1;
+    }
+
+    .event-meta { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+    .event-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: .8rem;
+      color: var(--text-mid);
+    }
+    .event-meta-row svg { width: 13px; height: 13px; flex-shrink: 0; color: var(--teal); }
+
+    .event-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid var(--gray-border); padding-top: 14px; }
+    .event-price {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--teal-darker);
+    }
+    .event-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      background: var(--teal);
+      color: var(--white);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background var(--transition);
+      white-space: nowrap;
+    }
+    .event-btn:hover { background: var(--teal-dark); }
+
+    /* ── CTA ── */
+    .cta-publicar {
+      background: var(--teal-darker);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .cta-publicar h3 { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+    .cta-publicar p { font-size: .85rem; color: rgba(255,255,255,.6); }
+    .cta-btn { font-family: 'Montserrat', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 11px 22px; border-radius: 7px; cursor: pointer; white-space: nowrap; transition: background var(--transition); }
+    .cta-btn:hover { background: var(--teal-pale); }
+
+    /* ── Vacío ── */
+    .empty-state { text-align: center; padding: 60px 24px; color: var(--text-light); display: none; }
+    .empty-state svg { width: 48px; height: 48px; margin: 0 auto 16px; opacity: .3; }
+    .empty-state h3 { font-family: 'Montserrat', sans-serif; font-size: .95rem; font-weight: 700; color: var(--text-mid); margin-bottom: 6px; }
+
+    /* Footer */
+    .footer { background: var(--teal-darker); text-align: center; padding: 28px 24px; color: rgba(255,255,255,.5); font-size: .83rem; }
+    .footer a { color: rgba(255,255,255,.7); }
+
+    @media (max-width: 900px) {
+      .events-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav { display: none; }
+      .cta-publicar { flex-direction: column; }
+    }
+    @media (max-width: 520px) {
+      .events-grid { grid-template-columns: 1fr; }
+      .page-hero { padding: 28px 20px 24px; }
+      .layout { padding: 24px 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="./index.html" class="logo">
+      <img src="./logo.png" alt="Enter Guía Digital" />
+      <div class="logo-text">
+        <div class="name">enter</div>
+        <div class="sub">guía digital</div>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="./guia.html">guIA</a>
+      <a href="./negocios.html">Negocios</a>
+      <a href="./reclamos.html">Reclamos</a>
+      <a href="./eventos.html" class="active">Eventos</a>
+      <a href="./empleos.html">Empleos</a>
+    </nav>
+    <div style="margin-left:auto;">
+      <button class="btn-publicar">Publicar evento <span style="opacity:.75;">(¡Es gratis!)</span></button>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <div class="hero-inner">
+      <h1>Agenda de Eventos</h1>
+      <p>Todo lo que pasa en Carlos Casares: shows, ferias, deportes, cultura y más.</p>
+      <div class="search-bar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar evento, lugar o fecha..." />
+      </div>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <button class="filter-chip active" data-filter="todos">🗓️ Todos</button>
+    <button class="filter-chip" data-filter="cine">🎬 Cine</button>
+    <button class="filter-chip" data-filter="teatro">🎭 Teatro</button>
+    <button class="filter-chip" data-filter="fiestas">🎉 Fiestas</button>
+    <button class="filter-chip" data-filter="boliche">🎧 Boliche</button>
+    <button class="filter-chip" data-filter="ferias">🛍️ Ferias</button>
+    <button class="filter-chip" data-filter="futbol">⚽ Fútbol</button>
+    <button class="filter-chip" data-filter="recitales">🎸 Recitales</button>
+    <button class="filter-chip" data-filter="talleres">📚 Talleres</button>
+  </div>
+
+  <div class="layout">
+    <div class="results-header">
+      <span class="results-title" id="resultsTitle">Próximos eventos</span>
+      <span class="results-count" id="resultsCount">8 eventos</span>
+    </div>
+
+    <div class="events-grid" id="eventsGrid">
+
+      <!-- CINE -->
+      <div class="event-card" data-cat="cine" data-search="cine pelicula animacion familia pantalla grande">
+        <div class="event-img">🎬</div>
+        <div class="event-body">
+          <div class="event-cat-row">
+            <span class="event-cat cat-cine">Cine</span>
+          </div>
+          <div class="event-title">Noche de Cine: El Planeta del Tesoro</div>
+          <div class="event-desc">Proyección especial animada apta para toda la familia en el salón del Centro Cultural. Entrada con butaca numerada.</div>
+          <div class="event-meta">
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Sábado 5 de julio · 20:00 hs
+            </div>
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Centro Cultural Municipal, C. Casares
+            </div>
+          </div>
+          <div class="event-footer">
+            <span class="event-price">$2.500</span>
+            <button class="event-btn">Ver detalle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEATRO -->
+      <div class="event-card" data-cat="teatro" data-search="teatro obra local actores escena">
+        <div class="event-img">🎭</div>
+        <div class="event-body">
+          <div class="event-cat-row">
+            <span class="event-cat cat-teatro">Teatro</span>
+          </div>
+          <div class="event-title">Obra: "El vecino del 4B"</div>
+          <div class="event-desc">Comedia costumbrista del grupo de teatro independiente de Carlos Casares. Dos funciones disponibles. Elenco local con dirección de Mariana Ríos.</div>
+          <div class="event-meta">
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Viernes 11 y sábado 12 de julio · 21:00 hs
+            </div>
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Teatro Municipal Juan B. Justo
+            </div>
+          </div>
+          <div class="event-footer">
+            <span class="event-price">$3.000</span>
+            <button class="event-btn">Ver detalle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIESTAS -->
+      <div class="event-card" data-cat="fiestas" data-search="fiesta cumpleaños aniversario celebracion baile">
+        <div class="event-img">🎉</div>
+        <div class="event-body">
+          <div class="event-cat-row">
+            <span class="event-cat cat-fiestas">Fiestas</span>
+            <span class="event-destacado">⭐ Destacado</span>
+          </div>
+          <div class="event-title">Fiesta del Aniversario de Carlos Casares</div>
+          <div class="event-desc">Celebración oficial por el aniversario de la ciudad con espectáculo artístico, fuegos artificiales y baile popular. Entrada libre y gratuita.</div>
+          <div class="event-meta">
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Domingo 20 de julio · 19:00 hs
+            </div>
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Plaza San Martín, Carlos Casares
+            </div>
+          </div>
+          <div class="event-footer">
+            <span class="event-price">Gratis</span>
+            <button class="event-btn">Ver detalle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOLICHE -->
+      <div class="event-card" data-cat="boliche" data-search="boliche disco dj noche electronica reggaeton">
+        <div class="event-img">🎧</div>
+        <div class="event-body">
+          <div class="event-cat-row">
+            <span class="event-cat cat-boliche">Boliche</span>
+          </div>
+          <div class="event-title">Noche Reggaetón — Sábado 19</div>
+          <div class="event-desc">La mejor noche del verano con los hits del momento. DJ en vivo toda la noche. Promoción de entradas anticipadas disponible hasta el viernes.</div>
+          <div class="event-meta">
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Sábado 19 de julio · 00:00 hs
+            </div>
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Boliche El Portal, C. Casares
+            </div>
+          </div>
+          <div class="event-footer">
+            <span class="event-price">$5.000 antic.</span>
+            <button class="event-btn">Ver detalle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FERIAS -->
+      <div class="event-card" data-cat="ferias" data-search="feria artesanal emprendedores productos locales mercado">
+        <div class="event-img">🛍️</div>
+        <div class="event-body">
+          <div class="event-cat-row">
+            <span class="event-cat cat-ferias">Ferias</span>
+          </div>
+          <div class="event-title">Feria de Artesanos y Emprendedores</div>
+          <div class="event-desc">Más de 30 puestos de productores locales con artesanías, ropa, gastronomía y productos regionales. Ideal para el fin de semana en familia.</div>
+          <div class="event-meta">
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Domingo 13 de julio · 10:00 – 18:00 hs
+            </div>
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Peatonal Rivadavia, C. Casares
+            </div>
+          </div>
+          <div class="event-footer">
+            <span class="event-price">Gratis</span>
+            <button class="event-btn">Ver detalle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FÚTBOL -->
+      <div class="event-card" data-cat="futbol" data-search="futbol partido local regional liga torneo">
+        <div class="event-img">⚽</div>
+        <div class="event-body">
+          <div class="event-cat-row">
+            <span class="event-cat cat-futbol">Fútbol</span>
+          </div>
+          <div class="event-title">Torneo Regional — Casares vs. Bolívar</div>
+          <div class="event-desc">Clásico regional por el torneo de la Liga del Oeste. Partido a disputarse en el estadio local con gran expectativa de público. Habrá venta de entradas en cancha.</div>
+          <div class="event-meta">
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Domingo 13 de julio · 15:30 hs
+            </div>
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Estadio Municipal, Carlos Casares
+            </div>
+          </div>
+          <div class="event-footer">
+            <span class="event-price">$2.000</span>
+            <button class="event-btn">Ver detalle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECITALES -->
+      <div class="event-card" data-cat="recitales" data-search="recital show musica en vivo banda concierto">
+        <div class="event-img">🎸</div>
+        <div class="event-body">
+          <div class="event-cat-row">
+            <span class="event-cat cat-recitales">Recitales</span>
+          </div>
+          <div class="event-title">Noche de Rock Local — Bandas en vivo</div>
+          <div class="event-desc">Tres bandas locales en vivo en una noche de rock y blues. Sin restricción de edad. Habrá barra con bebidas y entrada libre hasta agotar el lugar.</div>
+          <div class="event-meta">
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Viernes 18 de julio · 22:00 hs
+            </div>
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Bar La Esquina, C. Casares
+            </div>
+          </div>
+          <div class="event-footer">
+            <span class="event-price">Gratis</span>
+            <button class="event-btn">Ver detalle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TALLERES -->
+      <div class="event-card" data-cat="talleres" data-search="taller curso clase aprender capacitacion adultos jovenes">
+        <div class="event-img">📚</div>
+        <div class="event-body">
+          <div class="event-cat-row">
+            <span class="event-cat cat-talleres">Talleres</span>
+          </div>
+          <div class="event-title">Taller de Fotografía con Celular</div>
+          <div class="event-desc">Aprendé a sacar mejores fotos con tu celular: encuadre, luz, edición y redes sociales. Cupos limitados. Apto para todas las edades, no se requiere experiencia previa.</div>
+          <div class="event-meta">
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Sábado 26 de julio · 10:00 hs
+            </div>
+            <div class="event-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Biblioteca Municipal, C. Casares
+            </div>
+          </div>
+          <div class="event-footer">
+            <span class="event-price">$1.500</span>
+            <button class="event-btn">Ver detalle</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="empty-state" id="emptyState">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <h3>No se encontraron eventos</h3>
+      <p>Probá con otra categoría o búsqueda.</p>
+    </div>
+
+    <div class="cta-publicar">
+      <div>
+        <h3>¿Tenés un evento para publicar?</h3>
+        <p>Publicá tu evento gratis y llegá a toda la comunidad de Carlos Casares.</p>
+      </div>
+      <button class="cta-btn">Publicar evento — ¡Es gratis!</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2026 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
+  </footer>
+
+  <script>
+    const cards = document.querySelectorAll('.event-card');
+    const chips = document.querySelectorAll('.filter-chip');
+    const resultsCount = document.getElementById('resultsCount');
+    const resultsTitle = document.getElementById('resultsTitle');
+    const emptyState = document.getElementById('emptyState');
+    const grid = document.getElementById('eventsGrid');
+
+    function updateCount(visible) {
+      resultsCount.textContent = visible + ' evento' + (visible !== 1 ? 's' : '');
+      emptyState.style.display = visible === 0 ? 'block' : 'none';
+      grid.style.display = visible === 0 ? 'none' : 'grid';
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        document.getElementById('searchInput').value = '';
+        const filter = chip.dataset.filter;
+        let visible = 0;
+        cards.forEach(card => {
+          const show = filter === 'todos' || card.dataset.cat === filter;
+          card.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+        const label = chip.textContent.replace(/^.\s/, '');
+        resultsTitle.textContent = filter === 'todos' ? 'Próximos eventos' : label;
+        updateCount(visible);
+      });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const q = this.value.toLowerCase().trim();
+      chips.forEach(c => c.classList.remove('active'));
+      document.querySelector('[data-filter="todos"]').classList.add('active');
+      let visible = 0;
+      cards.forEach(card => {
+        const text = (card.dataset.search + ' ' + card.textContent).toLowerCase();
+        const show = !q || text.includes(q);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      resultsTitle.textContent = q ? `Resultados para "${this.value}"` : 'Próximos eventos';
+      updateCount(visible);
+    });
+  </script>
+</body>
+</html>
