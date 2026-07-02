@@ -340,8 +340,8 @@
           <textarea name="comentarios" placeholder="Cualquier otro dato que quieras agregarnos."></textarea>
         </div>
 
-        <button type="submit" class="submit-btn">Enviar datos a Thrive</button>
-        <p class="form-note">Tus datos se envían directo al correo de Thrive — Agencia Digital. Te contactamos en 24-48 hs para publicar tu ficha.</p>
+        <button type="submit" class="submit-btn">Enviar datos</button>
+        <p class="form-note">Tus datos se envían directo al correo de Enter Guía Digital. Te contactamos en 24-48 hs para publicar tu ficha.</p>
       </form>
     </div>
 
@@ -357,7 +357,7 @@
       alert('Próximamente: accedé con tu cuenta de Gmail para completar el registro más rápido.');
     });
 
-    // Placeholder: al enviar, redirige al mail de Thrive (o se reemplaza por Formspree/backend)
+    // Placeholder: al enviar, redirige al mail de Enter Guía Digital (o se reemplaza por Formspree/backend)
     document.getElementById('btnMail').addEventListener('click', () => {
       document.getElementById('registroForm').scrollIntoView({ behavior: 'smooth' });
     });
@@ -371,7 +371,7 @@
       }
       const cuerpo = encodeURIComponent(lineas.join('\n'));
       const asunto = encodeURIComponent('Nuevo registro de negocio — ' + (data.get('nombre') || ''));
-      window.location.href = `mailto:thrive.agenciadigital@gmail.com?subject=${asunto}&body=${cuerpo}`;
+      window.location.href = `mailto:enterguiadigital@gmail.com?subject=${asunto}&body=${cuerpo}`;
     });
   </script>
 </body>
