@@ -212,6 +212,7 @@
           <span class="chip" onclick="setChat(this)">¿Dónde hay farmacias de turno?</span>
           <span class="chip" onclick="setChat(this)">¿Qué eventos hay este fin de semana?</span>
           <span class="chip" onclick="setChat(this)">¿Dónde queda el hospital?</span>
+          <span class="chip" onclick="setChat(this)">¿Qué se trató en la última sesión del Concejo?</span>
         </div>
         <div class="chat-response" id="chatResponse">
           <div class="resp-label">guIA responde</div>
@@ -261,6 +262,12 @@
         <h3>Emergencias y contactos</h3>
         <p>Números de policía, bomberos, defensa civil y servicios de urgencia.</p>
       </div>
+      <div class="feature-card" style="border-color: var(--teal); position: relative;">
+        <span style="position:absolute; top:14px; right:14px; font-family:'Montserrat',sans-serif; font-size:9px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color:var(--teal); background:var(--teal-pale); padding:3px 8px; border-radius:20px;">Próximamente</span>
+        <div class="feature-icon">🏛️</div>
+        <h3>Transparencia municipal</h3>
+        <p>guIA va a leer el Boletín Oficial, las sesiones del Concejo Deliberante, declaraciones juradas, obras públicas, presupuesto, compras y sueldos de la planta municipal — y te lo resume en lenguaje claro.</p>
+      </div>
     </div>
   </div>
 
@@ -274,6 +281,13 @@
       document.getElementById('chatInput').focus();
     }
 
+    const transparenciaKeywords = [
+      'concejo', 'deliberante', 'sesión', 'sesion', 'boletín', 'boletin', 'oficial',
+      'declaración jurada', 'declaracion jurada', 'ddjj', 'obra pública', 'obra publica',
+      'presupuesto', 'licitación', 'licitacion', 'compra', 'sueldo', 'sueldos',
+      'planta municipal', 'funcionario', 'intendente', 'transparencia', 'gasto público', 'gasto publico'
+    ];
+
     function sendChat() {
       const input = document.getElementById('chatInput');
       const q = input.value.trim();
@@ -283,9 +297,17 @@
       resp.classList.add('visible');
       text.textContent = '';
       text.classList.add('typing');
+
+      const qLower = q.toLowerCase();
+      const esTransparencia = transparenciaKeywords.some(k => qLower.includes(k));
+
       setTimeout(() => {
         text.classList.remove('typing');
-        text.textContent = 'Esta función estará disponible próximamente. Por ahora, podés explorar la Guía de Negocios o la sección de Eventos para encontrar lo que buscás.';
+        if (esTransparencia) {
+          text.innerHTML = 'Estamos trabajando en sumar un módulo de <strong>Transparencia Municipal</strong>: guIA va a leer el Boletín Oficial, las actas del Concejo Deliberante, las declaraciones juradas de funcionarios, las obras públicas, el presupuesto votado, las compras y los sueldos de la planta municipal — y te lo va a resumir en lenguaje claro, todos los días. Por ahora esta función todavía no está activa, pero ya está en desarrollo. 🏛️';
+        } else {
+          text.textContent = 'Esta función estará disponible próximamente. Por ahora, podés explorar la Guía de Negocios o la sección de Eventos para encontrar lo que buscás.';
+        }
       }, 1200);
     }
 
