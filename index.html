@@ -299,6 +299,27 @@
       line-height: 1.5;
       animation: fadeUp .7s .35s ease both;
     }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--white);
+      color: var(--teal-darker);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 16px 32px;
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.25);
+      animation: fadeUp .7s .3s ease both;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .hero-cta svg { width: 26px; height: 26px; flex-shrink: 0; }
+    .hero-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 48px rgba(0,0,0,.32);
+    }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: none; }
@@ -1021,62 +1042,14 @@
         informate de eventos y reportá lo que pasa en tu barrio — sin vueltas.
       </p>
 
-      <!-- Chat box -->
-      <div class="chat-box">
-        <div class="chat-label">guIA — Preguntale algo a la IA</div>
-
-        <!-- Conversación pre-cargada: clima -->
-        <div class="chat-thread">
-          <!-- Pregunta del usuario -->
-          <div class="chat-msg-user">¿Cómo está el clima en Casares?</div>
-          <!-- Respuesta de guIA con widget de clima -->
-          <div class="chat-msg-ai">
-            <div class="wx-inline">
-              <!-- HOY -->
-              <div class="wx-row">
-                <div class="wx-icon-big" id="wxEmoji">⛅</div>
-                <div class="wx-info">
-                  <div class="wx-temp-big" id="wxTemp">—°</div>
-                  <div class="wx-cond-txt" id="wxCond">Cargando clima...</div>
-                  <div class="wx-meta-row">
-                    <span id="wxHum">— hum.</span>
-                    <span id="wxWind">— viento</span>
-                    <span id="wxClock">—:—</span>
-                  </div>
-                </div>
-              </div>
-              <!-- MAÑANA -->
-              <div class="wx-tomorrow-row">
-                <span class="wx-tmr-label">Mañana</span>
-                <span class="wx-tmr-emoji" id="tmrEmoji">—</span>
-                <span class="wx-tmr-desc" id="tmrCond">—</span>
-                <span class="wx-tmr-temps"><b id="tmrMax">—°</b> / <span id="tmrMin">—°</span></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Input para siguiente pregunta -->
-        <div class="chat-input-row" style="margin-top:14px;">
-          <input
-            class="chat-input"
-            type="text"
-            placeholder="¿Qué querés saber de Carlos Casares?"
-            id="chatInput"
-          />
-          <button class="chat-send" onclick="sendChat()">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-            </svg>
-          </button>
-        </div>
-        <div class="chat-suggestions">
-          <span class="chip" onclick="setChat(this)">¿Cuándo saco la basura?</span>
-          <span class="chip" onclick="setChat(this)">¿Dónde hay farmacias de turno?</span>
-          <span class="chip" onclick="setChat(this)">¿Qué eventos hay este fin de semana?</span>
-          <span class="chip" onclick="setChat(this)">¿Dónde queda el hospital?</span>
-        </div>
-      </div>
+      <!-- CTA hacia guIA -->
+      <a href="./guia.html" class="hero-cta">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#0e4a5a"/>
+          <circle cx="12" cy="12" r="3" fill="#1e7d96"/>
+        </svg>
+        Consultá a guIA
+      </a>
 
       <p class="ia-disclaimer">Enter Guía Digital es una iniciativa privada e independiente, no forma parte de la Municipalidad de Carlos Casares. La sección guIA orienta e informa, pero no inicia trámites municipales ni reemplaza los canales oficiales del municipio.</p>
     </div>
@@ -1370,68 +1343,6 @@
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // ── Chat ──
-    function setChat(el) {
-      document.getElementById('chatInput').value = el.textContent;
-      document.getElementById('chatInput').focus();
-    }
-    function sendChat() {
-      const val = document.getElementById('chatInput').value.trim();
-      if (val) {
-        window.location.href = '/guia?q=' + encodeURIComponent(val);
-      }
-    }
-    document.getElementById('chatInput').addEventListener('keydown', e => {
-      if (e.key === 'Enter') sendChat();
-    });
-
-    /* ── Widget clima ── */
-    (function() {
-      const WX = {
-        0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',
-        51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',
-        71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'🌧️',
-        95:'⛈️',96:'⛈️',99:'⛈️'
-      };
-      const ES = {
-        0:'Despejado',1:'Mayormente despejado',2:'Parcialmente nublado',3:'Nublado',
-        45:'Niebla',48:'Niebla',51:'Llovizna leve',53:'Llovizna',55:'Llovizna intensa',
-        61:'Lluvia leve',63:'Lluvia moderada',65:'Lluvia intensa',
-        71:'Nieve leve',73:'Nieve',75:'Nieve intensa',
-        80:'Chaparrones',81:'Chaparrones',82:'Chaparrones fuertes',
-        95:'Tormenta',96:'Tormenta',99:'Tormenta fuerte'
-      };
-      const DIAS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-      const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-
-      function tick() {
-        const n = new Date();
-        const el = document.getElementById('wxClock');
-        if (el) el.textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
-      }
-      tick(); setInterval(tick, 30000);
-
-      fetch('https://api.open-meteo.com/v1/forecast?latitude=-35.6194&longitude=-61.3655&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FArgentina%2FBuenos_Aires&forecast_days=2')
-        .then(r => r.json())
-        .then(d => {
-          const c = d.current, code = c.weather_code;
-          document.getElementById('wxEmoji').textContent  = WX[code] || '🌡️';
-          document.getElementById('wxTemp').textContent   = Math.round(c.temperature_2m) + '°';
-          document.getElementById('wxCond').textContent   = ES[code] || 'Variable';
-          document.getElementById('wxHum').textContent    = c.relative_humidity_2m + '% hum.';
-          document.getElementById('wxWind').textContent   = Math.round(c.wind_speed_10m) + ' km/h viento';
-          const tc = d.daily.weather_code[1];
-          const tmr = new Date(); tmr.setDate(tmr.getDate()+1);
-          document.getElementById('tmrEmoji').textContent = WX[tc] || '🌡️';
-          document.getElementById('tmrCond').textContent  = DIAS[tmr.getDay()] + ' · ' + (ES[tc] || 'Variable');
-          document.getElementById('tmrMax').textContent   = Math.round(d.daily.temperature_2m_max[1]) + '°';
-          document.getElementById('tmrMin').textContent   = Math.round(d.daily.temperature_2m_min[1]) + '°';
-        })
-        .catch(() => {
-          const el = document.getElementById('wxCond');
-          if (el) el.textContent = 'Sin conexión';
-        });
-    })();
   </script>
 
 </body>
