@@ -136,10 +136,18 @@
       background: var(--white);
       color: var(--teal-darker);
       border: none;
-      padding: 8px 18px;
+      padding: 6px 18px;
       border-radius: 6px;
       cursor: pointer;
+      line-height: 1.4;
+      text-align: center;
       transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .btn-registrar .sub-line {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      opacity: .75;
     }
     .btn-registrar:hover {
       background: var(--teal-pale);
@@ -999,7 +1007,7 @@
     </nav>
 
     <div class="header-actions">
-      <a href="./registro-negocio.html"><button class="btn-registrar">Registrá tu negocio <span style="opacity:.75;font-weight:600;">(¡Es gratis!)</span></button></a>
+      <a href="./registro-negocio.html"><button class="btn-registrar">Registrá tu negocio<span class="sub-line">(¡Es gratis!)</span></button></a>
     </div>
 
     <button class="hamburger" id="hamburger" aria-label="Menú">
