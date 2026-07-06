@@ -102,6 +102,7 @@
       transition: box-shadow var(--transition), transform var(--transition);
     }
     .chat-box:focus-within { box-shadow: 0 28px 72px rgba(0,0,0,.35), 0 0 0 2px var(--teal-light); transform: translateY(-2px); }
+    .ia-disclaimer { margin-top: 14px; font-size: 11.5px; color: rgba(255,255,255,.5); max-width: 560px; line-height: 1.5; animation: fadeUp .7s .35s ease both; }
     .chat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); font-family: 'Montserrat', sans-serif; margin-bottom: 8px; padding: 0 4px; }
     .chat-input-row { display: flex; align-items: center; gap: 10px; }
     .chat-input { flex: 1; border: none; outline: none; font-size: 16px; font-family: 'Inter', sans-serif; color: var(--text-dark); background: transparent; padding: 6px 4px; caret-color: var(--teal); }
@@ -195,8 +196,8 @@
       </h1>
 
       <p class="hero-sub">
-        Preguntale a nuestra IA todo lo que necesitás saber<br>
-        sobre Carlos Casares. Horarios, servicios, eventos y más.
+        Preguntá, enterate y resolvé — sin buscar en mil lugares.<br>
+        Horarios, servicios, eventos y más, en un solo chat.
       </p>
 
       <div class="chat-box">
@@ -219,6 +220,8 @@
           <div id="respText"></div>
         </div>
       </div>
+
+      <p class="ia-disclaimer">Enter Guía Digital es una iniciativa privada e independiente, no forma parte de la Municipalidad de Carlos Casares. guIA orienta e informa, pero no inicia trámites municipales ni reemplaza los canales oficiales del municipio.</p>
     </div>
 
     <div class="scroll-hint">

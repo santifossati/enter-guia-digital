@@ -291,6 +291,14 @@
       box-shadow: 0 28px 72px rgba(0,0,0,.35), 0 0 0 2px var(--teal-light);
       transform: translateY(-2px);
     }
+    .ia-disclaimer {
+      margin-top: 14px;
+      font-size: 11.5px;
+      color: rgba(255,255,255,.5);
+      max-width: 560px;
+      line-height: 1.5;
+      animation: fadeUp .7s .35s ease both;
+    }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: none; }
@@ -1010,7 +1018,7 @@
 
       <p class="hero-sub">
         Encontrá negocios, consultá la guía digital inteligente,<br>
-        informate de eventos y reportá lo que pasa en tu barrio.
+        informate de eventos y reportá lo que pasa en tu barrio — sin vueltas.
       </p>
 
       <!-- Chat box -->
@@ -1069,6 +1077,8 @@
           <span class="chip" onclick="setChat(this)">¿Dónde queda el hospital?</span>
         </div>
       </div>
+
+      <p class="ia-disclaimer">Enter Guía Digital es una iniciativa privada e independiente, no forma parte de la Municipalidad de Carlos Casares. guIA orienta e informa, pero no inicia trámites municipales ni reemplaza los canales oficiales del municipio.</p>
     </div>
 
     <div class="scroll-hint">
