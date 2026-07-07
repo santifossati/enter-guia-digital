@@ -210,33 +210,56 @@
     /* ── Tarjeta negocio ── */
     .biz-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
       gap: 14px;
     }
     .biz-card {
       background: var(--white);
       border-radius: var(--radius);
       border: 1px solid var(--gray-border);
-      padding: 18px;
+      overflow: hidden;
       display: flex;
-      gap: 14px;
-      align-items: flex-start;
+      align-items: stretch;
       box-shadow: var(--shadow-sm);
       transition: transform var(--transition), box-shadow var(--transition);
       cursor: pointer;
       position: relative;
     }
     .biz-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .biz-photo-wrap {
+      position: relative;
+      width: 140px;
+      flex-shrink: 0;
+      background: var(--teal-pale);
+    }
+    .biz-photo { width: 100%; height: 100%; object-fit: cover; }
+    .biz-cat-badge {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      right: 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: var(--white);
+      text-shadow: 0 1px 4px rgba(0,0,0,.6);
+      line-height: 1.3;
+    }
     .biz-logo {
-      width: 68px; height: 68px;
+      position: absolute;
+      top: 10px; left: 10px;
+      width: 44px; height: 44px;
       border-radius: 10px;
       flex-shrink: 0;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #eee;
-      background: #fff;
+      background: var(--white);
+      box-shadow: 0 4px 12px rgba(0,0,0,.25);
+      padding: 4px;
     }
     .biz-logo img { width: 100%; height: 100%; object-fit: contain; }
     .biz-logo.initials {
@@ -245,9 +268,8 @@
       font-weight: 800;
       font-size: 20px;
       color: var(--teal);
-      border: none;
     }
-    .biz-info { flex: 1; min-width: 0; }
+    .biz-info { flex: 1; min-width: 0; padding: 16px 18px; }
     .biz-name-row { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-bottom: 2px; }
     .biz-name { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800; color: var(--text-dark); text-transform: uppercase; letter-spacing: .3px; }
     .biz-cat { font-size: 11.5px; color: var(--text-light); margin-bottom: 8px; }
@@ -257,6 +279,11 @@
     .biz-detail { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--text-mid); }
     .biz-detail svg { width: 12px; height: 12px; flex-shrink: 0; color: var(--teal); }
     .biz-badge { font-family: 'Montserrat', sans-serif; font-size: 8px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; padding: 2px 7px; border-radius: 20px; white-space: nowrap; background: #fff3cd; color: #7c5a00; flex-shrink: 0; }
+
+    @media (max-width: 560px) {
+      .biz-photo-wrap { width: 96px; }
+      .biz-logo { width: 34px; height: 34px; top: 6px; left: 6px; }
+    }
 
     /* Estado vacío */
     .empty-state {
@@ -484,15 +511,18 @@
 
         <!-- Carnicería El Modelito -->
         <div class="biz-card" data-cats="carnicerias" onclick="window.location.href='./negocios/el-modelito.html'" style="cursor:pointer;">
-          <div class="biz-logo">
-            <img src="./logo-modelito.png" alt="Carnicería El Modelito" />
+          <div class="biz-photo-wrap">
+            <img src="./foto-modelito.jpg" alt="Carnicería El Modelito" class="biz-photo">
+            <div class="biz-logo">
+              <img src="./logo-modelito.png" alt="Carnicería El Modelito" />
+            </div>
+            <span class="biz-cat-badge">Carnicería y Despensa</span>
           </div>
           <div class="biz-info">
             <div class="biz-name-row">
               <span class="biz-name">Carnicería El Modelito</span>
               <span class="biz-badge">⭐ Destacado</span>
             </div>
-            <div class="biz-cat">Carnicería y Despensa</div>
             <div class="biz-tags">
               <span class="biz-tag">Carnicería</span>
               <span class="biz-tag">Despensa</span>
@@ -513,15 +543,17 @@
 
         <!-- Thrive Publicidad -->
         <div class="biz-card" data-cats="publicidad" onclick="window.location.href='./negocios/thrive.html'" style="cursor:pointer;">
-          <div class="biz-logo">
-            <img src="./logo-thrive.png" alt="Thrive Publicidad" />
+          <div class="biz-photo-wrap" style="background: linear-gradient(135deg, #0e4a5a, #1e7d96);">
+            <div class="biz-logo">
+              <img src="./logo-thrive.png" alt="Thrive Publicidad" />
+            </div>
+            <span class="biz-cat-badge">Publicidad, Web y Apps</span>
           </div>
           <div class="biz-info">
             <div class="biz-name-row">
               <span class="biz-name">Thrive</span>
               <span class="biz-badge">⭐ Destacado</span>
             </div>
-            <div class="biz-cat">Agencia de Publicidad, Diseño Web y Apps</div>
             <div class="biz-tags">
               <span class="biz-tag">Publicidad</span>
               <span class="biz-tag">Páginas web</span>
