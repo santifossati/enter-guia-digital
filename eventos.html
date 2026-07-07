@@ -32,16 +32,21 @@
 
     /* ── Header ── */
     .header {
-      background: var(--teal-darker);
+      background: transparent;
       height: 64px;
       display: flex;
       align-items: center;
       padding: 0 32px;
       gap: 24px;
-      position: sticky;
-      top: 0;
+      position: fixed;
+      top: 0; left: 0; right: 0;
       z-index: 100;
-      box-shadow: 0 2px 20px rgba(0,0,0,.2);
+      transition: background var(--transition), box-shadow var(--transition), backdrop-filter var(--transition);
+    }
+    .header.scrolled {
+      background: var(--teal-darker);
+      box-shadow: 0 2px 20px rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
     }
     .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
     .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
@@ -56,7 +61,7 @@
     /* ── Hero ── */
     .page-hero {
       background: var(--teal-darker);
-      padding: 44px 32px 36px;
+      padding: 108px 32px 36px;
       color: var(--white);
     }
     .hero-inner { max-width: 1200px; margin: 0 auto; }
@@ -433,7 +438,7 @@
     }
     @media (max-width: 520px) {
       .events-grid { grid-template-columns: 1fr; }
-      .page-hero { padding: 28px 20px 24px; }
+      .page-hero { padding: 92px 20px 24px; }
       .layout { padding: 24px 16px 60px; }
     }
   </style>
@@ -887,6 +892,12 @@
     renderPanel();
 
     // ── Filtros y búsqueda ──
+    // ── Header transparente/con fondo al hacer scroll ──
+    const headerEl = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      headerEl.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
     const cards = document.querySelectorAll('.event-card');
     const chips = document.querySelectorAll('.filter-chip');
     const resultsCount = document.getElementById('resultsCount');

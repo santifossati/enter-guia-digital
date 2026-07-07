@@ -26,14 +26,20 @@
     a { text-decoration: none; color: inherit; }
 
     .header {
-      background: var(--teal-darker);
+      background: transparent;
       height: 64px;
       display: flex;
       align-items: center;
       padding: 0 32px;
-      position: sticky;
-      top: 0;
+      position: fixed;
+      top: 0; left: 0; right: 0;
       z-index: 100;
+      transition: background .3s ease, box-shadow .3s ease, backdrop-filter .3s ease;
+    }
+    .header.scrolled {
+      background: var(--teal-darker);
+      box-shadow: 0 2px 20px rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
     }
     .logo { display: flex; align-items: center; gap: 10px; }
     .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
@@ -54,7 +60,7 @@
 
     .page-hero {
       background: var(--teal-darker);
-      padding: 56px 32px 48px;
+      padding: 120px 32px 48px;
       text-align: center;
       color: var(--white);
     }
@@ -376,5 +382,11 @@
     <p>© 2026 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
   </footer>
 
+  <script>
+    const headerEl = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      headerEl.classList.toggle('scrolled', window.scrollY > 10);
+    });
+  </script>
 </body>
 </html>

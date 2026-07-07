@@ -30,12 +30,17 @@
 
     /* ── Header ── */
     .header {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--teal-darker);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: transparent;
       height: 64px;
       display: flex; align-items: center;
       padding: 0 32px; gap: 24px;
-      box-shadow: 0 2px 20px rgba(0,0,0,.2);
+      transition: background var(--transition), box-shadow var(--transition), backdrop-filter var(--transition);
+    }
+    .header.scrolled {
+      background: var(--teal-darker);
+      box-shadow: 0 2px 20px rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
     }
     .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
     .logo img { height: 40px; width: auto; filter: brightness(0) invert(1); }
@@ -50,7 +55,7 @@
     /* ── Hero ── */
     .hero {
       position: relative;
-      min-height: calc(100vh - 64px);
+      min-height: 100vh;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       padding: 80px 24px 100px;
@@ -316,6 +321,12 @@
 
     document.getElementById('chatInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') sendChat();
+    });
+
+    // ── Header transparente/con fondo al hacer scroll ──
+    const headerEl = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      headerEl.classList.toggle('scrolled', window.scrollY > 10);
     });
   </script>
 </body>

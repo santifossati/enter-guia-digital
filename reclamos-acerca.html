@@ -25,11 +25,12 @@
       --transition:  .3s cubic-bezier(.4,0,.2,1);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-bg); color: var(--text-dark); padding-top: 64px; }
     a { text-decoration: none; color: inherit; }
     img { display: block; max-width: 100%; }
 
-    .header { background: var(--teal-darker); height: 64px; display: flex; align-items: center; padding: 0 32px; gap: 24px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 20px rgba(0,0,0,.2); }
+    .header { background: transparent; height: 64px; display: flex; align-items: center; padding: 0 32px; gap: 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 200; transition: background var(--transition), box-shadow var(--transition), backdrop-filter var(--transition); }
+    .header.scrolled { background: var(--teal-darker); box-shadow: 0 2px 20px rgba(0,0,0,.25); backdrop-filter: blur(10px); }
     .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
     .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
     .logo-text .name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); }
@@ -39,7 +40,7 @@
     .nav a:hover, .nav a.active { background: rgba(255,255,255,.12); color: var(--white); }
     .btn-nav { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; background: var(--white); color: var(--teal-darker); border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; transition: background var(--transition); white-space: nowrap; }
 
-    .subnav { background: var(--white); border-bottom: 2px solid var(--gray-border); padding: 0 24px; display: flex; }
+    .subnav { background: var(--white); border-bottom: 2px solid var(--gray-border); padding: 0 24px; display: flex; overflow-x: auto; }
     .subnav a { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; color: var(--text-light); padding: 14px 20px; border-bottom: 3px solid transparent; margin-bottom: -2px; display: flex; align-items: center; gap: 7px; transition: color var(--transition), border-color var(--transition); white-space: nowrap; }
     .subnav a:hover { color: var(--teal); }
     .subnav a.active { color: var(--teal-darker); border-bottom-color: var(--teal); }
@@ -283,5 +284,11 @@
     <p>© 2026 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
   </footer>
 
+  <script>
+    const headerEl = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      headerEl.classList.toggle('scrolled', window.scrollY > 10);
+    });
+  </script>
 </body>
 </html>

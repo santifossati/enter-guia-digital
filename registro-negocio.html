@@ -32,16 +32,21 @@
 
     /* ── Header ── */
     .header {
-      background: var(--teal-darker);
+      background: transparent;
       height: 64px;
       display: flex;
       align-items: center;
       padding: 0 32px;
       gap: 24px;
-      position: sticky;
-      top: 0;
+      position: fixed;
+      top: 0; left: 0; right: 0;
       z-index: 100;
-      box-shadow: 0 2px 20px rgba(0,0,0,.2);
+      transition: background var(--transition), box-shadow var(--transition), backdrop-filter var(--transition);
+    }
+    .header.scrolled {
+      background: var(--teal-darker);
+      box-shadow: 0 2px 20px rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
     }
     .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
     .logo img { height: 38px; width: auto; filter: brightness(0) invert(1); }
@@ -54,7 +59,7 @@
     /* ── Hero ── */
     .page-hero {
       background: var(--teal-darker);
-      padding: 48px 32px 40px;
+      padding: 112px 32px 40px;
       color: var(--white);
       text-align: center;
     }
@@ -361,6 +366,12 @@
   </footer>
 
   <script>
+    // ── Header transparente/con fondo al hacer scroll ──
+    const headerEl = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      headerEl.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
     // Placeholder: acá se conecta el login real con Google (OAuth)
     document.getElementById('btnGmail').addEventListener('click', () => {
       alert('Próximamente: accedé con tu cuenta de Gmail para completar el registro más rápido.');
