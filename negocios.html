@@ -108,6 +108,37 @@
       color: rgba(255,255,255,.8);
     }
 
+    /* Destacados (item fijo arriba) */
+    .cat-destacados {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 20px;
+      background: #fff8e1;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--transition);
+      border-bottom: 1px solid var(--gray-border);
+    }
+    .cat-destacados:hover { background: #fff0bd; }
+    .cat-destacados span:first-child {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #7c5a00;
+    }
+    .cat-destacados .count {
+      font-size: .68rem;
+      font-weight: 700;
+      background: rgba(124,90,0,.12);
+      color: #7c5a00;
+      padding: 1px 7px;
+      border-radius: 20px;
+    }
+    .cat-destacados.active { background: #ffe9a3; }
+
     /* Grupo de categorías */
     .cat-group { border-bottom: 1px solid var(--gray-border); }
     .cat-group:last-child { border-bottom: none; }
@@ -380,6 +411,12 @@
     <aside class="sidebar">
       <div class="sidebar-header">Categorías</div>
 
+      <!-- DESTACADOS -->
+      <div class="cat-destacados" id="catDestacados">
+        <span>⭐ Destacados</span>
+        <span class="count">2</span>
+      </div>
+
       <!-- INSTITUCIONES -->
       <div class="cat-group" data-group="instituciones">
         <div class="cat-group-header">
@@ -528,7 +565,7 @@
       <div class="biz-grid" id="bizGrid">
 
         <!-- Carnicería El Modelito -->
-        <div class="biz-card" data-cats="carnicerias" data-hours='{"0":[[8,13]],"1":[[8,13],[16,22]],"2":[[8,13],[16,22]],"3":[[8,13],[16,22]],"4":[[8,13],[16,22]],"5":[[8,13],[16,22]],"6":[[8,13],[16,22]]}' onclick="window.location.href='./negocios/el-modelito.html'" style="cursor:pointer;">
+        <div class="biz-card" data-cats="carnicerias" data-destacado="true" data-hours='{"0":[[8,13]],"1":[[8,13],[16,22]],"2":[[8,13],[16,22]],"3":[[8,13],[16,22]],"4":[[8,13],[16,22]],"5":[[8,13],[16,22]],"6":[[8,13],[16,22]]}' onclick="window.location.href='./negocios/el-modelito.html'" style="cursor:pointer;">
           <div class="biz-photo-wrap">
             <img src="./foto-modelito.jpg" alt="Carnicería El Modelito" class="biz-photo">
             <span class="biz-cat-badge">Carnicería y Despensa</span>
@@ -564,7 +601,7 @@
         </div>
 
         <!-- Thrive Publicidad -->
-        <div class="biz-card" data-cats="publicidad" data-hours='{"1":[[9,18]],"2":[[9,18]],"3":[[9,18]],"4":[[9,18]],"5":[[9,18]]}' onclick="window.location.href='./negocios/thrive.html'" style="cursor:pointer;">
+        <div class="biz-card" data-cats="publicidad" data-destacado="true" data-hours='{"1":[[9,18]],"2":[[9,18]],"3":[[9,18]],"4":[[9,18]],"5":[[9,18]]}' onclick="window.location.href='./negocios/thrive.html'" style="cursor:pointer;">
           <div class="biz-photo-wrap" style="background: linear-gradient(135deg, #0e4a5a, #1e7d96);">
             <span class="biz-cat-badge">Publicidad, Web y Apps</span>
           </div>
@@ -671,16 +708,22 @@
       });
     });
 
-    function filterByCat(cat, label) {
+    const catDestacados = document.getElementById('catDestacados');
+
+    function filterByCat(cat, label, destacadosOnly) {
       catItems.forEach(i => i.classList.remove('active'));
-      if (cat) {
+      catDestacados.classList.remove('active');
+      if (destacadosOnly) {
+        catDestacados.classList.add('active');
+      } else if (cat) {
         const item = document.querySelector(`.cat-item[data-cat="${cat}"]`);
         if (item) item.classList.add('active');
       }
       let visible = 0;
       cards.forEach(card => {
         const cats = card.dataset.cats || '';
-        const show = !cat || cats.split(' ').includes(cat);
+        const isDestacado = card.dataset.destacado === 'true';
+        const show = destacadosOnly ? isDestacado : (!cat || cats.split(' ').includes(cat));
         card.style.display = show ? '' : 'none';
         if (show) visible++;
       });
@@ -692,6 +735,10 @@
       item.addEventListener('click', () => {
         filterByCat(item.dataset.cat, item.textContent.replace(/\d+/g, '').trim());
       });
+    });
+
+    catDestacados.addEventListener('click', () => {
+      filterByCat(null, '⭐ Negocios Destacados', true);
     });
 
     document.getElementById('verTodosBtn').addEventListener('click', () => {
