@@ -772,10 +772,9 @@
       background: var(--white);
       border-radius: var(--radius);
       border: 1px solid var(--gray-border);
-      padding: 22px 20px;
+      overflow: hidden;
       display: flex;
-      align-items: center;
-      gap: 16px;
+      flex-direction: column;
       box-shadow: var(--shadow-sm);
       transition: transform var(--transition), box-shadow var(--transition);
       cursor: pointer;
@@ -784,48 +783,79 @@
       transform: translateY(-4px);
       box-shadow: var(--shadow-md);
     }
-    .dest-logo {
-      width: 72px; height: 72px;
-      border-radius: 12px;
+    .dest-photo-wrap {
+      position: relative;
+      height: 140px;
+      flex-shrink: 0;
       background: var(--teal-pale);
+    }
+    .dest-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .dest-cat-badge {
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: var(--white);
+      text-shadow: 0 1px 4px rgba(0,0,0,.6);
+    }
+    .dest-logo {
+      position: absolute;
+      bottom: -22px;
+      right: 14px;
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      background: var(--white);
+      box-shadow: 0 4px 14px rgba(0,0,0,.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--teal);
+      padding: 6px;
       flex-shrink: 0;
     }
-    .dest-info { flex: 1; min-width: 0; }
+    .dest-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .dest-body { padding: 30px 18px 18px; display: flex; flex-direction: column; flex: 1; }
+    .dest-info { flex: 1; min-width: 0; margin-bottom: 14px; }
     .dest-name {
       font-family: 'Montserrat', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .3px;
+      font-size: 15px;
+      font-weight: 800;
       color: var(--text-dark);
-      margin-bottom: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .dest-cat {
-      font-size: 11.5px;
-      color: var(--text-light);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .dest-addr {
-      font-size: 11px;
-      color: var(--teal);
+      font-size: 12px;
+      color: var(--text-light);
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
-    .dest-addr svg { width: 11px; height: 11px; flex-shrink: 0; }
+    .dest-addr svg { width: 12px; height: 12px; flex-shrink: 0; color: var(--teal); }
+    .dest-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--teal);
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      transition: background var(--transition);
+    }
+    .dest-card:hover .dest-btn { background: var(--teal-dark); }
 
     /* Empty dest card (CTA) */
     .dest-card.empty {
@@ -1257,29 +1287,40 @@
 
     <div class="dest-grid">
 
-      <div class="dest-card reveal reveal-delay-1">
-        <div class="dest-logo" style="background:#fff;padding:4px;"><img src="./logo-modelito.png" alt="El Modelito" style="width:100%;height:100%;object-fit:contain;border-radius:8px;"></div>
-        <div class="dest-info">
-          <div class="dest-name">Carnicería El Modelito</div>
-          <div class="dest-cat">Carnicería y Despensa</div>
-          <div class="dest-addr">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            9 de Julio 119
-          </div>
+      <a href="./negocios/el-modelito.html" class="dest-card reveal reveal-delay-1">
+        <div class="dest-photo-wrap">
+          <img src="./foto-modelito.jpg" alt="Carnicería El Modelito" class="dest-photo">
+          <span class="dest-cat-badge">Carnicería y Despensa</span>
+          <div class="dest-logo"><img src="./logo-modelito.png" alt="El Modelito"></div>
         </div>
-      </div>
+        <div class="dest-body">
+          <div class="dest-info">
+            <div class="dest-name">Carnicería El Modelito</div>
+            <div class="dest-addr">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              9 de Julio 119
+            </div>
+          </div>
+          <span class="dest-btn">Ver más</span>
+        </div>
+      </a>
 
-      <div class="dest-card reveal reveal-delay-2">
-        <div class="dest-logo" style="background:#fff;padding:4px;"><img src="./logo-thrive.png" alt="Thrive" style="width:100%;height:100%;object-fit:contain;border-radius:8px;"></div>
-        <div class="dest-info">
-          <div class="dest-name">Thrive</div>
-          <div class="dest-cat">Publicidad, Web y Apps</div>
-          <div class="dest-addr">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Carlos Casares
-          </div>
+      <a href="./negocios/thrive.html" class="dest-card reveal reveal-delay-2">
+        <div class="dest-photo-wrap" style="background: linear-gradient(135deg, #0e4a5a, #1e7d96);">
+          <span class="dest-cat-badge">Publicidad, Web y Apps</span>
+          <div class="dest-logo"><img src="./logo-thrive.png" alt="Thrive"></div>
         </div>
-      </div>
+        <div class="dest-body">
+          <div class="dest-info">
+            <div class="dest-name">Thrive</div>
+            <div class="dest-addr">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Carlos Casares
+            </div>
+          </div>
+          <span class="dest-btn">Ver más</span>
+        </div>
+      </a>
 
       <div class="dest-card empty reveal reveal-delay-3">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b0b0b0" stroke-width="1.5">
