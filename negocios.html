@@ -230,7 +230,49 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .filters-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
       margin-bottom: 20px;
+    }
+    .filter-chips { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .filter-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-border);
+      background: var(--white);
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .filter-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: #2e7d32; flex-shrink: 0; }
+    .filter-chip:hover { border-color: var(--teal); color: var(--teal-dark); }
+    .filter-chip.active { background: #2e7d32; border-color: #2e7d32; color: var(--white); }
+    .filter-chip.active .dot { background: var(--white); }
+    .sort-select {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-mid);
+      border: 1.5px solid var(--gray-border);
+      border-radius: 20px;
+      padding: 7px 14px;
+      background: var(--white);
+      cursor: pointer;
+      outline: none;
     }
     .results-title {
       font-family: 'Montserrat', sans-serif;
@@ -562,6 +604,19 @@
         <span class="results-count" id="resultsCount">2 resultados</span>
       </div>
 
+      <div class="filters-row">
+        <div class="filter-chips">
+          <button class="filter-chip" id="openNowChip"><span class="dot"></span> Abierto ahora</button>
+          <button class="filter-chip" id="withPhotoChip">📷 Con fotos</button>
+        </div>
+        <select class="sort-select" id="sortSelect">
+          <option value="relevancia">Ordenar por: Relevancia</option>
+          <option value="az">Nombre A-Z</option>
+          <option value="za">Nombre Z-A</option>
+          <option value="destacados">Destacados primero</option>
+        </select>
+      </div>
+
       <div style="background: linear-gradient(135deg, #1e7d96, #0e4a5a); border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
         <span style="font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; color: white;">⭐ ¿Querés destacarte entre los negocios?</span>
         <a href="mailto:santifossa10@gmail.com" style="font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; background: white; color: #0e4a5a; padding: 7px 16px; border-radius: 6px; white-space: nowrap;">¡Contactanos!</a>
@@ -570,7 +625,7 @@
       <div class="biz-grid" id="bizGrid">
 
         <!-- Carnicería El Modelito -->
-        <div class="biz-card" data-cats="carnicerias" data-destacado="true" data-hours='{"0":[[8,13]],"1":[[8,13],[16,22]],"2":[[8,13],[16,22]],"3":[[8,13],[16,22]],"4":[[8,13],[16,22]],"5":[[8,13],[16,22]],"6":[[8,13],[16,22]]}' onclick="window.location.href='./negocios/el-modelito.html'" style="cursor:pointer;">
+        <div class="biz-card" data-cats="carnicerias" data-destacado="true" data-has-photo="true" data-hours='{"0":[[8,13]],"1":[[8,13],[16,22]],"2":[[8,13],[16,22]],"3":[[8,13],[16,22]],"4":[[8,13],[16,22]],"5":[[8,13],[16,22]],"6":[[8,13],[16,22]]}' onclick="window.location.href='./negocios/el-modelito.html'" style="cursor:pointer;">
           <div class="biz-photo-wrap">
             <img src="./foto-modelito.jpg" alt="Carnicería El Modelito" class="biz-photo">
             <span class="biz-cat-badge">Carnicería y Despensa</span>
@@ -711,6 +766,7 @@
     const catItems = document.querySelectorAll('.cat-item');
     const resultsTitle = document.getElementById('resultsTitle');
     const resultsCount = document.getElementById('resultsCount');
+    const bizGrid = document.getElementById('bizGrid');
 
     // Toggle grupos
     document.querySelectorAll('.cat-group-header').forEach(header => {
@@ -720,6 +776,48 @@
     });
 
     const catDestacados = document.getElementById('catDestacados');
+    const openNowChip = document.getElementById('openNowChip');
+    const withPhotoChip = document.getElementById('withPhotoChip');
+    const sortSelect = document.getElementById('sortSelect');
+    const searchInput = document.getElementById('searchInput');
+
+    const state = { cat: null, label: 'Todos los negocios', destacadosOnly: false, openNow: false, withPhoto: false, query: '' };
+
+    function applyFilters() {
+      let visible = 0;
+      cards.forEach(card => {
+        const cats = card.dataset.cats || '';
+        const isDestacado = card.dataset.destacado === 'true';
+        const hasPhoto = card.dataset.hasPhoto === 'true';
+        const isOpen = card.dataset.hours ? computeStatus(JSON.parse(card.dataset.hours)).open : false;
+        const text = card.textContent.toLowerCase();
+
+        let show = true;
+        if (state.destacadosOnly) show = show && isDestacado;
+        else if (state.cat) show = show && cats.split(' ').includes(state.cat);
+        if (state.openNow) show = show && isOpen;
+        if (state.withPhoto) show = show && hasPhoto;
+        if (state.query) show = show && text.includes(state.query);
+
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      resultsTitle.textContent = state.query ? `Resultados para "${searchInput.value}"` : state.label;
+      resultsCount.textContent = visible + ' resultado' + (visible !== 1 ? 's' : '');
+    }
+
+    function sortCards() {
+      const val = sortSelect.value;
+      const arr = Array.from(cards);
+      if (val === 'az') {
+        arr.sort((a, b) => a.querySelector('.biz-name').textContent.localeCompare(b.querySelector('.biz-name').textContent));
+      } else if (val === 'za') {
+        arr.sort((a, b) => b.querySelector('.biz-name').textContent.localeCompare(a.querySelector('.biz-name').textContent));
+      } else if (val === 'destacados') {
+        arr.sort((a, b) => (b.dataset.destacado === 'true') - (a.dataset.destacado === 'true'));
+      }
+      arr.forEach(card => bizGrid.appendChild(card));
+    }
 
     function filterByCat(cat, label, destacadosOnly) {
       catItems.forEach(i => i.classList.remove('active'));
@@ -730,16 +828,10 @@
         const item = document.querySelector(`.cat-item[data-cat="${cat}"]`);
         if (item) item.classList.add('active');
       }
-      let visible = 0;
-      cards.forEach(card => {
-        const cats = card.dataset.cats || '';
-        const isDestacado = card.dataset.destacado === 'true';
-        const show = destacadosOnly ? isDestacado : (!cat || cats.split(' ').includes(cat));
-        card.style.display = show ? '' : 'none';
-        if (show) visible++;
-      });
-      resultsTitle.textContent = label || 'Todos los negocios';
-      resultsCount.textContent = visible + ' resultado' + (visible !== 1 ? 's' : '');
+      state.cat = cat;
+      state.label = label || 'Todos los negocios';
+      state.destacadosOnly = !!destacadosOnly;
+      applyFilters();
     }
 
     catItems.forEach(item => {
@@ -756,19 +848,31 @@
       filterByCat(null, 'Todos los negocios');
     });
 
+    // Filtro: abierto ahora
+    openNowChip.addEventListener('click', () => {
+      state.openNow = !state.openNow;
+      openNowChip.classList.toggle('active', state.openNow);
+      applyFilters();
+    });
+
+    // Filtro: con fotos
+    withPhotoChip.addEventListener('click', () => {
+      state.withPhoto = !state.withPhoto;
+      withPhotoChip.classList.toggle('active', state.withPhoto);
+      applyFilters();
+    });
+
+    // Orden
+    sortSelect.addEventListener('change', sortCards);
+
     // Búsqueda
-    document.getElementById('searchInput').addEventListener('input', function () {
-      const q = this.value.toLowerCase().trim();
+    searchInput.addEventListener('input', function () {
       catItems.forEach(i => i.classList.remove('active'));
-      let visible = 0;
-      cards.forEach(card => {
-        const text = card.textContent.toLowerCase();
-        const show = !q || text.includes(q);
-        card.style.display = show ? '' : 'none';
-        if (show) visible++;
-      });
-      resultsTitle.textContent = q ? `Resultados para "${this.value}"` : 'Todos los negocios';
-      resultsCount.textContent = visible + ' resultado' + (visible !== 1 ? 's' : '');
+      catDestacados.classList.remove('active');
+      state.cat = null;
+      state.destacadosOnly = false;
+      state.query = this.value.toLowerCase().trim();
+      applyFilters();
     });
   </script>
 </body>
