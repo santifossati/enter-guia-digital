@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -288,6 +288,7 @@
     .hero-title span { color: #4dd9f0; }
 
     .hero-sub {
+      text-align: center;
       font-size: clamp(.9rem, 2vw, 1.05rem);
       color: rgba(255,255,255,.7);
       line-height: 1.6;
@@ -316,11 +317,12 @@
       transform: translateY(-2px);
     }
     .ia-disclaimer {
-      margin-top: 32px;
       font-size: 11.5px;
       color: rgba(255,255,255,.5);
       max-width: 560px;
       line-height: 1.5;
+      margin: 32px auto 0;
+      text-align: center;
       animation: fadeUp .7s .35s ease both;
     }
 
@@ -1027,7 +1029,7 @@
       .nav { display: none; }
       .header-actions { display: none; }
       .hamburger { display: flex; }
-      .header { position: relative; }
+      .header { position: relative; background: var(--teal-darker); }
     }
 
   </style>
@@ -1095,8 +1097,7 @@
       </h1>
 
       <p class="hero-sub">
-        Encontrá negocios, preguntale lo que quieras sobre la ciudad,<br>
-        informate de eventos, revisá la bolsa de empleos y reportá lo que pasa en tu barrio — sin vueltas.
+        Encontrá negocios, preguntale lo que quieras sobre la ciudad, informate de eventos, revisá la bolsa de empleos y reportá lo que pasa en tu barrio — sin vueltas.
       </p>
 
       <!-- CTA hacia guIA -->
@@ -1289,7 +1290,7 @@
 
       <a href="./negocios/el-modelito.html" class="dest-card reveal reveal-delay-1">
         <div class="dest-photo-wrap">
-          <img src="./foto-modelito.jpg" alt="Carnicería El Modelito" class="dest-photo">
+          <img src="./foto-modelito.png" alt="Carnicería El Modelito" class="dest-photo">
           <span class="dest-cat-badge">Carnicería y Despensa</span>
           <div class="dest-logo"><img src="./logo-modelito.png" alt="El Modelito"></div>
         </div>
