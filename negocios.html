@@ -891,14 +891,15 @@
         const isDestacado = card.dataset.destacado === 'true';
         const hasPhoto = card.dataset.hasPhoto === 'true';
         const isOpen = card.dataset.hours ? computeStatus(JSON.parse(card.dataset.hours)).open : false;
-        const text = card.textContent.toLowerCase();
+        const norm = s => s.normalize('NFD').replace(new RegExp('[\\u0300-\\u036f]', 'g'), '').toLowerCase();
+        const text = norm(card.textContent);
 
         let show = true;
         if (state.destacadosOnly) show = show && isDestacado;
         else if (state.cat) show = show && cats.split(' ').includes(state.cat);
         if (state.openNow) show = show && isOpen;
         if (state.withPhoto) show = show && hasPhoto;
-        if (state.query) show = show && text.includes(state.query);
+        if (state.query) show = show && text.includes(norm(state.query));
 
         card.style.display = show ? '' : 'none';
         if (show) visible++;
@@ -982,6 +983,21 @@
       state.query = this.value.toLowerCase().trim();
       applyFilters();
     });
+
+    // Leer ?q= de la URL (cuando se llega desde la lupa del header)
+    const urlQ = new URLSearchParams(location.search).get('q');
+    if (urlQ) {
+      searchInput.value = urlQ;
+      catItems.forEach(i => i.classList.remove('active'));
+      catDestacados.classList.remove('active');
+      state.cat = null;
+      state.destacadosOnly = false;
+      state.label = 'Todos los negocios';
+      state.query = urlQ.toLowerCase().trim();
+      setCatHero(null, null);
+      applyFilters();
+      searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   </script>
 </body>
 </html>

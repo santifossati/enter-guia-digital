@@ -1033,6 +1033,67 @@
       .hero-sub { font-size: .92rem; padding: 0 12px; }
     }
 
+    /* ── Search overlay ── */
+    #searchOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 28, 38, 0.82);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      z-index: 200;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 90px;
+    }
+    #searchOverlay.open { display: flex; animation: overlayIn .18s ease; }
+    @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+    .search-overlay-box {
+      width: min(620px, 92vw);
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 26px 22px;
+      box-shadow: 0 28px 64px rgba(0,0,0,.35);
+      animation: overlayBoxIn .22s ease;
+    }
+    @keyframes overlayBoxIn { from { opacity:0; transform:translateY(-14px); } to { opacity:1; transform:none; } }
+    .search-overlay-input-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 2px solid var(--teal);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+    .search-overlay-input-row svg { width: 22px; height: 22px; color: var(--teal); flex-shrink: 0; }
+    #overlayInput {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      color: #111;
+      background: transparent;
+    }
+    #overlayInput::placeholder { color: #bbb; }
+    .search-overlay-hint {
+      font-size: .8rem;
+      color: #aaa;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .search-overlay-close {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: .82rem;
+      color: #bbb;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px 0;
+    }
+    .search-overlay-close:hover { color: #888; }
   </style>
 </head>
 <body>
@@ -1056,9 +1117,9 @@
     </nav>
 
     <div class="header-actions">
-      <a href="./negocios.html" class="btn-search" aria-label="Buscar">
+      <button id="searchBtn" class="btn-search" aria-label="Buscar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      </a>
+      </button>
       <a href="./registro-negocio.html"><button class="btn-registrar">Registrá tu negocio<span class="sub-line">(¡Es gratis!)</span></button></a>
     </div>
 
@@ -1399,6 +1460,20 @@
     </div>
   </footer>
 
+  <!-- Search overlay -->
+  <div id="searchOverlay" role="dialog" aria-modal="true" aria-label="Buscar negocios">
+    <div class="search-overlay-box">
+      <form id="searchOverlayForm" action="./negocios.html" method="get">
+        <div class="search-overlay-input-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" name="q" id="overlayInput" placeholder="Buscá un negocio, rubro o servicio..." autocomplete="off">
+        </div>
+        <p class="search-overlay-hint">Presioná <strong>Enter</strong> para ver los resultados</p>
+        <button type="button" class="search-overlay-close" id="searchOverlayClose">✕ Cerrar</button>
+      </form>
+    </div>
+  </div>
+
   <script>
     // ── Header scroll effect ──
     // ── Banner publicitario rotativo ──
@@ -1451,7 +1526,30 @@
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  </script>
+    // ── Search overlay ──
+    const searchBtn = document.getElementById('searchBtn');
+    const searchOverlay = document.getElementById('searchOverlay');
+    const overlayInput = document.getElementById('overlayInput');
 
+    function openSearch() {
+      searchOverlay.classList.add('open');
+      setTimeout(() => overlayInput.focus(), 60);
+    }
+    function closeSearch() {
+      searchOverlay.classList.remove('open');
+      overlayInput.value = '';
+    }
+
+    searchBtn.addEventListener('click', openSearch);
+    document.getElementById('searchOverlayClose').addEventListener('click', closeSearch);
+    searchOverlay.addEventListener('click', e => { if (e.target === searchOverlay) closeSearch(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearch(); });
+
+    document.getElementById('searchOverlayForm').addEventListener('submit', e => {
+      const q = overlayInput.value.trim();
+      if (!q) { e.preventDefault(); return; }
+    });
+
+  </script>
 </body>
 </html>
