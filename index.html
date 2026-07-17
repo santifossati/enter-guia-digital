@@ -1052,9 +1052,11 @@
       width: min(620px, 92vw);
       background: #fff;
       border-radius: 16px;
-      padding: 28px 26px 22px;
+      padding: 24px 22px 18px;
       box-shadow: 0 28px 64px rgba(0,0,0,.35);
       animation: overlayBoxIn .22s ease;
+      max-height: 80vh;
+      overflow-y: auto;
     }
     @keyframes overlayBoxIn { from { opacity:0; transform:translateY(-14px); } to { opacity:1; transform:none; } }
     .search-overlay-input-row {
@@ -1063,7 +1065,7 @@
       gap: 12px;
       border-bottom: 2px solid var(--teal);
       padding-bottom: 14px;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
     .search-overlay-input-row svg { width: 22px; height: 22px; color: var(--teal); flex-shrink: 0; }
     #overlayInput {
@@ -1076,22 +1078,55 @@
       background: transparent;
     }
     #overlayInput::placeholder { color: #bbb; }
-    .search-overlay-hint {
-      font-size: .8rem;
-      color: #aaa;
+    /* Results */
+    .overlay-group-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: var(--teal);
+      padding: 6px 8px 4px;
+    }
+    .overlay-result-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: background .12s;
+    }
+    .overlay-result-item:hover { background: #f4f9f7; }
+    .overlay-result-icon { font-size: 1.25rem; width: 30px; text-align: center; flex-shrink: 0; }
+    .overlay-result-title { font-size: .92rem; font-weight: 600; color: #111; line-height: 1.2; }
+    .overlay-result-desc { font-size: .76rem; color: #999; margin-top: 1px; }
+    #overlayEmpty {
       text-align: center;
-      margin-bottom: 14px;
+      color: #bbb;
+      font-size: .88rem;
+      padding: 12px 0 6px;
+    }
+    .search-overlay-hint {
+      font-size: .78rem;
+      color: #ccc;
+      text-align: center;
+      padding: 10px 0 4px;
+      border-top: 1px solid #f0f0f0;
+      margin-top: 8px;
     }
     .search-overlay-close {
       display: block;
       width: 100%;
       text-align: center;
-      font-size: .82rem;
-      color: #bbb;
+      font-size: .8rem;
+      color: #ccc;
       cursor: pointer;
       background: none;
       border: none;
-      padding: 4px 0;
+      padding: 6px 0 2px;
     }
     .search-overlay-close:hover { color: #888; }
   </style>
@@ -1461,16 +1496,17 @@
   </footer>
 
   <!-- Search overlay -->
-  <div id="searchOverlay" role="dialog" aria-modal="true" aria-label="Buscar negocios">
+  <div id="searchOverlay" role="dialog" aria-modal="true" aria-label="Buscar en Enter Guía Digital">
     <div class="search-overlay-box">
       <form id="searchOverlayForm" action="./negocios.html" method="get">
         <div class="search-overlay-input-row">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input type="text" name="q" id="overlayInput" placeholder="Buscá un negocio, rubro o servicio..." autocomplete="off">
+          <input type="text" name="q" id="overlayInput" placeholder="Buscá negocios, eventos, reclamos..." autocomplete="off">
         </div>
-        <p class="search-overlay-hint">Presioná <strong>Enter</strong> para ver los resultados</p>
-        <button type="button" class="search-overlay-close" id="searchOverlayClose">✕ Cerrar</button>
       </form>
+      <div id="overlayResults"></div>
+      <p class="search-overlay-hint" id="overlayHint">Escribí para buscar en toda la guía</p>
+      <button type="button" class="search-overlay-close" id="searchOverlayClose">✕ Cerrar</button>
     </div>
   </div>
 
@@ -1527,9 +1563,62 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     // ── Search overlay ──
-    const searchBtn = document.getElementById('searchBtn');
+    const SEARCH_INDEX = [
+      { type: 'seccion', title: 'guIA — Chat inteligente',  desc: 'Preguntá sobre Carlos Casares en lenguaje natural', url: './guia.html',     icon: '🤖', kw: 'guia chat ia inteligencia artificial preguntar consultar horario tramite informacion ayuda' },
+      { type: 'seccion', title: 'Agenda de Eventos',        desc: 'Shows, ferias, deportes y cultura',                url: './eventos.html',   icon: '📅', kw: 'evento agenda show feria festival deporte cultura musica concierto fiesta actividad teatro cine baile' },
+      { type: 'seccion', title: 'Mapa de Reclamos',         desc: 'Reportá problemas urbanos en el mapa',            url: './reclamos.html',  icon: '🗺️', kw: 'reclamo reporte problema bache alumbrado luminaria calle semaforo basura vereda municipio queja denuncia reportar' },
+      { type: 'seccion', title: 'Portal de Empleos',        desc: 'Encontrá trabajo o publicá una búsqueda',         url: './empleos.html',   icon: '💼', kw: 'empleo trabajo buscar personal contratacion puesto oferta laboral sueldo cv curriculum vacante' },
+      { type: 'seccion', title: 'Guía de Negocios',         desc: 'Comercios, servicios y profesionales',            url: './negocios.html',  icon: '🏪', kw: 'negocio comercio tienda servicio comprar local empresa profesional directorio' },
+      { type: 'seccion', title: 'Registrá tu negocio',      desc: 'Sumá tu comercio a la guía gratis',               url: './registro-negocio.html', icon: '➕', kw: 'registrar negocio sumar agregar publicar gratis alta comercio local empresa' },
+      { type: 'negocio', title: 'Carnicería El Modelito',   desc: 'Carnicería · Despensa · Fiambres — 9 de Julio 119', url: './negocios/el-modelito.html', icon: '🥩', kw: 'carniceria carne modelito fiambre despensa embutido chorizo 9 julio' },
+      { type: 'negocio', title: 'Thrive',                   desc: 'Publicidad y Marketing',                          url: './negocios/thrive.html',      icon: '📢', kw: 'thrive publicidad marketing redes sociales diseño agencia' },
+    ];
+
+    const normStr = s => s.normalize('NFD').replace(new RegExp('[\\u0300-\\u036f]', 'g'), '').toLowerCase();
+
+    function queryIndex(q) {
+      if (!q) return [];
+      const nq = normStr(q);
+      return SEARCH_INDEX.filter(item => normStr(item.title + ' ' + item.kw).includes(nq));
+    }
+
+    function renderOverlayResults(results, rawQ) {
+      const el = document.getElementById('overlayResults');
+      const hint = document.getElementById('overlayHint');
+      if (!rawQ) {
+        el.innerHTML = '';
+        hint.textContent = 'Escribí para buscar en toda la guía';
+        return;
+      }
+      if (!results.length) {
+        el.innerHTML = `<div id="overlayEmpty">Sin resultados para "<strong>${rawQ}</strong>"</div>`;
+        hint.innerHTML = `O presioná <strong>Enter</strong> para buscar en Negocios`;
+        return;
+      }
+      const secciones = results.filter(r => r.type === 'seccion');
+      const negocios  = results.filter(r => r.type === 'negocio');
+      let html = '';
+      const renderGroup = (label, items) => {
+        html += `<div class="overlay-group-label">${label}</div>`;
+        items.forEach(r => {
+          html += `<a class="overlay-result-item" href="${r.url}">
+            <span class="overlay-result-icon">${r.icon}</span>
+            <div>
+              <div class="overlay-result-title">${r.title}</div>
+              <div class="overlay-result-desc">${r.desc}</div>
+            </div>
+          </a>`;
+        });
+      };
+      if (secciones.length) renderGroup('Secciones', secciones);
+      if (negocios.length)  renderGroup('Negocios',  negocios);
+      el.innerHTML = html;
+      hint.innerHTML = `O presioná <strong>Enter</strong> para buscar "<em>${rawQ}</em>" en Negocios`;
+    }
+
+    const searchBtn    = document.getElementById('searchBtn');
     const searchOverlay = document.getElementById('searchOverlay');
-    const overlayInput = document.getElementById('overlayInput');
+    const overlayInput  = document.getElementById('overlayInput');
 
     function openSearch() {
       searchOverlay.classList.add('open');
@@ -1538,6 +1627,7 @@
     function closeSearch() {
       searchOverlay.classList.remove('open');
       overlayInput.value = '';
+      renderOverlayResults([], '');
     }
 
     searchBtn.addEventListener('click', openSearch);
@@ -1545,9 +1635,13 @@
     searchOverlay.addEventListener('click', e => { if (e.target === searchOverlay) closeSearch(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearch(); });
 
-    document.getElementById('searchOverlayForm').addEventListener('submit', e => {
+    overlayInput.addEventListener('input', () => {
       const q = overlayInput.value.trim();
-      if (!q) { e.preventDefault(); return; }
+      renderOverlayResults(queryIndex(q), q);
+    });
+
+    document.getElementById('searchOverlayForm').addEventListener('submit', e => {
+      if (!overlayInput.value.trim()) e.preventDefault();
     });
 
   </script>
