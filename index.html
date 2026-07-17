@@ -186,11 +186,41 @@
       background: var(--teal-darker);
     }
 
+    /* ── Hero photo carousel ── */
+    #heroBgCarousel {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-carousel-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.6s ease;
+      z-index: 0;
+    }
+    .hero-carousel-slide.active {
+      opacity: 1;
+      z-index: 1;
+    }
+    /* Teal overlay at 75% — the "digital" filter */
+    .hero-teal-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: var(--teal-darker);
+      opacity: .75;
+      pointer-events: none;
+    }
+
     /* Animated gradient blobs */
     .hero-bg {
       position: absolute;
       inset: 0;
       overflow: hidden;
+      z-index: 2;
     }
     .blob {
       position: absolute;
@@ -234,6 +264,7 @@
     .hero-grid {
       position: absolute;
       inset: 0;
+      z-index: 3;
       background-image:
         linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
@@ -244,7 +275,7 @@
     /* Hero content */
     .hero-content {
       position: relative;
-      z-index: 2;
+      z-index: 4;
       text-align: center;
       max-width: 720px;
     }
@@ -1174,6 +1205,8 @@
 
   <!-- ══ HERO ══ -->
   <section class="hero">
+    <div id="heroBgCarousel"></div>
+    <div class="hero-teal-overlay"></div>
     <div class="hero-bg">
       <div class="blob blob-1"></div>
       <div class="blob blob-2"></div>
@@ -1561,6 +1594,33 @@
     }, { threshold: 0.12 });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── Hero background carousel ──
+    (() => {
+      const files = [
+        '470075281_567462736067264_3480528250804751166_n.jpg',
+        '491941386_1495700928222255_6995978112076970915_n.jpg',
+        'Iglesia_Nuestra_Señora_del_Carmen_-_año_2022.jpg',
+        'pIayC2QV2_1256x620__1.jpg',
+      ];
+      const container = document.getElementById('heroBgCarousel');
+      const slides = files.map(f => {
+        const d = document.createElement('div');
+        d.className = 'hero-carousel-slide';
+        d.style.backgroundImage = `url('./img/hero/${encodeURIComponent(f)}')`;
+        container.appendChild(d);
+        return d;
+      });
+
+      let cur = 0;
+      slides[cur].classList.add('active');
+
+      setInterval(() => {
+        slides[cur].classList.remove('active');
+        cur = (cur + 1) % slides.length;
+        slides[cur].classList.add('active');
+      }, 5000);
+    })();
 
     // ── Search overlay ──
     const SEARCH_INDEX = [
