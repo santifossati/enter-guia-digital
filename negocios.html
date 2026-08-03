@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     :root {
       --teal:        #1e7d96;
@@ -262,6 +263,11 @@
     .filter-chip:hover { border-color: var(--teal); color: var(--teal-dark); }
     .filter-chip.active { background: #2e7d32; border-color: #2e7d32; color: var(--white); }
     .filter-chip.active .dot { background: var(--white); }
+    .filter-chip.promo.active { background: #b8860b; border-color: #b8860b; }
+    .near-me-btn { background: var(--teal); border-color: var(--teal); color: var(--white); }
+    .near-me-btn:hover { background: var(--teal-dark); border-color: var(--teal-dark); color: var(--white); }
+    .map-toggle-btn.active { background: var(--teal-darker); border-color: var(--teal-darker); color: var(--white); }
+
     .sort-select {
       font-family: 'Inter', sans-serif;
       font-size: 12px;
@@ -269,10 +275,35 @@
       color: var(--text-mid);
       border: 1.5px solid var(--gray-border);
       border-radius: 20px;
-      padding: 7px 14px;
-      background: var(--white);
+      padding: 7px 30px 7px 14px;
+      background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a4a4a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center / 13px 13px;
       cursor: pointer;
       outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    /* ── Mapa de negocios ── */
+    #mapContainer {
+      display: none;
+      height: 440px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--gray-border);
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    #negociosMap { height: 100%; width: 100%; }
+    .map-popup { font-family: 'Inter', sans-serif; }
+    .map-popup strong { font-family: 'Montserrat', sans-serif; display: block; margin-bottom: 4px; }
+    .map-popup a { color: var(--teal); font-weight: 600; font-size: 12px; }
+    .user-loc-dot {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #1a73e8;
+      border: 3px solid white;
+      box-shadow: 0 0 0 4px rgba(26,115,232,.3);
     }
     .results-title {
       font-family: 'Montserrat', sans-serif;
@@ -638,13 +669,21 @@
         <div class="filter-chips">
           <button class="filter-chip" id="openNowChip"><span class="dot"></span> Abierto ahora</button>
           <button class="filter-chip" id="withPhotoChip">📷 Con fotos</button>
+          <button class="filter-chip promo" id="promoChip">🏷️ Con promociones</button>
+          <button class="filter-chip near-me-btn" id="nearMeBtn">📍 Cerca mío</button>
+          <button class="filter-chip map-toggle-btn" id="mapToggleBtn">🗺️ Ver mapa</button>
         </div>
         <select class="sort-select" id="sortSelect">
           <option value="relevancia">Ordenar por: Relevancia</option>
           <option value="az">Nombre A-Z</option>
           <option value="za">Nombre Z-A</option>
           <option value="destacados">Destacados primero</option>
+          <option value="cerca">Más cerca mío</option>
         </select>
+      </div>
+
+      <div id="mapContainer">
+        <div id="negociosMap"></div>
       </div>
 
       <div style="background: linear-gradient(135deg, #1e7d96, #0e4a5a); border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
@@ -663,7 +702,7 @@
       <div class="biz-grid" id="bizGrid">
 
         <!-- Carnicería El Modelito -->
-        <div class="biz-card" data-cats="carnicerias" data-destacado="true" data-has-photo="true" data-hours='{"0":[[8,13]],"1":[[8,13],[16,22]],"2":[[8,13],[16,22]],"3":[[8,13],[16,22]],"4":[[8,13],[16,22]],"5":[[8,13],[16,22]],"6":[[8,13],[16,22]]}' onclick="window.location.href='./negocios/el-modelito.html'" style="cursor:pointer;">
+        <div class="biz-card" data-cats="carnicerias" data-destacado="true" data-has-photo="true" data-lat="-35.6252896" data-lng="-61.3614151" data-hours='{"0":[[8,13]],"1":[[8,13],[16,22]],"2":[[8,13],[16,22]],"3":[[8,13],[16,22]],"4":[[8,13],[16,22]],"5":[[8,13],[16,22]],"6":[[8,13],[16,22]]}' onclick="window.location.href='./negocios/el-modelito.html'" style="cursor:pointer;">
           <div class="biz-photo-wrap">
             <img src="./foto-modelito.png" alt="Carnicería El Modelito" class="biz-photo">
             <span class="biz-cat-badge">Carnicería y Despensa</span>
@@ -699,7 +738,7 @@
         </div>
 
         <!-- Thrive Publicidad -->
-        <div class="biz-card" data-cats="publicidad" data-destacado="true" data-hours='{"1":[[9,18]],"2":[[9,18]],"3":[[9,18]],"4":[[9,18]],"5":[[9,18]]}' onclick="window.location.href='./negocios/thrive.html'" style="cursor:pointer;">
+        <div class="biz-card" data-cats="publicidad" data-destacado="true" data-lat="-35.6194" data-lng="-61.3655" data-hours='{"1":[[9,18]],"2":[[9,18]],"3":[[9,18]],"4":[[9,18]],"5":[[9,18]]}' onclick="window.location.href='./negocios/thrive.html'" style="cursor:pointer;">
           <div class="biz-photo-wrap" style="background: linear-gradient(135deg, #0e4a5a, #1e7d96);">
             <span class="biz-cat-badge">Publicidad, Web y Apps</span>
           </div>
@@ -750,6 +789,7 @@
     <p>© 2026 Enter Guía Digital — Carlos Casares, Buenos Aires &nbsp;|&nbsp; <a href="./terminos.html">Términos de uso</a> &nbsp;|&nbsp; <a href="./privacidad.html">Política de privacidad</a></p>
   </footer>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     // ── Estado abierto/cerrado por horarios ──
     function computeStatus(schedule) {
@@ -882,7 +922,7 @@
     const sortSelect = document.getElementById('sortSelect');
     const searchInput = document.getElementById('searchInput');
 
-    const state = { cat: null, label: 'Todos los negocios', destacadosOnly: false, openNow: false, withPhoto: false, query: '' };
+    const state = { cat: null, label: 'Todos los negocios', destacadosOnly: false, openNow: false, withPhoto: false, withPromo: false, query: '' };
 
     function applyFilters() {
       let visible = 0;
@@ -890,6 +930,7 @@
         const cats = card.dataset.cats || '';
         const isDestacado = card.dataset.destacado === 'true';
         const hasPhoto = card.dataset.hasPhoto === 'true';
+        const hasPromo = card.dataset.hasPromo === 'true';
         const isOpen = card.dataset.hours ? computeStatus(JSON.parse(card.dataset.hours)).open : false;
         const norm = s => s.normalize('NFD').replace(new RegExp('[\\u0300-\\u036f]', 'g'), '').toLowerCase();
         const text = norm(card.textContent);
@@ -899,6 +940,7 @@
         else if (state.cat) show = show && cats.split(' ').includes(state.cat);
         if (state.openNow) show = show && isOpen;
         if (state.withPhoto) show = show && hasPhoto;
+        if (state.withPromo) show = show && hasPromo;
         if (state.query) show = show && text.includes(norm(state.query));
 
         card.style.display = show ? '' : 'none';
@@ -917,9 +959,111 @@
         arr.sort((a, b) => b.querySelector('.biz-name').textContent.localeCompare(a.querySelector('.biz-name').textContent));
       } else if (val === 'destacados') {
         arr.sort((a, b) => (b.dataset.destacado === 'true') - (a.dataset.destacado === 'true'));
+      } else if (val === 'cerca') {
+        arr.sort((a, b) => (parseFloat(a.dataset.distance) || Infinity) - (parseFloat(b.dataset.distance) || Infinity));
       }
       arr.forEach(card => bizGrid.appendChild(card));
     }
+
+    // ── Cerca mío (geolocalización) ──
+    function haversine(lat1, lng1, lat2, lng2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    let userLatLng = null;
+    const nearMeBtn = document.getElementById('nearMeBtn');
+
+    function applyDistances() {
+      if (!userLatLng) return;
+      cards.forEach(card => {
+        const lat = parseFloat(card.dataset.lat), lng = parseFloat(card.dataset.lng);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          const d = haversine(userLatLng.lat, userLatLng.lng, lat, lng);
+          card.dataset.distance = d;
+          const detailEl = card.querySelector('.biz-details');
+          if (detailEl && !detailEl.querySelector('.biz-distance')) {
+            const distEl = document.createElement('div');
+            distEl.className = 'biz-detail biz-distance';
+            distEl.style.color = 'var(--teal-dark)';
+            distEl.style.fontWeight = '700';
+            distEl.textContent = '📍 A ' + d.toFixed(1) + ' km de tu ubicación';
+            detailEl.appendChild(distEl);
+          }
+        }
+      });
+    }
+
+    nearMeBtn.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        alert('Tu navegador no permite compartir tu ubicación.');
+        return;
+      }
+      nearMeBtn.textContent = '📍 Buscando...';
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          userLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          nearMeBtn.textContent = '📍 Cerca mío';
+          nearMeBtn.classList.add('active');
+          applyDistances();
+          sortSelect.value = 'cerca';
+          sortCards();
+          if (mapInstance) centerMapOnUser();
+        },
+        () => {
+          nearMeBtn.textContent = '📍 Cerca mío';
+          alert('No pudimos acceder a tu ubicación. Revisá los permisos del navegador.');
+        }
+      );
+    });
+
+    // ── Mapa de negocios ──
+    let mapInstance = null;
+    let userMarker = null;
+    const mapContainer = document.getElementById('mapContainer');
+    const mapToggleBtn = document.getElementById('mapToggleBtn');
+
+    function initMap() {
+      if (mapInstance) return;
+      mapInstance = L.map('negociosMap').setView([-35.6194, -61.3655], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+      }).addTo(mapInstance);
+
+      cards.forEach(card => {
+        const lat = parseFloat(card.dataset.lat), lng = parseFloat(card.dataset.lng);
+        if (isNaN(lat) || isNaN(lng)) return;
+        const name = card.querySelector('.biz-name').textContent;
+        const href = card.getAttribute('onclick').match(/'([^']+)'/)[1];
+        L.marker([lat, lng]).addTo(mapInstance)
+          .bindPopup(`<div class="map-popup"><strong>${name}</strong><a href="${href}">Ver ficha →</a></div>`);
+      });
+    }
+
+    function centerMapOnUser() {
+      if (!mapInstance || !userLatLng) return;
+      if (userMarker) mapInstance.removeLayer(userMarker);
+      userMarker = L.marker([userLatLng.lat, userLatLng.lng], {
+        icon: L.divIcon({ className: 'user-loc-dot', iconSize: [16, 16] })
+      }).addTo(mapInstance).bindPopup('Tu ubicación');
+      mapInstance.setView([userLatLng.lat, userLatLng.lng], 15);
+    }
+
+    mapToggleBtn.addEventListener('click', () => {
+      const showing = mapContainer.style.display === 'block';
+      mapContainer.style.display = showing ? 'none' : 'block';
+      bizGrid.style.display = showing ? '' : 'none';
+      mapToggleBtn.classList.toggle('active', !showing);
+      mapToggleBtn.textContent = showing ? '🗺️ Ver mapa' : '📋 Ver lista';
+      if (!showing) {
+        initMap();
+        setTimeout(() => mapInstance.invalidateSize(), 50);
+        if (userLatLng) centerMapOnUser();
+      }
+    });
 
     function filterByCat(cat, label, destacadosOnly) {
       catItems.forEach(i => i.classList.remove('active'));
@@ -968,6 +1112,14 @@
     withPhotoChip.addEventListener('click', () => {
       state.withPhoto = !state.withPhoto;
       withPhotoChip.classList.toggle('active', state.withPhoto);
+      applyFilters();
+    });
+
+    // Filtro: con promociones
+    const promoChip = document.getElementById('promoChip');
+    promoChip.addEventListener('click', () => {
+      state.withPromo = !state.withPromo;
+      promoChip.classList.toggle('active', state.withPromo);
       applyFilters();
     });
 
