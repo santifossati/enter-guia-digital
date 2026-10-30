@@ -1,0 +1,61 @@
+/* ─────────────────────────────────────────────────────────
+   Enter — capa de pulido
+   No cambia fuentes, colores ni layout. Solo detalles de
+   accesibilidad, interacción y tipografía.
+   Se carga al final del <head> de cada página.
+   ───────────────────────────────────────────────────────── */
+
+/* Sombras teñidas con el teal de la marca (en vez de negro puro) */
+:root {
+  --shadow-sm: 0 2px 8px rgba(14, 74, 90, .10);
+  --shadow-md: 0 6px 24px rgba(14, 74, 90, .14);
+  --shadow-lg: 0 16px 48px rgba(14, 74, 90, .18);
+}
+
+/* Foco visible para navegación con teclado */
+:focus-visible {
+  outline: 2px solid var(--teal-light, #4db3cc);
+  outline-offset: 3px;
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline-offset: 1px;
+}
+
+/* Feedback al presionar (supera a los :hover de cada página) */
+button:active:not(:disabled),
+.hero-cta:active,
+.biz-card:active,
+.dest-card:active,
+.section-card:active,
+.event-card:active,
+.job-card:active {
+  transform: scale(.98);
+}
+
+/* Títulos balanceados, párrafos sin palabras huérfanas */
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* Cifras alineadas */
+.count,
+.results-count,
+.cal-day,
+.hero-stat,
+.stat-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Alto de pantalla estable en celulares (barra del navegador) */
+.hero { min-height: 100dvh; }
+
+/* Respeta la preferencia de menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
