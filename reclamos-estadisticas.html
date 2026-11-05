@@ -2,12 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://*.tile.openstreetmap.org https://unpkg.com; frame-src https://www.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Estadísticas de Reclamos — Enter Guía Digital</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" integrity="sha256-DiMmxoaAcr7BWSdgxnKQQ8ruopYKK0bO5qIZKqxqv/A=" crossorigin="anonymous"></script>
   <style>
     :root {
       --teal:        #1e7d96;

@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://*.tile.openstreetmap.org https://unpkg.com; frame-src https://www.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Enter — Guía Digital de Carlos Casares</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1646,6 +1648,9 @@
       return SEARCH_INDEX.filter(item => normStr(item.title + ' ' + item.kw).includes(nq));
     }
 
+    // Escapa texto escrito por el usuario antes de meterlo en innerHTML
+    const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
     function renderOverlayResults(results, rawQ) {
       const el = document.getElementById('overlayResults');
       const hint = document.getElementById('overlayHint');
@@ -1654,8 +1659,9 @@
         hint.textContent = 'Escribí para buscar en toda la guía';
         return;
       }
+      const safeQ = escapeHtml(rawQ);
       if (!results.length) {
-        el.innerHTML = `<div id="overlayEmpty">Sin resultados para "<strong>${rawQ}</strong>"</div>`;
+        el.innerHTML = `<div id="overlayEmpty">Sin resultados para "<strong>${safeQ}</strong>"</div>`;
         hint.innerHTML = `O presioná <strong>Enter</strong> para buscar en Negocios`;
         return;
       }
@@ -1677,7 +1683,7 @@
       if (secciones.length) renderGroup('Secciones', secciones);
       if (negocios.length)  renderGroup('Negocios',  negocios);
       el.innerHTML = html;
-      hint.innerHTML = `O presioná <strong>Enter</strong> para buscar "<em>${rawQ}</em>" en Negocios`;
+      hint.innerHTML = `O presioná <strong>Enter</strong> para buscar "<em>${safeQ}</em>" en Negocios`;
     }
 
     const searchBtn    = document.getElementById('searchBtn');
